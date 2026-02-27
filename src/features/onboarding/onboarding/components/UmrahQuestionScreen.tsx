@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { UmrahQuestionAssets } from '../types'
 
 type UmrahQuestionScreenProps = {
@@ -37,6 +37,10 @@ function isSameDate(left: Date, right: Date) {
     left.getMonth() === right.getMonth() &&
     left.getFullYear() === right.getFullYear()
   )
+}
+
+function isSameMonth(left: Date, right: Date) {
+  return left.getMonth() === right.getMonth() && left.getFullYear() === right.getFullYear()
 }
 
 export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionScreenProps) {
@@ -112,6 +116,24 @@ export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionSc
   const changeMonth = (offset: number) => {
     setVisibleMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + offset, 1))
   }
+
+  useEffect(() => {
+    if (visaStatus === null) {
+      return
+    }
+
+    const hasAvailableDateInMonth = calendarCells.some((date) => date !== null && !getIsDisabled(date))
+    if (hasAvailableDateInMonth) {
+      return
+    }
+
+    const firstAvailableDate = visaStatus === 'no-visa' ? firstAvailableIfNoVisa : addDays(today, 1)
+    const targetMonth = new Date(firstAvailableDate.getFullYear(), firstAvailableDate.getMonth(), 1)
+
+    if (!isSameMonth(visibleMonth, targetMonth)) {
+      setVisibleMonth(targetMonth)
+    }
+  }, [calendarCells, firstAvailableIfNoVisa, today, visaStatus, visibleMonth])
 
   return (
     <section className="phone-shell umrah-question-shell" aria-label="Pertanyaan Umrah">

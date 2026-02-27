@@ -9,7 +9,7 @@ type WalkthroughScreenProps = {
 
 export function WalkthroughScreen({ step, totalSteps, currentSlide, onNext }: WalkthroughScreenProps) {
   return (
-    <section className="phone-shell">
+    <section className="phone-shell walkthrough-shell">
       <div className="decorative-shape" aria-hidden />
 
       <div className="walkthrough-content">
