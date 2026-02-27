@@ -12,6 +12,11 @@ import { UmrahProcessingScreen } from './features/onboarding/onboarding/componen
 import { UmrahHotelDetailScreen } from './features/onboarding/onboarding/components/UmrahHotelDetailScreen'
 import { UmrahHotelScreen } from './features/onboarding/onboarding/components/UmrahHotelScreen'
 import { UmrahHotelTicketInfoScreen } from './features/onboarding/onboarding/components/UmrahHotelTicketInfoScreen'
+import { UmrahPaymentMethodScreen } from './features/onboarding/onboarding/components/UmrahPaymentMethodScreen'
+import { UmrahPaymentCompleteScreen } from './features/onboarding/onboarding/components/UmrahPaymentCompleteScreen'
+import { UmrahPaymentOverviewScreen } from './features/onboarding/onboarding/components/UmrahPaymentOverviewScreen'
+import { UmrahPaymentPendingScreen } from './features/onboarding/onboarding/components/UmrahPaymentPendingScreen'
+import { UmrahPaymentSuccessScreen } from './features/onboarding/onboarding/components/UmrahPaymentSuccessScreen'
 import { SplashScreen } from './features/onboarding/onboarding/components/SplashScreen'
 import { UmrahQuestionScreen } from './features/onboarding/onboarding/components/UmrahQuestionScreen'
 import { UmrahTicketInfoScreen } from './features/onboarding/onboarding/components/UmrahTicketInfoScreen'
@@ -32,6 +37,8 @@ import {
   umrahArrivalReturnAssets,
   umrahFlightAssets,
   umrahHotelAssets,
+  umrahPaymentAssets,
+  umrahCompletionAssets,
   umrahBudgetAssets,
   umrahDepartureAssets,
   umrahProcessingAssets,
@@ -40,7 +47,7 @@ import {
   umrahTravelerAssets,
   walkthroughSlides,
 } from './features/onboarding/onboarding/data'
-import type { PassengerFormData, Screen, TicketFareOption } from './features/onboarding/onboarding/types'
+import type { PassengerFormData, PaymentBreakdown, PaymentMethod, Screen, TicketFareOption } from './features/onboarding/onboarding/types'
 
 const budgetOffsets: Record<string, number> = {
   'Kurang dari 25.000.000': 0,
@@ -108,6 +115,7 @@ function App() {
   const [selectedFareId, setSelectedFareId] = useState<TicketFareOption['id']>('economy')
   const [selectedHotelId, setSelectedHotelId] = useState<string | null>(null)
   const [selectedHotelRoomId, setSelectedHotelRoomId] = useState<string | null>(null)
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('bni-va')
   const [travelerNames, setTravelerNames] = useState<string[]>(['Noermansyah'])
   const [activePassengerIndex, setActivePassengerIndex] = useState(0)
   const [passengerForms, setPassengerForms] = useState<PassengerFormData[]>([createInitialPassengerForm()])
@@ -312,6 +320,14 @@ function App() {
     [hotelOffers, selectedHotelId],
   )
 
+  const secondHotelOffer = useMemo(() => {
+    if (!selectedHotelOffer) {
+      return hotelOffers[1] ?? hotelOffers[0] ?? null
+    }
+
+    return hotelOffers.find((hotel) => hotel.id !== selectedHotelOffer.id) ?? selectedHotelOffer
+  }, [hotelOffers, selectedHotelOffer])
+
   const selectedHotelDetail = useMemo(() => {
     if (!selectedHotelOffer) {
       return null
@@ -354,6 +370,28 @@ function App() {
     const diff = hotelEndValue.getTime() - hotelStartValue.getTime()
     return Math.max(1, Math.round(diff / (1000 * 60 * 60 * 24)))
   }, [hotelEndValue, hotelStartValue])
+
+  const paymentBreakdown = useMemo<PaymentBreakdown>(() => {
+    const flightDeparture = selectedFare.totalPrice * travelerCount
+    const flightReturn = Math.round(flightDeparture * 1.067)
+    const hotelMakkah = selectedHotelRoom?.totalPrice ?? 12000000
+    const hotelMadinah = selectedHotelRoom?.totalPrice ?? 12000000
+    const subtotal = flightDeparture + flightReturn + hotelMakkah + hotelMadinah
+    const serviceFee = 50000
+    const taxAmount = Math.round(subtotal * 0.1)
+    const grandTotal = subtotal + serviceFee + taxAmount
+
+    return {
+      flightDeparture,
+      flightReturn,
+      hotelMakkah,
+      hotelMadinah,
+      subtotal,
+      serviceFee,
+      taxAmount,
+      grandTotal,
+    }
+  }, [selectedFare.totalPrice, selectedHotelRoom?.totalPrice, travelerCount])
 
   const hotelCheckInLabel = useMemo(
     () =>
@@ -606,6 +644,107 @@ function App() {
           totalPrice={selectedHotelRoom.totalPrice}
           totalLabel={selectedHotelRoom.totalLabel}
           onBack={() => setScreen('umrah-hotel-detail')}
+          onNext={() => setScreen('umrah-payment-overview')}
+        />
+      )}
+
+      {screen === 'umrah-payment-overview' && selectedHotelRoom && (
+        <UmrahPaymentOverviewScreen
+          assets={umrahPaymentAssets}
+          hotels={[
+            {
+              id: `${selectedHotelOffer?.id ?? 'hotel-makkah'}-makkah`,
+              name: selectedHotelOffer?.name ?? 'Pullman ZamZam',
+              nightsLabel: `${hotelNights + 1} hari ${hotelNights} malam`,
+              rating: selectedHotelOffer?.rating ?? 5,
+              image: selectedHotelOffer?.image ?? hotelOffers[0]?.image ?? '',
+              pricePerNight: Math.round(paymentBreakdown.hotelMakkah / hotelNights),
+              totalPrice: paymentBreakdown.hotelMakkah,
+              travelerLabel: `${travelerCount} orang`,
+            },
+            {
+              id: `${secondHotelOffer?.id ?? 'hotel-madinah'}-madinah`,
+              name: secondHotelOffer?.name ?? 'Anjum Hotel',
+              nightsLabel: `${hotelNights + 1} hari ${hotelNights} malam`,
+              rating: secondHotelOffer?.rating ?? 5,
+              image: secondHotelOffer?.image ?? selectedHotelOffer?.image ?? '',
+              pricePerNight: Math.round(paymentBreakdown.hotelMadinah / hotelNights),
+              totalPrice: paymentBreakdown.hotelMadinah,
+              travelerLabel: `${travelerCount} orang`,
+            },
+          ]}
+          flights={[
+            {
+              id: 'flight-outbound',
+              fromTime: selectedFlightDepartureTime,
+              fromCode: departureCode ?? 'CGK',
+              duration: selectedFlightDuration,
+              mode: 'Langsung',
+              toTime: selectedFlightArrivalTime,
+              toCode: destinationCode,
+              airline: selectedFlightOffer?.airline ?? 'Oman Air',
+              price: paymentBreakdown.flightDeparture,
+              isSelected: true,
+            },
+            {
+              id: 'flight-return',
+              fromTime: shiftTimeLabel(selectedFlightArrivalTime, 0),
+              fromCode: destinationCode,
+              duration: selectedFlightDuration,
+              mode: 'Langsung',
+              toTime: shiftTimeLabel(selectedFlightDepartureTime, 0),
+              toCode: departureCode ?? 'CGK',
+              airline: selectedFlightOffer?.airline ?? 'Oman Air',
+              price: paymentBreakdown.flightReturn,
+              isSelected: false,
+            },
+          ]}
+          breakdown={paymentBreakdown}
+          travelerCount={travelerCount}
+          hotelNightsLabel={`${hotelNights + 1} hari ${hotelNights} malam`}
+          onBack={() => setScreen('umrah-hotel-ticket-info')}
+          onNext={() => setScreen('umrah-payment-method')}
+        />
+      )}
+
+      {screen === 'umrah-payment-method' && (
+        <UmrahPaymentMethodScreen
+          assets={umrahPaymentAssets}
+          breakdown={paymentBreakdown}
+          onBack={() => setScreen('umrah-payment-overview')}
+          onPay={(method) => {
+            setSelectedPaymentMethod(method)
+            setScreen('umrah-payment-pending')
+          }}
+        />
+      )}
+
+      {screen === 'umrah-payment-pending' && (
+        <UmrahPaymentPendingScreen
+          assets={umrahPaymentAssets}
+          virtualAccountNumber="8848800096475552"
+          virtualAccountName={selectedPaymentMethod === 'credit-card' ? 'Visa / Master Card' : 'BNI Virtual Account'}
+          totalPayment={paymentBreakdown.grandTotal}
+          onBack={() => setScreen('umrah-payment-method')}
+          onNext={() => setScreen('umrah-payment-success')}
+        />
+      )}
+
+      {screen === 'umrah-payment-success' && (
+        <UmrahPaymentSuccessScreen
+          assets={umrahPaymentAssets}
+          virtualAccountNumber="8848800096475552"
+          virtualAccountName={selectedPaymentMethod === 'credit-card' ? 'Visa / Master Card' : 'BNI Virtual Account'}
+          totalPayment={paymentBreakdown.grandTotal}
+          onBack={() => setScreen('umrah-payment-pending')}
+          onNext={() => setScreen('umrah-payment-complete')}
+        />
+      )}
+
+      {screen === 'umrah-payment-complete' && (
+        <UmrahPaymentCompleteScreen
+          assets={umrahCompletionAssets}
+          onBack={() => setScreen('umrah-payment-success')}
           onNext={() => setScreen('home')}
         />
       )}

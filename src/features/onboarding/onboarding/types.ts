@@ -14,6 +14,11 @@ export type Screen =
   | 'umrah-hotel'
   | 'umrah-hotel-detail'
   | 'umrah-hotel-ticket-info'
+  | 'umrah-payment-overview'
+  | 'umrah-payment-method'
+  | 'umrah-payment-pending'
+  | 'umrah-payment-success'
+  | 'umrah-payment-complete'
   | 'umrah-passenger-form'
   | 'umrah-passenger-camera'
 
@@ -216,4 +221,34 @@ export type HotelDetail = {
   rooms: HotelRoomOption[]
   highlightedPolicy: HotelPolicyItem
   policies: HotelPolicyItem[]
+}
+
+export type UmrahPaymentAssets = {
+  bankBniLogo: string
+  bankBriLogo: string
+  bankMandiriLogo: string
+  bankBcaLogo: string
+  visaLogo: string
+  mastercardLogo: string
+  copyIcon: string
+  userIcon: string
+  planeLogo: string
+}
+
+export type UmrahCompletionAssets = {
+  backIcon: string
+  successBadge: string
+}
+
+export type PaymentMethod = 'bni-va' | 'bri-va' | 'mandiri-va' | 'bca-va' | 'credit-card'
+
+export type PaymentBreakdown = {
+  flightDeparture: number
+  flightReturn: number
+  hotelMakkah: number
+  hotelMadinah: number
+  subtotal: number
+  serviceFee: number
+  taxAmount: number
+  grandTotal: number
 }

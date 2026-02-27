@@ -4,6 +4,8 @@ import type {
   FlightOffer,
   HotelDetail,
   HotelOffer,
+  UmrahCompletionAssets,
+  UmrahPaymentAssets,
   HomeAssets,
   ServiceItem,
   UmrahFlightAssets,
@@ -324,4 +326,21 @@ export const hotelDetailTemplate: HotelDetail = {
       body: 'Informasi perjalanan yang tercantum pada e-voucher dan informasi produk yang tercantum dalam syarat dan ketentuan hotel yang bersangkutan.',
     },
   ],
+}
+
+export const umrahPaymentAssets: UmrahPaymentAssets = {
+  bankBniLogo: 'https://www.figma.com/api/mcp/asset/34021b3d-7977-4403-b495-e5df18bd2384',
+  bankBriLogo: 'https://www.figma.com/api/mcp/asset/f92c3412-2699-4783-9684-828d8db17b12',
+  bankMandiriLogo: 'https://www.figma.com/api/mcp/asset/03b9ed78-30a7-4141-9ec6-053022997f77',
+  bankBcaLogo: 'https://www.figma.com/api/mcp/asset/7b99033e-a382-4a21-b463-7425234b197e',
+  visaLogo: 'https://www.figma.com/api/mcp/asset/56be393a-ef11-4776-b245-715bf6e36998',
+  mastercardLogo: 'https://www.figma.com/api/mcp/asset/74de822d-daec-4a9a-9c11-3a83dc26b58a',
+  copyIcon: 'https://www.figma.com/api/mcp/asset/d0c3043d-ff28-47b3-9f3b-06aae2d2002d',
+  userIcon: 'https://www.figma.com/api/mcp/asset/dd2ccf07-d695-4b7b-ab8c-cb8eafc864e7',
+  planeLogo: 'https://www.figma.com/api/mcp/asset/8dab0ef3-efa7-49fb-a4fc-c290567cd467',
+}
+
+export const umrahCompletionAssets: UmrahCompletionAssets = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/cd2f5bf6-0efd-4acf-a72b-180c5eacd71e',
+  successBadge: 'https://www.figma.com/api/mcp/asset/373a1061-a3fe-4b48-9f73-b9987f54e2cf',
 }

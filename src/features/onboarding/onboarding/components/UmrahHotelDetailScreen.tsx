@@ -21,13 +21,7 @@ function iconForFeature(feature: string, assets: UmrahHotelAssets) {
   return assets.noSmokingIcon
 }
 
-export function UmrahHotelDetailScreen({
-  assets,
-  detail,
-  selectedRoomId,
-  onBack,
-  onSelectRoom,
-}: UmrahHotelDetailScreenProps) {
+export function UmrahHotelDetailScreen({ assets, detail, selectedRoomId, onBack, onSelectRoom }: UmrahHotelDetailScreenProps) {
   const primaryPolicy = detail.policies[0]
   const otherPolicies = detail.policies.slice(1)
 
