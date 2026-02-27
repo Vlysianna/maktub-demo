@@ -2,9 +2,12 @@ import type {
   AirportOption,
   ArticleItem,
   FlightOffer,
+  HotelDetail,
+  HotelOffer,
   HomeAssets,
   ServiceItem,
   UmrahFlightAssets,
+  UmrahHotelAssets,
   UmrahProcessingAssets,
   UmrahQuestionAssets,
   UmrahStepAssets,
@@ -214,3 +217,111 @@ export const flightOfferTemplate: FlightOffer[] = [
     price: 12500000,
   },
 ]
+
+export const umrahHotelAssets: UmrahHotelAssets = {
+  chevronRight: 'https://www.figma.com/api/mcp/asset/2ccd8fb3-cbbc-4b67-bb88-9725a7b8c843',
+  calendarIcon: 'https://www.figma.com/api/mcp/asset/ddb86521-8919-4954-8b59-3f732a0a912c',
+  userIcon: 'https://www.figma.com/api/mcp/asset/752ee1b6-50f7-48a6-8333-1e8958fee749',
+  roomIcon: 'https://www.figma.com/api/mcp/asset/6383630d-21f0-41ab-9f1f-535275a685a2',
+  locationIcon: 'https://www.figma.com/api/mcp/asset/745cb550-f2a3-4683-afab-c9210a864b6a',
+  sparkleIcon: 'https://www.figma.com/api/mcp/asset/28ffc00b-0b3d-48d9-8942-74c4406ab88a',
+  facilityIcon: 'https://www.figma.com/api/mcp/asset/36118d8f-cfaa-4859-97cc-8934a25e07f0',
+  bedIcon: 'https://www.figma.com/api/mcp/asset/f8956d00-daa8-451a-b7cf-f7d67fa0156f',
+  areaIcon: 'https://www.figma.com/api/mcp/asset/d77b956f-4188-44d7-9b98-1fbf22d4df7d',
+  wifiIcon: 'https://www.figma.com/api/mcp/asset/86cbd17e-7a9f-4cc0-a323-cd8d974e2a01',
+  breakfastIcon: 'https://www.figma.com/api/mcp/asset/a52f06b2-4063-494e-9f72-44892d902d29',
+  noSmokingIcon: 'https://www.figma.com/api/mcp/asset/4f28da0d-f4f4-43d1-a18a-c860399aa286',
+  bathtubIcon: 'https://www.figma.com/api/mcp/asset/b0d4fdac-ebee-4c21-8b29-09bb2986f7c0',
+  policyIcon: 'https://www.figma.com/api/mcp/asset/ca455b7e-d7d8-4669-b271-9066e5c4148f',
+}
+
+export const hotelOfferTemplate: HotelOffer[] = [
+  {
+    id: 'hotel-1',
+    name: 'Pullman ZamZam',
+    nightsLabel: '3 hari 2 malam',
+    distanceLabel: '1,2 km dari ka’bah',
+    pricePerNight: 3200000,
+    totalPrice: 12000000,
+    rating: 5,
+    image: 'https://www.figma.com/api/mcp/asset/5eb9c5c6-52fc-4c37-8cf1-526464a5b58c',
+    isRecommended: true,
+  },
+  {
+    id: 'hotel-2',
+    name: 'Anjum Hotel',
+    nightsLabel: '3 hari 2 malam',
+    distanceLabel: '1,5 km dari ka’bah',
+    pricePerNight: 3370000,
+    totalPrice: 16500000,
+    rating: 5,
+    image: 'https://www.figma.com/api/mcp/asset/ec3c22ee-8727-49dd-ac6c-702da916e5cb',
+  },
+  {
+    id: 'hotel-3',
+    name: 'Elaf Ajyad Hotel',
+    nightsLabel: '3 hari 2 malam',
+    distanceLabel: '2 km dari ka’bah',
+    pricePerNight: 4550000,
+    totalPrice: 18600000,
+    rating: 5,
+    image: 'https://www.figma.com/api/mcp/asset/859548e7-3f5c-41c0-8e0b-e13d013fc76d',
+  },
+]
+
+export const hotelDetailTemplate: HotelDetail = {
+  hotelId: 'hotel-1',
+  name: 'Pullman ZamZam',
+  typeLabel: 'Hotel',
+  description:
+    'Discover the epitome of family living in this semi-furnished 4-Bedroom Villa at Ain Khalid Gate, nestled in a delightful residential area enjoy a wealth of amenities.',
+  facilities: ['Squash room', 'Supermarket', 'Laundry shop', 'Outdoor children’s play', 'Library', 'Sport area', 'Beauty salon'],
+  locationName: 'Viva Bahriya Tower 19, The Pearl, Qatar',
+  locationDistanceLabel: '1,2 km ke arah Mekah',
+  mapImage: 'https://www.figma.com/api/mcp/asset/2cf654c3-d1b3-4422-90e2-9460f0dcef6e',
+  heroImage: 'https://www.figma.com/api/mcp/asset/61c90fde-cbf9-46a2-94a2-5159c307810c',
+  rooms: [
+    {
+      id: 'room-1',
+      name: 'Deluxe King Room',
+      images: [
+        'https://www.figma.com/api/mcp/asset/40876946-7f3e-46b4-a616-ad56918faaaa',
+        'https://www.figma.com/api/mcp/asset/28323d74-f127-427e-96f0-bc7db8dd8f62',
+      ],
+      features: ['1 King bed', '30 m2', 'Wifi', 'Sarapan', 'Bebas asap rokok'],
+      pricePerNight: 3200000,
+      totalPrice: 12000000,
+      totalLabel: 'untuk 10 malam',
+    },
+    {
+      id: 'room-2',
+      name: 'Luxury King Room',
+      images: [
+        'https://www.figma.com/api/mcp/asset/532f730a-f487-4d5a-812f-ad6b8e742f45',
+        'https://www.figma.com/api/mcp/asset/28ffee5a-b7d2-4a08-99c0-26b7717728af',
+      ],
+      features: ['Bathtub', '1 King bed', '50 m2', 'Wifi', 'Sarapan', 'Bebas asap rokok'],
+      pricePerNight: 1400000,
+      totalPrice: 14000000,
+      totalLabel: 'untuk 10 malam',
+    },
+  ],
+  highlightedPolicy: {
+    title: 'Catatan Penting',
+    body: 'Informasi perjalanan yang tercantum pada e-voucher dan informasi produk yang tercantum dalam syarat dan ketentuan yang bersangkutan.',
+  },
+  policies: [
+    {
+      title: 'Waktu Check-in/Check-out',
+      body: 'Check-in: Dari 16:00\nCheck-out: Sebelum 12:00',
+    },
+    {
+      title: 'Petunjuk Umum Check-in',
+      body: 'Informasi perjalanan yang tercantum pada e-voucher dan informasi produk yang tercantum dalam syarat dan ketentuan hotel yang bersangkutan.',
+    },
+    {
+      title: 'Kebijakan Tambahan',
+      body: 'Informasi perjalanan yang tercantum pada e-voucher dan informasi produk yang tercantum dalam syarat dan ketentuan hotel yang bersangkutan.',
+    },
+  ],
+}

@@ -31,10 +31,19 @@ function toMonthLabel(date: Date) {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
+function isSameDate(left: Date, right: Date) {
+  return (
+    left.getDate() === right.getDate() &&
+    left.getMonth() === right.getMonth() &&
+    left.getFullYear() === right.getFullYear()
+  )
+}
+
 export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionScreenProps) {
   const [visaStatus, setVisaStatus] = useState<VisaStatus | null>(null)
   const [visibleMonth, setVisibleMonth] = useState(() => new Date(new Date().getFullYear(), new Date().getMonth(), 1))
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null)
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null)
 
   const today = useMemo(() => startOfDay(new Date()), [])
   const firstAvailableIfNoVisa = useMemo(() => addDays(today, 10), [today])
@@ -85,7 +94,19 @@ export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionSc
       return
     }
 
-    setSelectedDate(date)
+    if (!selectedStartDate || selectedEndDate) {
+      setSelectedStartDate(date)
+      setSelectedEndDate(null)
+      return
+    }
+
+    if (date.getTime() < selectedStartDate.getTime()) {
+      setSelectedEndDate(selectedStartDate)
+      setSelectedStartDate(date)
+      return
+    }
+
+    setSelectedEndDate(date)
   }
 
   const changeMonth = (offset: number) => {
@@ -138,18 +159,21 @@ export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionSc
             const isEmpty = date === null
             const isHoliday = index % 7 === 6 && !isEmpty
             const isDisabled = date ? getIsDisabled(date) : false
-            const isSelected =
+            const hasCompletedRange = selectedStartDate && selectedEndDate
+            const isRangeStart = date && selectedStartDate ? isSameDate(date, selectedStartDate) : false
+            const isRangeEnd = date && selectedEndDate ? isSameDate(date, selectedEndDate) : false
+            const isSingleSelection = Boolean(isRangeStart && !selectedEndDate)
+            const isInRange =
               date &&
-              selectedDate &&
-              date.getDate() === selectedDate.getDate() &&
-              date.getMonth() === selectedDate.getMonth() &&
-              date.getFullYear() === selectedDate.getFullYear()
+              hasCompletedRange &&
+              date.getTime() > selectedStartDate.getTime() &&
+              date.getTime() < selectedEndDate.getTime()
 
             return (
               <button
                 key={date ? `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}` : `empty-${index}`}
                 type="button"
-                className={`umrah-date ${isEmpty ? 'empty' : ''} ${isDisabled ? 'disabled' : ''} ${isHoliday ? 'holiday' : ''} ${isSelected ? 'selected' : ''}`}
+                className={`umrah-date ${isEmpty ? 'empty' : ''} ${isDisabled ? 'disabled' : ''} ${isHoliday ? 'holiday' : ''} ${isInRange ? 'in-range' : ''} ${isRangeStart ? 'range-start' : ''} ${isRangeEnd ? 'range-end' : ''} ${isSingleSelection ? 'selected' : ''}`}
                 disabled={isEmpty || isDisabled || visaStatus === null}
                 onClick={() => {
                   if (date) {
@@ -168,10 +192,10 @@ export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionSc
         <button
           type="button"
           className="umrah-next-btn"
-          disabled={!selectedDate}
+          disabled={!selectedStartDate || !selectedEndDate}
           onClick={() => {
-            if (selectedDate) {
-              onNext(selectedDate)
+            if (selectedStartDate && selectedEndDate) {
+              onNext(selectedStartDate)
             }
           }}
         >

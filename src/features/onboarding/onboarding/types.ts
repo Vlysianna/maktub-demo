@@ -11,6 +11,9 @@ export type Screen =
   | 'umrah-flight'
   | 'umrah-flight-detail'
   | 'umrah-ticket-info'
+  | 'umrah-hotel'
+  | 'umrah-hotel-detail'
+  | 'umrah-hotel-ticket-info'
   | 'umrah-passenger-form'
   | 'umrah-passenger-camera'
 
@@ -154,4 +157,63 @@ export type PassengerFormData = {
   passportExpiryDay: string
   passportExpiryMonth: string
   passportExpiryYear: string
+}
+
+export type UmrahHotelAssets = {
+  chevronRight: string
+  calendarIcon: string
+  userIcon: string
+  roomIcon: string
+  locationIcon: string
+  sparkleIcon: string
+  facilityIcon: string
+  bedIcon: string
+  areaIcon: string
+  wifiIcon: string
+  breakfastIcon: string
+  noSmokingIcon: string
+  bathtubIcon: string
+  policyIcon: string
+}
+
+export type HotelOffer = {
+  id: string
+  name: string
+  nightsLabel: string
+  distanceLabel: string
+  pricePerNight: number
+  totalPrice: number
+  rating: number
+  image: string
+  isRecommended?: boolean
+}
+
+export type HotelRoomOption = {
+  id: string
+  name: string
+  images: string[]
+  features: string[]
+  pricePerNight: number
+  totalPrice: number
+  totalLabel: string
+}
+
+export type HotelPolicyItem = {
+  title: string
+  body: string
+}
+
+export type HotelDetail = {
+  hotelId: string
+  name: string
+  typeLabel: string
+  description: string
+  facilities: string[]
+  locationName: string
+  locationDistanceLabel: string
+  mapImage: string
+  heroImage: string
+  rooms: HotelRoomOption[]
+  highlightedPolicy: HotelPolicyItem
+  policies: HotelPolicyItem[]
 }

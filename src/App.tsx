@@ -9,6 +9,9 @@ import { UmrahFlightDetailScreen } from './features/onboarding/onboarding/compon
 import { UmrahPassengerCameraScreen } from './features/onboarding/onboarding/components/UmrahPassengerCameraScreen'
 import { UmrahPassengerFormScreen } from './features/onboarding/onboarding/components/UmrahPassengerFormScreen'
 import { UmrahProcessingScreen } from './features/onboarding/onboarding/components/UmrahProcessingScreen'
+import { UmrahHotelDetailScreen } from './features/onboarding/onboarding/components/UmrahHotelDetailScreen'
+import { UmrahHotelScreen } from './features/onboarding/onboarding/components/UmrahHotelScreen'
+import { UmrahHotelTicketInfoScreen } from './features/onboarding/onboarding/components/UmrahHotelTicketInfoScreen'
 import { SplashScreen } from './features/onboarding/onboarding/components/SplashScreen'
 import { UmrahQuestionScreen } from './features/onboarding/onboarding/components/UmrahQuestionScreen'
 import { UmrahTicketInfoScreen } from './features/onboarding/onboarding/components/UmrahTicketInfoScreen'
@@ -21,11 +24,14 @@ import {
   cityOptions,
   departureAirportOptions,
   flightOfferTemplate,
+  hotelDetailTemplate,
+  hotelOfferTemplate,
   homeAssets,
   services,
   splashLogo,
   umrahArrivalReturnAssets,
   umrahFlightAssets,
+  umrahHotelAssets,
   umrahBudgetAssets,
   umrahDepartureAssets,
   umrahProcessingAssets,
@@ -54,6 +60,16 @@ function shiftTimeLabel(timeLabel: string, hourOffset: number) {
   const shiftedHour = (hour + hourOffset + 24) % 24
 
   return `${String(shiftedHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+}
+
+function startOfDay(date: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+}
+
+function addDays(date: Date, days: number) {
+  const next = new Date(date)
+  next.setDate(next.getDate() + days)
+  return startOfDay(next)
 }
 
 function createInitialPassengerForm(): PassengerFormData {
@@ -86,8 +102,12 @@ function App() {
   const [returnCity, setReturnCity] = useState<string | null>(null)
   const [budgetRange, setBudgetRange] = useState<string | null>(null)
   const [travelDate, setTravelDate] = useState<Date | null>(null)
+  const [hotelStartDate, setHotelStartDate] = useState<Date | null>(null)
+  const [hotelEndDate, setHotelEndDate] = useState<Date | null>(null)
   const [selectedFlightId, setSelectedFlightId] = useState<string | null>(null)
   const [selectedFareId, setSelectedFareId] = useState<TicketFareOption['id']>('economy')
+  const [selectedHotelId, setSelectedHotelId] = useState<string | null>(null)
+  const [selectedHotelRoomId, setSelectedHotelRoomId] = useState<string | null>(null)
   const [travelerNames, setTravelerNames] = useState<string[]>(['Noermansyah'])
   const [activePassengerIndex, setActivePassengerIndex] = useState(0)
   const [passengerForms, setPassengerForms] = useState<PassengerFormData[]>([createInitialPassengerForm()])
@@ -134,6 +154,7 @@ function App() {
 
   const travelerCount = Math.max(totalParticipants, 1)
   const passengerText = `${travelerCount} orang`
+  const roomCount = Math.max(1, Math.ceil(travelerCount / travelerRoom))
 
   useEffect(() => {
     const count = Math.max(totalParticipants, 1)
@@ -276,6 +297,86 @@ function App() {
     [selectedFareId, ticketFareOptions],
   )
 
+  const hotelOffers = useMemo(() => {
+    const participantOffset = Math.max(0, travelerCount - 2) * 250000
+
+    return hotelOfferTemplate.map((hotel, index) => ({
+      ...hotel,
+      pricePerNight: hotel.pricePerNight + participantOffset + index * 50000,
+      totalPrice: hotel.totalPrice + participantOffset * 2 + index * 350000,
+    }))
+  }, [travelerCount])
+
+  const selectedHotelOffer = useMemo(
+    () => hotelOffers.find((hotel) => hotel.id === selectedHotelId) ?? hotelOffers[0] ?? null,
+    [hotelOffers, selectedHotelId],
+  )
+
+  const selectedHotelDetail = useMemo(() => {
+    if (!selectedHotelOffer) {
+      return null
+    }
+
+    const start = startOfDay(hotelStartDate ?? travelDate ?? new Date(2026, 1, 18))
+    const end = hotelEndDate ? startOfDay(hotelEndDate) : addDays(start, 2)
+    const diff = end.getTime() - start.getTime()
+    const nights = Math.max(1, Math.round(diff / (1000 * 60 * 60 * 24)))
+
+    return {
+      ...hotelDetailTemplate,
+      hotelId: selectedHotelOffer.id,
+      name: selectedHotelOffer.name,
+      locationDistanceLabel: selectedHotelOffer.distanceLabel.replace('dari ka’bah', 'ke arah Mekah'),
+      rooms: hotelDetailTemplate.rooms.map((room) => ({
+        ...room,
+        totalPrice: room.id === 'room-1' ? selectedHotelOffer.totalPrice : selectedHotelOffer.totalPrice + 2000000,
+        totalLabel: `untuk ${nights} malam`,
+      })),
+    }
+  }, [hotelEndDate, hotelStartDate, selectedHotelOffer, travelDate])
+
+  const selectedHotelRoom = useMemo(
+    () => selectedHotelDetail?.rooms.find((room) => room.id === selectedHotelRoomId) ?? selectedHotelDetail?.rooms[0] ?? null,
+    [selectedHotelDetail, selectedHotelRoomId],
+  )
+
+  const hotelStartValue = useMemo(() => startOfDay(hotelStartDate ?? travelDate ?? new Date(2026, 1, 18)), [hotelStartDate, travelDate])
+
+  const hotelEndValue = useMemo(() => {
+    if (hotelEndDate) {
+      return startOfDay(hotelEndDate)
+    }
+
+    return addDays(hotelStartValue, 2)
+  }, [hotelEndDate, hotelStartValue])
+
+  const hotelNights = useMemo(() => {
+    const diff = hotelEndValue.getTime() - hotelStartValue.getTime()
+    return Math.max(1, Math.round(diff / (1000 * 60 * 60 * 24)))
+  }, [hotelEndValue, hotelStartValue])
+
+  const hotelCheckInLabel = useMemo(
+    () =>
+      hotelStartValue.toLocaleDateString('id-ID', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      }),
+    [hotelStartValue],
+  )
+
+  const hotelCheckOutLabel = useMemo(
+    () =>
+      hotelEndValue.toLocaleDateString('id-ID', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      }),
+    [hotelEndValue],
+  )
+
   const activePassengerForm = passengerForms[activePassengerIndex] ?? createInitialPassengerForm()
 
   const nationalityOptions = ['Indonesia', 'Malaysia', 'Singapura', 'Brunei', 'Arab Saudi']
@@ -324,6 +425,8 @@ function App() {
           onClose={() => setScreen('home')}
           onNext={(selectedDate) => {
             setTravelDate(selectedDate)
+            setHotelStartDate(selectedDate)
+            setHotelEndDate(addDays(selectedDate, 2))
             setScreen('umrah-traveler')
           }}
         />
@@ -446,6 +549,63 @@ function App() {
             setActivePassengerIndex(index)
             setScreen('umrah-passenger-form')
           }}
+          onNext={() => setScreen('umrah-hotel')}
+        />
+      )}
+
+      {screen === 'umrah-hotel' && (
+        <UmrahHotelScreen
+          assets={umrahHotelAssets}
+          cityLabel="Mekah"
+          checkInLabel={hotelCheckInLabel}
+          checkOutLabel={hotelCheckOutLabel}
+          nightsLabel={`${hotelNights} malam`}
+          initialStartDate={hotelStartValue}
+          initialEndDate={hotelEndValue}
+          passengerText={passengerText}
+          roomText={`${roomCount} kamar`}
+          hotels={hotelOffers}
+          onBack={() => setScreen('umrah-ticket-info')}
+          onSaveDateRange={(startDate, endDate) => {
+            setHotelStartDate(startDate)
+            setHotelEndDate(endDate)
+          }}
+          onSelectHotel={(hotel) => {
+            setSelectedHotelId(hotel.id)
+            setSelectedHotelRoomId(null)
+            setScreen('umrah-hotel-detail')
+          }}
+        />
+      )}
+
+      {screen === 'umrah-hotel-detail' && selectedHotelDetail && (
+        <UmrahHotelDetailScreen
+          assets={umrahHotelAssets}
+          detail={selectedHotelDetail}
+          selectedRoomId={selectedHotelRoomId}
+          onBack={() => setScreen('umrah-hotel')}
+          onSelectRoom={(room) => {
+            setSelectedHotelRoomId(room.id)
+            setScreen('umrah-hotel-ticket-info')
+          }}
+        />
+      )}
+
+      {screen === 'umrah-hotel-ticket-info' && selectedHotelOffer && selectedHotelRoom && (
+        <UmrahHotelTicketInfoScreen
+          assets={umrahHotelAssets}
+          hotelImage={selectedHotelOffer.image}
+          hotelName={selectedHotelOffer.name}
+          roomName={selectedHotelRoom.name}
+          travelerText={`${travelerParticipants.dewasa} Dewasa / Kamar`}
+          checkInLabel={`${hotelCheckInLabel} (16:00)`}
+          checkOutLabel={`${hotelCheckOutLabel} (12:00)`}
+          contactName={travelerNames[0]}
+          contactEmail="noermansyah@gmail.com"
+          contactPhone="081288990011"
+          totalPrice={selectedHotelRoom.totalPrice}
+          totalLabel={selectedHotelRoom.totalLabel}
+          onBack={() => setScreen('umrah-hotel-detail')}
           onNext={() => setScreen('home')}
         />
       )}
