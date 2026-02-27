@@ -1,14 +1,17 @@
 .walkthrough-page {
   --phone-base-width: 375;
   --phone-base-height: 812;
-  --phone-scale: min(1, calc(100vw / var(--phone-base-width)), calc(100dvh / var(--phone-base-height)));
+  --phone-scale: calc(100vw / var(--phone-base-width));
+  min-height: 100vh;
+  min-height: 100svh;
   min-height: 100dvh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   background: #f5f7f9;
-  padding: 0;
-  overflow: hidden;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .phone-shell {
@@ -19,6 +22,7 @@
   overflow: hidden;
   transform: scale(var(--phone-scale));
   transform-origin: top center;
+  margin-bottom: max(0px, calc((var(--phone-scale) * var(--phone-base-height) - var(--phone-base-height)) * 1px));
 }
 
 .splash-shell {
