@@ -50,10 +50,28 @@ import {
 } from './features/onboarding/onboarding/data'
 import type { PassengerFormData, PaymentBreakdown, PaymentMethod, Screen, TicketFareOption } from './features/onboarding/onboarding/types'
 
-const budgetProfiles: Record<string, { flightMultiplier: number; hotelMultiplier: number }> = {
-  'Kurang dari 25.000.000': { flightMultiplier: 0.7, hotelMultiplier: 0.52 },
-  '25.000.000 sampai 40.000.000': { flightMultiplier: 1, hotelMultiplier: 1 },
-  'Lebih dari 40.000.000': { flightMultiplier: 1.28, hotelMultiplier: 1.22 },
+const budgetProfiles: Record<
+  string,
+  { ticketPerPersonMin: number; ticketPerPersonMax: number; returnTicketDelta: number; hotelMultiplier: number }
+> = {
+  'Kurang dari 25.000.000': {
+    ticketPerPersonMin: 5_400_000,
+    ticketPerPersonMax: 8_500_000,
+    returnTicketDelta: 220_000,
+    hotelMultiplier: 0.52,
+  },
+  '25.000.000 sampai 40.000.000': {
+    ticketPerPersonMin: 10_500_000,
+    ticketPerPersonMax: 14_000_000,
+    returnTicketDelta: 320_000,
+    hotelMultiplier: 1,
+  },
+  'Lebih dari 40.000.000': {
+    ticketPerPersonMin: 14_000_000,
+    ticketPerPersonMax: 20_000_000,
+    returnTicketDelta: 450_000,
+    hotelMultiplier: 1.22,
+  },
 }
 
 const defaultBudgetProfile = budgetProfiles['25.000.000 sampai 40.000.000']
@@ -156,8 +174,11 @@ function App() {
   const [selectedReturnFlightId, setSelectedReturnFlightId] = useState<string | null>(null)
   const [selectedDepartureFareId, setSelectedDepartureFareId] = useState<TicketFareOption['id']>('economy')
   const [selectedReturnFareId, setSelectedReturnFareId] = useState<TicketFareOption['id']>('economy')
+  const [hotelSelectionLeg, setHotelSelectionLeg] = useState<'departure' | 'return'>('departure')
   const [selectedHotelId, setSelectedHotelId] = useState<string | null>(null)
   const [selectedHotelRoomId, setSelectedHotelRoomId] = useState<string | null>(null)
+  const [selectedReturnHotelId, setSelectedReturnHotelId] = useState<string | null>(null)
+  const [selectedReturnHotelRoomId, setSelectedReturnHotelRoomId] = useState<string | null>(null)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('bni-va')
   const [travelerNames, setTravelerNames] = useState<string[]>([onboardingConfig.defaultContact.name])
   const [activePassengerIndex, setActivePassengerIndex] = useState(0)
@@ -309,12 +330,21 @@ function App() {
   const activeBudgetProfile = budgetRange ? (budgetProfiles[budgetRange] ?? defaultBudgetProfile) : defaultBudgetProfile
 
   const flightOffers = useMemo(() => {
-    const participantOffset = Math.max(0, totalParticipants - 2) * 350_000
+    const sortedTemplatePrices = [...flightOfferTemplate].map((offer) => offer.price).sort((a, b) => a - b)
+    const templateMinPrice = sortedTemplatePrices[0] ?? 10_800_000
+    const templateMaxPrice = sortedTemplatePrices[sortedTemplatePrices.length - 1] ?? templateMinPrice
+    const templateSpread = Math.max(1, templateMaxPrice - templateMinPrice)
 
-    return flightOfferTemplate.map((offer, index) => ({
-      ...offer,
-      price: Math.round((offer.price + participantOffset + index * 120_000) * activeBudgetProfile.flightMultiplier),
-      segments: offer.segments.map((segment) => {
+    return flightOfferTemplate.map((offer) => {
+      const normalizedTemplateRank = (offer.price - templateMinPrice) / templateSpread
+      const ticketPerPerson =
+        activeBudgetProfile.ticketPerPersonMin +
+        normalizedTemplateRank * (activeBudgetProfile.ticketPerPersonMax - activeBudgetProfile.ticketPerPersonMin)
+
+      return {
+        ...offer,
+        price: Math.round(ticketPerPerson * travelerCount),
+        segments: offer.segments.map((segment) => {
         if (segment.code === 'CGK' && departureCode) {
           return { ...segment, code: departureCode }
         }
@@ -324,9 +354,16 @@ function App() {
         }
 
         return segment
-      }),
-    }))
-  }, [activeBudgetProfile.flightMultiplier, departureCode, destinationCode, totalParticipants])
+        }),
+      }
+    })
+  }, [
+    activeBudgetProfile.ticketPerPersonMax,
+    activeBudgetProfile.ticketPerPersonMin,
+    departureCode,
+    destinationCode,
+    travelerCount,
+  ])
 
   const selectedFlightOffer = useMemo(
     () => flightOffers.find((offer) => offer.id === selectedFlightId) ?? flightOffers[0] ?? null,
@@ -352,11 +389,11 @@ function App() {
       return {
         ...offer,
         id: `${offer.id}-return`,
-        price: offer.price + index * 90000,
+        price: offer.price + index * activeBudgetProfile.returnTicketDelta,
         segments,
       }
     })
-  }, [departureCode, flightOffers, returnDestinationCode])
+  }, [activeBudgetProfile.returnTicketDelta, departureCode, flightOffers, returnDestinationCode])
 
   const selectedReturnFlightOffer = useMemo(
     () => returnFlightOffers.find((offer) => offer.id === selectedReturnFlightId) ?? returnFlightOffers[0] ?? null,
@@ -415,20 +452,24 @@ function App() {
     [hotelOffers, selectedHotelId],
   )
 
-  const secondHotelOffer = useMemo(() => {
+  const selectedReturnHotelOffer = useMemo(() => {
+    if (selectedReturnHotelId) {
+      return hotelOffers.find((hotel) => hotel.id === selectedReturnHotelId) ?? null
+    }
+
     if (!selectedHotelOffer) {
       return hotelOffers[1] ?? hotelOffers[0] ?? null
     }
 
     return hotelOffers.find((hotel) => hotel.id !== selectedHotelOffer.id) ?? selectedHotelOffer
-  }, [hotelOffers, selectedHotelOffer])
+  }, [hotelOffers, selectedHotelOffer, selectedReturnHotelId])
 
   const fallbackSecondHotelCity = cityOptions.find((city) => city !== onboardingConfig.defaultHotelCityLabel) ?? 'Madinah'
   const primaryHotelCityLabel = onboardingConfig.defaultHotelCityLabel
   const secondaryHotelCityLabel = returnCity ?? fallbackSecondHotelCity
 
-  const selectedHotelDetail = useMemo(() => {
-    if (!selectedHotelOffer) {
+  const buildHotelDetail = (hotelOffer: (typeof hotelOffers)[number] | null) => {
+    if (!hotelOffer) {
       return null
     }
 
@@ -439,20 +480,36 @@ function App() {
 
     return {
       ...hotelDetailTemplate,
-      hotelId: selectedHotelOffer.id,
-      name: selectedHotelOffer.name,
-      locationDistanceLabel: selectedHotelOffer.distanceLabel.replace('dari ka’bah', 'ke arah Mekah'),
+      hotelId: hotelOffer.id,
+      name: hotelOffer.name,
+      locationDistanceLabel: hotelOffer.distanceLabel.replace('dari ka’bah', 'ke arah Mekah'),
       rooms: hotelDetailTemplate.rooms.map((room) => ({
         ...room,
-        totalPrice: room.id === 'room-1' ? selectedHotelOffer.totalPrice : selectedHotelOffer.totalPrice + 2000000,
+        totalPrice: room.id === 'room-1' ? hotelOffer.totalPrice : hotelOffer.totalPrice + 2000000,
         totalLabel: `untuk ${nights} malam`,
       })),
     }
+  }
+
+  const selectedHotelDetail = useMemo(() => {
+    return buildHotelDetail(selectedHotelOffer)
   }, [hotelEndDate, hotelStartDate, selectedHotelOffer, travelDate])
+
+  const selectedReturnHotelDetail = useMemo(() => {
+    return buildHotelDetail(selectedReturnHotelOffer)
+  }, [hotelEndDate, hotelStartDate, selectedReturnHotelOffer, travelDate])
 
   const selectedHotelRoom = useMemo(
     () => selectedHotelDetail?.rooms.find((room) => room.id === selectedHotelRoomId) ?? selectedHotelDetail?.rooms[0] ?? null,
     [selectedHotelDetail, selectedHotelRoomId],
+  )
+
+  const selectedReturnHotelRoom = useMemo(
+    () =>
+      selectedReturnHotelDetail?.rooms.find((room) => room.id === selectedReturnHotelRoomId) ??
+      selectedReturnHotelDetail?.rooms[0] ??
+      null,
+    [selectedReturnHotelDetail, selectedReturnHotelRoomId],
   )
 
   const hotelStartValue = useMemo(() => startOfDay(hotelStartDate ?? travelDate ?? fallbackTravelDate), [hotelStartDate, travelDate])
@@ -474,7 +531,7 @@ function App() {
     const flightDeparture = selectedDepartureFare.totalPrice
     const flightReturn = selectedReturnFare.totalPrice
     const hotelMakkah = selectedHotelRoom?.totalPrice ?? selectedHotelOffer?.totalPrice ?? 12000000
-    const hotelMadinah = secondHotelOffer?.totalPrice ?? selectedHotelOffer?.totalPrice ?? 12000000
+    const hotelMadinah = selectedReturnHotelRoom?.totalPrice ?? selectedReturnHotelOffer?.totalPrice ?? 12000000
     const subtotal = flightDeparture + flightReturn + hotelMakkah + hotelMadinah
     const serviceFee = 50000
     const taxAmount = Math.round(subtotal * 0.1)
@@ -491,10 +548,11 @@ function App() {
       grandTotal,
     }
   }, [
-    secondHotelOffer?.totalPrice,
     selectedDepartureFare.totalPrice,
     selectedHotelOffer?.totalPrice,
     selectedHotelRoom?.totalPrice,
+    selectedReturnHotelOffer?.totalPrice,
+    selectedReturnHotelRoom?.totalPrice,
     selectedReturnFare.totalPrice,
     travelerCount,
   ])
@@ -517,13 +575,13 @@ function App() {
       },
     ]
 
-    if (secondHotelOffer && secondHotelOffer.id !== selectedHotelOffer.id) {
+    if (selectedReturnHotelOffer) {
       cards.push({
-        id: `${secondHotelOffer.id}-${secondaryHotelCityLabel.toLowerCase()}`,
-        name: secondHotelOffer.name,
+        id: `${selectedReturnHotelOffer.id}-${secondaryHotelCityLabel.toLowerCase()}`,
+        name: selectedReturnHotelOffer.name,
         nightsLabel: `${hotelNights + 1} hari ${hotelNights} malam`,
-        rating: secondHotelOffer.rating,
-        image: secondHotelOffer.image,
+        rating: selectedReturnHotelOffer.rating,
+        image: selectedReturnHotelOffer.image,
         pricePerNight: Math.round(paymentBreakdown.hotelMadinah / hotelNights),
         totalPrice: paymentBreakdown.hotelMadinah,
         travelerLabel: `${travelerCount} orang`,
@@ -537,8 +595,8 @@ function App() {
     paymentBreakdown.hotelMakkah,
     primaryHotelCityLabel,
     secondaryHotelCityLabel,
-    secondHotelOffer,
     selectedHotelOffer,
+    selectedReturnHotelOffer,
     travelerCount,
   ])
 
@@ -762,14 +820,19 @@ function App() {
             setActivePassengerIndex(index)
             setScreen('umrah-passenger-form')
           }}
-          onNext={() => setScreen('umrah-hotel')}
+          onNext={() => {
+            setHotelSelectionLeg('departure')
+            setSelectedReturnHotelId(null)
+            setSelectedReturnHotelRoomId(null)
+            setScreen('umrah-hotel')
+          }}
         />
       )}
 
       {screen === 'umrah-hotel' && (
         <UmrahHotelScreen
           assets={umrahHotelAssets}
-          cityLabel={onboardingConfig.defaultHotelCityLabel}
+          cityLabel={hotelSelectionLeg === 'departure' ? onboardingConfig.defaultHotelCityLabel : secondaryHotelCityLabel}
           checkInLabel={hotelCheckInLabel}
           checkOutLabel={hotelCheckOutLabel}
           nightsLabel={`${hotelNights} malam`}
@@ -778,38 +841,60 @@ function App() {
           passengerText={passengerText}
           roomText={`${roomCount} kamar`}
           hotels={hotelOffers}
-          onBack={() => setScreen('umrah-ticket-info')}
+          onBack={() => {
+            if (hotelSelectionLeg === 'return') {
+              setHotelSelectionLeg('departure')
+              setScreen('umrah-hotel-ticket-info')
+              return
+            }
+
+            setScreen('umrah-ticket-info')
+          }}
           onSaveDateRange={(startDate, endDate) => {
             setHotelStartDate(startDate)
             setHotelEndDate(endDate)
           }}
           onSelectHotel={(hotel) => {
-            setSelectedHotelId(hotel.id)
-            setSelectedHotelRoomId(null)
+            if (hotelSelectionLeg === 'departure') {
+              setSelectedHotelId(hotel.id)
+              setSelectedHotelRoomId(null)
+            } else {
+              setSelectedReturnHotelId(hotel.id)
+              setSelectedReturnHotelRoomId(null)
+            }
+
             setScreen('umrah-hotel-detail')
           }}
         />
       )}
 
-      {screen === 'umrah-hotel-detail' && selectedHotelDetail && (
+      {screen === 'umrah-hotel-detail' && (hotelSelectionLeg === 'departure' ? selectedHotelDetail : selectedReturnHotelDetail) && (
         <UmrahHotelDetailScreen
           assets={umrahHotelAssets}
-          detail={selectedHotelDetail}
-          selectedRoomId={selectedHotelRoomId}
+          detail={hotelSelectionLeg === 'departure' ? selectedHotelDetail! : selectedReturnHotelDetail!}
+          selectedRoomId={hotelSelectionLeg === 'departure' ? selectedHotelRoomId : selectedReturnHotelRoomId}
           onBack={() => setScreen('umrah-hotel')}
           onSelectRoom={(room) => {
-            setSelectedHotelRoomId(room.id)
+            if (hotelSelectionLeg === 'departure') {
+              setSelectedHotelRoomId(room.id)
+            } else {
+              setSelectedReturnHotelRoomId(room.id)
+            }
+
             setScreen('umrah-hotel-ticket-info')
           }}
         />
       )}
 
-      {screen === 'umrah-hotel-ticket-info' && selectedHotelOffer && selectedHotelRoom && (
+      {screen === 'umrah-hotel-ticket-info' &&
+        (hotelSelectionLeg === 'departure'
+          ? selectedHotelOffer && selectedHotelRoom
+          : selectedReturnHotelOffer && selectedReturnHotelRoom) && (
         <UmrahHotelTicketInfoScreen
           assets={umrahHotelAssets}
-          hotelImage={selectedHotelOffer.image}
-          hotelName={selectedHotelOffer.name}
-          roomName={selectedHotelRoom.name}
+          hotelImage={hotelSelectionLeg === 'departure' ? selectedHotelOffer!.image : selectedReturnHotelOffer!.image}
+          hotelName={hotelSelectionLeg === 'departure' ? selectedHotelOffer!.name : selectedReturnHotelOffer!.name}
+          roomName={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.name : selectedReturnHotelRoom!.name}
           travelerCount={travelerCount}
           travelerText={`${travelerParticipants.dewasa} Dewasa / Kamar`}
           checkInLabel={`${hotelCheckInLabel} (16:00)`}
@@ -817,10 +902,18 @@ function App() {
           contactName={travelerNames[0]}
           contactEmail={onboardingConfig.defaultContact.email}
           contactPhone={onboardingConfig.defaultContact.phone}
-          totalPrice={selectedHotelRoom.totalPrice}
-          totalLabel={selectedHotelRoom.totalLabel}
+          totalPrice={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalPrice : selectedReturnHotelRoom!.totalPrice}
+          totalLabel={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalLabel : selectedReturnHotelRoom!.totalLabel}
           onBack={() => setScreen('umrah-hotel-detail')}
-          onNext={() => setScreen('umrah-payment-overview')}
+          onNext={() => {
+            if (hotelSelectionLeg === 'departure') {
+              setHotelSelectionLeg('return')
+              setScreen('umrah-hotel')
+              return
+            }
+
+            setScreen('umrah-payment-overview')
+          }}
         />
       )}
 
@@ -859,7 +952,10 @@ function App() {
           hotelNightsLabel={`${hotelNights + 1} hari ${hotelNights} malam`}
           primaryHotelCityLabel={primaryHotelCityLabel}
           secondaryHotelCityLabel={secondaryHotelCityLabel}
-          onBack={() => setScreen('umrah-hotel-ticket-info')}
+          onBack={() => {
+            setHotelSelectionLeg('return')
+            setScreen('umrah-hotel-ticket-info')
+          }}
           onNext={() => setScreen('umrah-payment-method')}
         />
       )}
