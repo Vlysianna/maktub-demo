@@ -1,0 +1,2045 @@
+.walkthrough-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7f9;
+  padding: 12px;
+}
+
+.phone-shell {
+  position: relative;
+  width: 375px;
+  height: 812px;
+  background: #f5f7f9;
+  overflow: hidden;
+}
+
+.splash-shell {
+  background: linear-gradient(97.21deg, #013d2b 5.81%, #086f50 30.65%, #013d2b 76.52%);
+}
+
+.splash-pattern {
+  position: absolute;
+  inset: 0;
+  background: url('https://www.figma.com/api/mcp/asset/e10540b9-9e54-4de4-8c50-3c2d87f1ca4d') center / cover no-repeat;
+  mix-blend-mode: multiply;
+}
+
+.splash-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 127px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.decorative-shape {
+  position: absolute;
+  top: 107px;
+  left: 93px;
+  width: 310.425px;
+  height: 235.737px;
+  background: url('https://www.figma.com/api/mcp/asset/01774a99-9c06-475f-aaa2-660415fc9dc5') center / contain no-repeat;
+  transform: scaleY(-1);
+  pointer-events: none;
+}
+
+.walkthrough-content {
+  position: absolute;
+  left: 24px;
+  top: 56px;
+  width: 327px;
+}
+
+.progress {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.progress-item {
+  flex: 1;
+  height: 3px;
+  border-radius: 8px;
+  background: rgba(44, 50, 72, 0.25);
+}
+
+.progress-item.active {
+  background: #2c3248;
+}
+
+.hero-card {
+  position: relative;
+  width: 327px;
+  height: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 74, 55, 0) 33.17%, #0b4a37 89.84%);
+}
+
+.hero-brand {
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 500;
+  margin: 0;
+}
+
+.description {
+  margin-top: 24px;
+  color: #0a0c0e;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  min-height: 96px;
+}
+
+.description p {
+  margin: 0;
+}
+
+.cta-wrap {
+  position: absolute;
+  left: 24px;
+  width: 327px;
+  top: 721px;
+}
+
+.cta-button {
+  width: 100%;
+  height: 49px;
+  border: 0;
+  border-radius: 8px;
+  background: #2c3248;
+  color: #fff;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.home-indicator {
+  position: absolute;
+  left: 127px;
+  bottom: 6px;
+  width: 121px;
+  height: 4px;
+  border-radius: 2.5px;
+  background: #0a0c0e;
+  opacity: 0.25;
+}
+
+.splash-home-indicator {
+  background: #0b4a37;
+  opacity: 1;
+}
+
+.home-shell {
+  background: #eef2f6;
+}
+
+.home-top-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 375px;
+  height: 549px;
+  background: #00412d;
+}
+
+.home-top-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 375px;
+  height: 551px;
+  background: url('https://www.figma.com/api/mcp/asset/78bd8aa3-fb8e-462b-9936-1f2727ad104d') center / cover no-repeat;
+  mix-blend-mode: multiply;
+}
+
+.home-scroll {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding: 52px 16px 120px;
+}
+
+.home-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.home-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.home-user-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.home-avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.home-welcome {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.home-name {
+  margin: 2px 0 0;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.home-bell {
+  border: 0;
+  background: transparent;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  margin-top: 10px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.home-bell img {
+  width: 100%;
+  height: 100%;
+}
+
+.home-badge {
+  position: absolute;
+  top: -4px;
+  right: -7px;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  background: #ec3434;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-card {
+  margin-top: 20px;
+  border-radius: 16px;
+  padding: 42px 24px 24px;
+  backdrop-filter: blur(25px);
+  border: 0.5px solid #40a3cd;
+  background: rgba(255, 255, 255, 0.1);
+  min-height: 385px;
+}
+
+.ai-star-wrap {
+  width: 71px;
+  height: 71px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.ai-star-glow {
+  position: absolute;
+  inset: 0;
+  width: 71px;
+  height: 71px;
+  object-fit: contain;
+}
+
+.ai-star {
+  position: relative;
+  z-index: 1;
+  width: 71px;
+  height: 71px;
+  display: block;
+}
+
+.ai-card h2 {
+  margin: 10px 0 0;
+  color: #fff;
+  font-size: 35px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.ai-card p {
+  margin: 6px auto 0;
+  width: 223px;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.ai-tags {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.ai-tags span {
+  padding: 4px 10px;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.ai-search-btn {
+  margin-top: 36px;
+  width: 100%;
+  border-radius: 32px;
+  border: 0.5px solid #40a3cd;
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+  padding: 16px 16px 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.ai-search-btn span,
+.ai-search-btn strong {
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.ai-search-btn strong {
+  color: #fff;
+}
+
+.ai-search-btn img {
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+}
+
+.about-strip {
+  margin-top: 20px;
+  width: calc(100% + 32px);
+  margin-left: -16px;
+  height: 65px;
+  padding: 14px 12px 10px 16px;
+  border: 0;
+  border-radius: 16px 16px 0 0;
+  background: #03694b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.about-strip span {
+  flex: 1;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.about-strip img {
+  width: 16px;
+  height: 16px;
+}
+
+.home-content {
+  background: #eef2f6;
+  border-radius: 16px;
+  width: calc(100% + 32px);
+  margin-left: -16px;
+  padding: 16px;
+  min-height: 512px;
+}
+
+.services-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+
+.service-item {
+  border: 0;
+  border-radius: 8px;
+  background: rgba(3, 105, 75, 0.1);
+  height: 86px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #323333;
+  cursor: pointer;
+  padding: 0;
+}
+
+.service-item span {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.service-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  border: 1.35px solid #03694b;
+  background: linear-gradient(180deg, #0d8d66 13.9%, #013d2b 88.31%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-icon {
+  width: 21.6px;
+  height: 21.6px;
+}
+
+.articles-scroll {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.articles-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.article-card {
+  width: 270px;
+  height: 173px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  flex: 0 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.article-card > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.article-brand,
+.article-card h3 {
+  position: relative;
+  margin: 0;
+  color: #fff;
+}
+
+.article-brand {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.article-card h3 {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.chatbot-fab {
+  position: absolute;
+  right: 16px;
+  bottom: 95px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  border: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.chatbot-fab img {
+  width: 32px;
+  height: 32px;
+}
+
+.home-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  height: 61px;
+  background: #fff;
+  border-top: 1px solid #d1d5da;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  z-index: 2;
+}
+
+.home-nav-item {
+  border: 0;
+  background: transparent;
+  color: #323333;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.home-nav-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.home-nav-item.active {
+  font-weight: 600;
+}
+
+.umrah-question-shell {
+  background: #f5f7f9;
+  overflow: hidden;
+}
+
+.umrah-bg-blur {
+  position: absolute;
+  left: -61px;
+  top: 382px;
+  width: 399px;
+  height: 303px;
+  pointer-events: none;
+}
+
+.umrah-topbar {
+  position: absolute;
+  top: 52px;
+  left: 24px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.umrah-topbar h1 {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #0a0c0e;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
+}
+
+.umrah-topbar h1 img {
+  width: 16px;
+  height: 16px;
+}
+
+.umrah-close-btn {
+  position: absolute;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  border: 1px solid #d1d5da;
+  background: #fff;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.umrah-close-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.umrah-heading {
+  position: absolute;
+  left: 24px;
+  top: 120px;
+  width: 327px;
+  margin: 0;
+  color: #0a0c0e;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.umrah-calendar-card {
+  position: absolute;
+  left: 24px;
+  top: 239px;
+  width: 327px;
+  border-radius: 24px;
+  border: 3px solid #40a3cd;
+  background: #fff;
+  padding: 22px 21px 24px;
+}
+
+.umrah-calendar-card.blocked {
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.umrah-calendar-card h2 {
+  margin: 0;
+  color: #323333;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.umrah-calendar-head {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.umrah-calendar-head p {
+  margin: 0;
+  color: #121212;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.umrah-calendar-arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.umrah-calendar-arrows button {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.umrah-calendar-arrows img {
+  width: 24px;
+  height: 24px;
+}
+
+.umrah-weekdays,
+.umrah-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.umrah-weekdays {
+  margin-top: 8px;
+}
+
+.umrah-weekdays span,
+.umrah-date {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 16px;
+  color: #121212;
+}
+
+.umrah-date {
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.umrah-weekdays .holiday,
+.umrah-date.holiday {
+  color: #f36a6a;
+}
+
+.umrah-calendar-grid {
+  margin-top: 4px;
+  row-gap: 4px;
+}
+
+.umrah-date.muted {
+  color: #b5b5b5;
+}
+
+.umrah-date.disabled {
+  color: #b5b5b5;
+  cursor: not-allowed;
+}
+
+.umrah-date.selected {
+  background: rgba(44, 50, 72, 0.12);
+  color: #2c3248;
+  font-weight: 600;
+}
+
+.umrah-date.empty {
+  color: transparent;
+  cursor: default;
+}
+
+.umrah-next-wrap {
+  position: absolute;
+  right: 24px;
+  bottom: 34px;
+}
+
+.umrah-next-btn {
+  width: 159px;
+  height: 49px;
+  border: 0;
+  border-radius: 8px;
+  background: #2c3248;
+  color: #fff;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.umrah-next-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.umrah-traveler-shell {
+  background: #f5f7f9;
+}
+
+.umrah-traveler-card {
+  position: absolute;
+  left: 24px;
+  top: 239px;
+  width: 327px;
+  border-radius: 24px;
+  border: 3px solid #40a3cd;
+  background: #fff;
+  padding: 22px 21px 22px;
+}
+
+.umrah-traveler-card h2 {
+  margin: 0;
+  color: #323333;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.traveler-subtitle {
+  margin: 16px 0 0;
+  color: #0a0c0e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.traveler-rows {
+  margin-top: 8px;
+  display: grid;
+  gap: 10px;
+}
+
+.traveler-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.traveler-row > span {
+  color: #0a0c0e;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.traveler-stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.traveler-stepper strong {
+  width: 24px;
+  text-align: center;
+  color: #0a0c0e;
+  font-size: 13px;
+  line-height: normal;
+  font-weight: 400;
+}
+
+.step-btn {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.step-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+.step-btn.minus {
+  background: #d9d9d9;
+}
+
+.step-btn.plus {
+  background: #03694b;
+}
+
+.step-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.traveler-subtitle.room {
+  margin-top: 16px;
+}
+
+.room-options {
+  margin-top: 10px;
+  display: flex;
+  gap: 6px;
+}
+
+.room-chip {
+  height: 36px;
+  border-radius: 40px;
+  border: 1px solid #d1d5da;
+  background: #f5f7f9;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #0a0c0e;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.room-chip.active {
+  border-color: #2c3248;
+  background: rgba(44, 50, 72, 0.08);
+}
+
+.room-chip img {
+  width: 14px;
+  height: 14px;
+}
+
+.room-summary {
+  margin: 10px 0 0;
+  color: #323333;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.traveler-note {
+  position: absolute;
+  left: 37px;
+  top: 605px;
+  width: 283px;
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.traveler-note img {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
+
+.traveler-note p,
+.traveler-note-secondary {
+  margin: 0;
+  color: #0a0c0e;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.traveler-note-secondary {
+  position: absolute;
+  left: 52px;
+  top: 673px;
+  width: 274px;
+}
+
+.traveler-note-secondary strong {
+  color: #03694b;
+}
+
+.umrah-traveler-actions {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 729px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.umrah-back-btn {
+  height: 49px;
+  border: 1px solid #d1d5da;
+  border-radius: 8px;
+  background: #fff;
+  color: #0a0c0e;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.umrah-choice-card {
+  position: absolute;
+  left: 24px;
+  top: 239px;
+  width: 327px;
+  min-height: 350px;
+  border-radius: 24px;
+  border: 3px solid #40a3cd;
+  background: #fff;
+  padding: 22px 21px;
+}
+
+.umrah-choice-card h2 {
+  margin: 0;
+  color: #323333;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.umrah-choice-card h2.second {
+  margin-top: 22px;
+}
+
+.umrah-radio-list {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.umrah-radio-list.budget {
+  margin-top: 24px;
+}
+
+.umrah-radio-row {
+  border: 0;
+  background: transparent;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.umrah-radio-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.umrah-radio-text strong,
+.umrah-radio-text em {
+  font-style: normal;
+  font-size: 12px;
+  line-height: normal;
+}
+
+.umrah-radio-text strong {
+  color: #0a0c0e;
+  font-weight: 600;
+}
+
+.umrah-radio-text em {
+  color: #979899;
+  font-weight: 400;
+}
+
+.umrah-radio-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid #979899;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.umrah-radio-circle.active::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #2c3248;
+}
+
+.umrah-chip-grid {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.umrah-city-chip {
+  height: 38px;
+  border-radius: 40px;
+  border: 1px solid #d1d5da;
+  background: #f5f7f9;
+  padding: 0 16px;
+  color: #0a0c0e;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.umrah-city-chip.active {
+  border-color: #03694b;
+  background: #03694b;
+  color: #fff;
+}
+
+.umrah-processing-shell {
+  background: #f5f7f9;
+  overflow: hidden;
+}
+
+.umrah-processing-blur {
+  position: absolute;
+  left: -61px;
+  top: 170px;
+  width: 482px;
+  height: 776px;
+  pointer-events: none;
+}
+
+.umrah-processing-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.umrah-processing-icon {
+  width: 52px;
+  height: 52px;
+  animation: processingPulse 1.2s ease-in-out infinite;
+}
+
+.umrah-processing-center p {
+  margin: 0;
+  color: #0a0c0e;
+  font-size: 36px;
+  font-weight: 600;
+}
+
+@keyframes processingPulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.12) rotate(8deg);
+    opacity: 1;
+  }
+}
+
+.umrah-flight-shell {
+  background: #f5f7f9;
+  overflow: hidden;
+}
+
+.umrah-flight-header {
+  position: absolute;
+  top: 54px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.umrah-flight-header h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0a0c0e;
+}
+
+.umrah-flight-back,
+.umrah-flight-close {
+  border: 0;
+  background: transparent;
+  width: 24px;
+  height: 24px;
+  font-size: 28px;
+  color: #0a0c0e;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.umrah-flight-stepper {
+  position: absolute;
+  top: 90px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.umrah-flight-stepper span {
+  color: #a7a7a7;
+  white-space: nowrap;
+}
+
+.umrah-flight-stepper .active {
+  color: #0a0c0e;
+}
+
+.umrah-flight-summary {
+  position: absolute;
+  left: 16px;
+  top: 126px;
+  width: 343px;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  background: #f5f7f9;
+  padding: 12px 16px;
+}
+
+.umrah-flight-summary p {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(51, 51, 51, 0.8);
+}
+
+.umrah-flight-summary h2 {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #0a0c0e;
+}
+
+.umrah-flight-summary h2 img {
+  width: 16px;
+  height: 16px;
+}
+
+.umrah-flight-summary > div {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  color: #727272;
+}
+
+.umrah-flight-summary > div span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.umrah-flight-summary > div img {
+  width: 12px;
+  height: 12px;
+}
+
+.umrah-flight-list {
+  position: absolute;
+  left: 16px;
+  top: 242px;
+  right: 16px;
+  bottom: 84px;
+  overflow-y: auto;
+  display: grid;
+  gap: 12px;
+  padding-bottom: 8px;
+}
+
+.flight-card {
+  background: #fff;
+  border: 1px solid #dfdfdf;
+  border-radius: 8px;
+  padding: 16px;
+  position: relative;
+}
+
+.flight-card.recommended {
+  border-color: #40a3cd;
+  padding-bottom: 44px;
+}
+
+.flight-main-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.flight-segments {
+  display: flex;
+  gap: 14px;
+}
+
+.segment-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.segment-item strong {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.segment-item small {
+  font-size: 10px;
+  color: rgba(51, 51, 51, 0.4);
+  background: #f3f9fb;
+  padding: 2px 12px;
+  border-radius: 8px;
+}
+
+.segment-item em {
+  font-style: normal;
+  font-size: 10px;
+  color: rgba(51, 51, 51, 0.6);
+}
+
+.flight-price {
+  margin: 0;
+  color: #03694b;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.flight-meta-row,
+.flight-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flight-meta-row {
+  margin-top: 10px;
+}
+
+.flight-meta-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: rgba(51, 51, 51, 0.6);
+}
+
+.flight-meta-row img {
+  width: 14px;
+  height: 14px;
+}
+
+.flight-footer-row {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ececec;
+}
+
+.flight-detail-btn {
+  border: 0;
+  background: transparent;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 0;
+}
+
+.flight-detail-btn span {
+  color: #03694b;
+  font-size: 12px;
+}
+
+.flight-detail-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+.flight-recommend-badge {
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  height: 32px;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(59.03deg, #40a3cd 6.62%, #90e0ae 93.32%);
+  color: #fff;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+}
+
+.flight-recommend-badge img {
+  width: 8px;
+  height: 8px;
+}
+
+.umrah-flight-costs {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 26px;
+  display: grid;
+  grid-template-columns: 170px 99px 70px;
+  gap: 2px;
+}
+
+.umrah-flight-costs span {
+  height: 20px;
+  border-radius: 4px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  color: rgba(0, 0, 0, 0.8);
+  background: #dceee2;
+}
+
+.umrah-flight-costs .active {
+  color: rgba(255, 255, 255, 0.8);
+  background: #03694b;
+}
+
+.umrah-ticket-shell {
+  background: #f5f7f9;
+  overflow: hidden;
+}
+
+.umrah-ticket-header {
+  position: absolute;
+  top: 54px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.umrah-ticket-header h1 {
+  margin: 0;
+  color: #0a0c0e;
+  font-size: 15px;
+  line-height: normal;
+  font-weight: 600;
+}
+
+.umrah-ticket-back,
+.umrah-ticket-close,
+.umrah-ticket-head-spacer {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.umrah-ticket-back {
+  cursor: pointer;
+}
+
+.umrah-ticket-back img {
+  width: 24px;
+  height: 24px;
+}
+
+.umrah-ticket-close {
+  color: #0a0c0e;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.umrah-ticket-scroll {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 122px;
+  bottom: 84px;
+  overflow-y: auto;
+  padding: 14px 16px 40px;
+}
+
+.umrah-ticket-scroll-info {
+  top: 118px;
+}
+
+.umrah-ticket-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.umrah-ticket-title {
+  margin: 0;
+  color: #323333;
+  font-size: 15px;
+  line-height: normal;
+  font-weight: 600;
+}
+
+.umrah-ticket-card-list {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.umrah-ticket-card {
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  background: #fff;
+  padding: 16px;
+}
+
+.umrah-ticket-top-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.umrah-ticket-name,
+.umrah-ticket-subtitle {
+  margin: 0;
+  color: rgba(51, 51, 51, 0.8);
+  font-size: 12px;
+  line-height: normal;
+}
+
+.umrah-ticket-price {
+  margin: 3px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.umrah-ticket-price strong {
+  color: #03694b;
+  font-size: 15px;
+  line-height: normal;
+  font-weight: 600;
+}
+
+.umrah-ticket-price span {
+  color: #0a0c0e;
+  font-size: 12px;
+}
+
+.umrah-ticket-select-btn {
+  width: 80px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #03694b;
+  background: #fff;
+  color: #03694b;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.umrah-ticket-select-btn.active {
+  background: #03694b;
+  color: #fff;
+}
+
+.umrah-ticket-feature-list {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.umrah-ticket-feature-list p {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(51, 51, 51, 0.8);
+  font-size: 12px;
+}
+
+.umrah-ticket-feature-list img {
+  width: 14px;
+  height: 14px;
+}
+
+.umrah-ticket-policy-highlight {
+  margin-top: 12px;
+  border: 1px solid rgba(3, 105, 75, 0.5);
+  border-radius: 8px;
+  background: rgba(3, 105, 75, 0.1);
+  padding: 16px;
+}
+
+.umrah-ticket-policy-highlight h3,
+.umrah-ticket-policy-item h3 {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #03694b;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.umrah-ticket-policy-highlight h3 img {
+  width: 14px;
+  height: 14px;
+}
+
+.umrah-ticket-policy-highlight p,
+.umrah-ticket-policy-item p {
+  margin: 6px 0 0;
+  color: #333;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.umrah-ticket-policy-highlight button {
+  margin-top: 6px;
+  border: 0;
+  background: transparent;
+  color: #03694b;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+}
+
+.umrah-ticket-policy-item {
+  margin-top: 12px;
+}
+
+.umrah-ticket-policy-item h3 {
+  color: #0a0c0e;
+}
+
+.umrah-ticket-policy-item h3 img {
+  width: 16px;
+  height: 16px;
+}
+
+.umrah-ticket-footer {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 26px;
+}
+
+.umrah-info-route-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 44px 16px 1fr;
+  gap: 12px;
+}
+
+.umrah-info-times {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 278px;
+}
+
+.umrah-info-times div {
+  display: grid;
+  gap: 3px;
+  justify-items: center;
+}
+
+.umrah-info-times strong {
+  color: #333;
+  font-size: 14px;
+  line-height: normal;
+  font-weight: 500;
+}
+
+.umrah-info-times small,
+.umrah-info-times p {
+  margin: 0;
+  color: rgba(51, 51, 51, 0.7);
+  font-size: 12px;
+  line-height: normal;
+}
+
+.umrah-info-line img {
+  width: 16px;
+  height: 260px;
+  margin-top: 1px;
+}
+
+.umrah-info-route {
+  display: grid;
+  gap: 24px;
+}
+
+.umrah-info-airport-block h4 {
+  margin: 0;
+  color: #03694b;
+  font-size: 14px;
+  line-height: normal;
+  font-weight: 500;
+}
+
+.umrah-info-airport-block p {
+  margin: 2px 0 0;
+  color: rgba(51, 51, 51, 0.7);
+  font-size: 12px;
+  line-height: normal;
+}
+
+.umrah-info-flight-card {
+  border-radius: 4px;
+  background: #f5f7f9;
+  padding: 8px;
+}
+
+.umrah-info-airline-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.umrah-info-airline-row img {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.umrah-info-airline-row p,
+.umrah-info-airline-row small {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.umrah-info-airline-row p {
+  color: #333;
+}
+
+.umrah-info-airline-row small {
+  color: rgba(51, 51, 51, 0.7);
+}
+
+.umrah-info-divider {
+  margin-top: 8px;
+  width: 100%;
+  height: 1px;
+}
+
+.umrah-info-bag-row {
+  margin: 8px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(51, 51, 51, 0.9);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.umrah-info-bag-row img {
+  width: 16px;
+  height: 14px;
+}
+
+.umrah-info-seat-row {
+  margin-top: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.umrah-info-seat-row > img {
+  width: 19px;
+  height: 19px;
+}
+
+.umrah-info-seat-row p {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: rgba(51, 51, 51, 0.9);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.umrah-info-seat-row p span:first-child {
+  width: 62px;
+}
+
+.umrah-info-seat-row p span:last-child {
+  white-space: nowrap;
+}
+
+.umrah-info-passenger-card {
+  margin-top: 12px;
+  border: 1px solid #d1d5da;
+  border-radius: 8px;
+  background: #fff;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.umrah-info-add-passenger {
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #03694b;
+  font-size: 13px;
+  line-height: 21px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.umrah-info-add-passenger img {
+  width: 16px;
+  height: 16px;
+}
+
+.umrah-info-passenger-item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #0a0c0e;
+  font-size: 13px;
+  line-height: 21px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.umrah-info-passenger-item span:last-child {
+  font-size: 18px;
+  line-height: 1;
+  color: #323333;
+}
+
+.umrah-info-caption {
+  margin: 10px 0 0;
+  color: rgba(51, 51, 51, 0.7);
+  font-size: 12px;
+  line-height: normal;
+}
+
+.umrah-info-contact-card {
+  margin-top: 10px;
+  border: 1px solid #dfdfdf;
+  border-radius: 8px;
+  background: #f5f7f9;
+  padding: 12px 14px;
+}
+
+.umrah-info-contact-card p {
+  margin: 0;
+  color: #0a0c0e;
+  font-size: 13px;
+  line-height: normal;
+  font-weight: 600;
+}
+
+.umrah-info-contact-card small {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #727272;
+  font-size: 12px;
+}
+
+.umrah-info-price {
+  margin: 4px 0 0;
+  color: #03694b;
+  font-size: 15px;
+  line-height: normal;
+  font-weight: 600;
+}
+
+.umrah-passenger-shell {
+  background: #f5f7f9;
+  overflow: hidden;
+}
+
+.umrah-passenger-blank-rect {
+  position: absolute;
+  top: 90px;
+  left: 0;
+  right: 0;
+  bottom: 132px;
+  background: #fff;
+}
+
+.umrah-passenger-scroll {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 90px;
+  bottom: 132px;
+  overflow-y: auto;
+  padding: 16px 19px 18px;
+}
+
+.umrah-passenger-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.umrah-passenger-field {
+  display: grid;
+  gap: 6px;
+}
+
+.umrah-passenger-field + .umrah-passenger-field {
+  margin-top: 16px;
+}
+
+.umrah-passenger-field p {
+  margin: 0;
+  color: #323333;
+  font-size: 13px;
+  line-height: normal;
+  font-weight: 600;
+}
+
+.umrah-passenger-field p span {
+  color: #ec3434;
+}
+
+.umrah-passenger-field input,
+.umrah-passenger-select-wrap select {
+  width: 100%;
+  border: 1px solid #d1d5da;
+  border-radius: 8px;
+  background: #f5f7f9;
+  color: #0a0c0e;
+  font-size: 13px;
+  line-height: 21px;
+  padding: 13px 12px;
+  outline: none;
+  appearance: none;
+}
+
+.umrah-passenger-field input::placeholder,
+.umrah-passenger-select-wrap select:invalid {
+  color: #979899;
+}
+
+.umrah-passenger-hint {
+  margin: 4px 0 0;
+  color: #323333;
+  font-size: 13px;
+  line-height: normal;
+}
+
+.umrah-passenger-date-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.umrah-passenger-select-wrap {
+  position: relative;
+}
+
+.umrah-passenger-select-wrap img {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.umrah-passenger-note {
+  margin-top: 16px;
+}
+
+.umrah-passenger-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  border-top: 1px solid #d1d5da;
+  background: #fff;
+  padding: 12px 16px 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.umrah-passport-photo-btn {
+  height: 43px;
+  border: 1px solid #d1d5da;
+  border-radius: 8px;
+  background: #fff;
+  color: #0a0c0e;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.umrah-passport-photo-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.visa-popup-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 12, 14, 0.38);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.visa-popup-card {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 16px;
+  background: #fff;
+  padding: 20px 16px 16px;
+}
+
+.visa-popup-card h3 {
+  margin: 0;
+  color: #0a0c0e;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.visa-popup-card p {
+  margin: 8px 0 0;
+  color: #323333;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.visa-popup-actions {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.visa-option {
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #d1d5da;
+  background: #fff;
+  color: #323333;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.visa-option.primary {
+  border-color: #2c3248;
+  background: #2c3248;
+  color: #fff;
+}
+
+@media (max-width: 400px) {
+  .walkthrough-page {
+    padding: 0;
+  }
+
+  .phone-shell {
+    width: 100vw;
+  }
+}
