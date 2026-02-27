@@ -1977,6 +1977,117 @@
   height: 20px;
 }
 
+.umrah-camera-shell {
+  background: #000;
+  overflow: hidden;
+}
+
+.umrah-camera-header {
+  position: absolute;
+  top: 54px;
+  left: 16px;
+  z-index: 4;
+}
+
+.umrah-camera-header .umrah-ticket-back img {
+  filter: brightness(0) invert(1);
+}
+
+.umrah-camera-preview-wrap {
+  position: absolute;
+  left: 45px;
+  top: 125px;
+  width: 296px;
+  height: 464px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.umrah-camera-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: rotate(90deg) scale(1.82);
+}
+
+.umrah-camera-guide {
+  position: absolute;
+  left: 37px;
+  top: 175px;
+  width: 302px;
+  height: 511px;
+  z-index: 3;
+}
+
+.umrah-camera-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+}
+
+.umrah-camera-flash {
+  position: absolute;
+  top: 654px;
+  left: 284px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 4;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.umrah-camera-flash img {
+  width: 40px;
+  height: 40px;
+}
+
+.umrah-camera-shutter {
+  position: absolute;
+  left: 50%;
+  top: 662px;
+  transform: translateX(-50%);
+  width: 73px;
+  height: 73px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  z-index: 4;
+  cursor: pointer;
+}
+
+.umrah-camera-shutter .outer {
+  position: absolute;
+  inset: 0;
+  width: 73px;
+  height: 73px;
+}
+
+.umrah-camera-shutter .inner {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 65px;
+  height: 65px;
+}
+
+.umrah-camera-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 127px;
+  width: 121px;
+  height: 4px;
+  border-radius: 2.5px;
+  opacity: 0.25;
+  background: #fff;
+  z-index: 4;
+}
+
 .visa-popup-backdrop {
   position: absolute;
   inset: 0;

@@ -11,6 +11,7 @@ type UmrahPassengerFormScreenProps = {
   yearOptions: string[]
   onBack: () => void
   onSave: () => void
+  onOpenCamera: () => void
   onChange: <K extends keyof PassengerFormData>(field: K, value: PassengerFormData[K]) => void
 }
 
@@ -63,6 +64,7 @@ export function UmrahPassengerFormScreen({
   yearOptions,
   onBack,
   onSave,
+  onOpenCamera,
   onChange,
 }: UmrahPassengerFormScreenProps) {
   return (
@@ -191,7 +193,7 @@ export function UmrahPassengerFormScreen({
       </div>
 
       <footer className="umrah-passenger-footer">
-        <button type="button" className="umrah-passport-photo-btn">
+        <button type="button" className="umrah-passport-photo-btn" onClick={onOpenCamera}>
           <img src={assets.cameraIcon} alt="" aria-hidden /> Foto Passport
         </button>
         <button type="button" className="cta-button" onClick={onSave}>

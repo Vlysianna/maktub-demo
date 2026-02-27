@@ -164,6 +164,12 @@ export const umrahTicketAssets: UmrahTicketAssets = {
   addCircleIcon: 'https://www.figma.com/api/mcp/asset/20b6f12e-1d02-44cf-a178-5301cd0e0287',
   cameraIcon: 'https://www.figma.com/api/mcp/asset/eac09041-3669-43e8-bc51-228266a8a363',
   chevronDownIcon: 'https://www.figma.com/api/mcp/asset/01ef2f68-a662-43c7-99d2-88c44d2811f3',
+  cameraSamplePassport: 'https://www.figma.com/api/mcp/asset/429a70e0-7bc1-42c3-9417-6f9cc917a64b',
+  cameraGuideFrame: 'https://www.figma.com/api/mcp/asset/a9dbadda-8e05-4960-a834-a5af8df8cbda',
+  cameraMaskOverlay: 'https://www.figma.com/api/mcp/asset/3b265557-4f3e-4a78-b8c7-7763b52482ad',
+  cameraFlashIcon: 'https://www.figma.com/api/mcp/asset/0fe3ee2c-2a65-4586-ad0a-5a9414da2704',
+  cameraShutterOuter: 'https://www.figma.com/api/mcp/asset/df507603-f71c-48d3-b48f-6e49cc5e4cdb',
+  cameraShutterInner: 'https://www.figma.com/api/mcp/asset/81f2455d-ee40-4b39-aab6-536b8103d91b',
 }
 
 export const cityAirportCodeMap: Record<string, string> = {

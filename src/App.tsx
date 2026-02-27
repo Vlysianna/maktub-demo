@@ -6,6 +6,7 @@ import { UmrahBudgetScreen } from './features/onboarding/onboarding/components/U
 import { UmrahDepartureScreen } from './features/onboarding/onboarding/components/UmrahDepartureScreen'
 import { UmrahFlightScreen } from './features/onboarding/onboarding/components/UmrahFlightScreen'
 import { UmrahFlightDetailScreen } from './features/onboarding/onboarding/components/UmrahFlightDetailScreen'
+import { UmrahPassengerCameraScreen } from './features/onboarding/onboarding/components/UmrahPassengerCameraScreen'
 import { UmrahPassengerFormScreen } from './features/onboarding/onboarding/components/UmrahPassengerFormScreen'
 import { UmrahProcessingScreen } from './features/onboarding/onboarding/components/UmrahProcessingScreen'
 import { SplashScreen } from './features/onboarding/onboarding/components/SplashScreen'
@@ -459,6 +460,7 @@ function App() {
           monthOptions={monthOptions}
           yearOptions={yearOptions}
           onBack={() => setScreen('umrah-ticket-info')}
+          onOpenCamera={() => setScreen('umrah-passenger-camera')}
           onChange={(field, value) => {
             setPassengerForms((prev) => {
               const next = [...prev]
@@ -479,6 +481,14 @@ function App() {
 
             setScreen('umrah-ticket-info')
           }}
+        />
+      )}
+
+      {screen === 'umrah-passenger-camera' && (
+        <UmrahPassengerCameraScreen
+          assets={umrahTicketAssets}
+          onBack={() => setScreen('umrah-passenger-form')}
+          onCapture={() => setScreen('umrah-passenger-form')}
         />
       )}
     </main>

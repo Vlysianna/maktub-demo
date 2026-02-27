@@ -12,6 +12,7 @@ export type Screen =
   | 'umrah-flight-detail'
   | 'umrah-ticket-info'
   | 'umrah-passenger-form'
+  | 'umrah-passenger-camera'
 
 export type WalkthroughSlide = {
   image: string
@@ -133,6 +134,12 @@ export type UmrahTicketAssets = {
   addCircleIcon: string
   cameraIcon: string
   chevronDownIcon: string
+  cameraSamplePassport: string
+  cameraGuideFrame: string
+  cameraMaskOverlay: string
+  cameraFlashIcon: string
+  cameraShutterOuter: string
+  cameraShutterInner: string
 }
 
 export type PassengerFormData = {
