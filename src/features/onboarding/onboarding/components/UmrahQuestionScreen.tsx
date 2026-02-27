@@ -138,7 +138,7 @@ export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionSc
 
           <div className="umrah-calendar-arrows">
             <button type="button" aria-label="Bulan sebelumnya" onClick={() => changeMonth(-1)}>
-              <img src={assets.chevronLeft} alt="" />
+              <img src={assets.chevronLeft} alt="" className="is-left" />
             </button>
             <button type="button" aria-label="Bulan berikutnya" onClick={() => changeMonth(1)}>
               <img src={assets.chevronRight} alt="" />

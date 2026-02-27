@@ -95,8 +95,8 @@ export const umrahQuestionAssets: UmrahQuestionAssets = {
   blur: 'https://www.figma.com/api/mcp/asset/57cd73b2-73b0-45af-9e07-23a80ca00208',
   aiMagic: 'https://www.figma.com/api/mcp/asset/1feef05b-cfe4-40bb-8b0e-a7dafc9409f4',
   closeIcon: 'https://www.figma.com/api/mcp/asset/bcc18140-1ac7-4603-99eb-b0a7ee936de9',
-  chevronLeft: 'https://www.figma.com/api/mcp/asset/fe104165-5acc-43c1-ae44-89d07120dce9',
-  chevronRight: 'https://www.figma.com/api/mcp/asset/b0e9f755-e04a-4681-958d-e8e83dae169a',
+  chevronLeft: 'https://www.figma.com/api/mcp/asset/2909023e-2b4e-45be-90c0-4046f05ddf6f',
+  chevronRight: 'https://www.figma.com/api/mcp/asset/2909023e-2b4e-45be-90c0-4046f05ddf6f',
 }
 
 export const umrahTravelerAssets: UmrahTravelerAssets = {

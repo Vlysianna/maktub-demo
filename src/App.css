@@ -674,6 +674,10 @@
   height: 24px;
 }
 
+.umrah-calendar-arrows img.is-left {
+  transform: scaleX(-1);
+}
+
 .umrah-weekdays,
 .umrah-calendar-grid {
   display: grid;
