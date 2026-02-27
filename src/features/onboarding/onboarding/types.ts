@@ -19,6 +19,9 @@ export type Screen =
   | 'umrah-payment-pending'
   | 'umrah-payment-success'
   | 'umrah-payment-complete'
+  | 'umrah-visa-services'
+  | 'umrah-visa-form-personal'
+  | 'umrah-visa-form-docs'
   | 'umrah-passenger-form'
   | 'umrah-passenger-camera'
 

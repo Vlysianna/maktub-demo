@@ -1,0 +1,83 @@
+import { useMemo } from 'react'
+
+type VisaDocumentField = 'passport' | 'ktp' | 'familyCard' | 'marriageBook' | 'birthCertificate' | 'photo'
+
+type VisaDocumentsValue = Record<VisaDocumentField, File | null>
+
+type UmrahVisaFormDocsScreenProps = {
+  value: VisaDocumentsValue
+  onUpload: (field: VisaDocumentField, file: File | null) => void
+  onBack: () => void
+  onSave: () => void
+}
+
+const requiredFields: VisaDocumentField[] = ['passport', 'ktp', 'familyCard', 'photo']
+
+const docItems: Array<{ field: VisaDocumentField; label: string; hint?: string; required?: boolean }> = [
+  { field: 'passport', label: 'Paspor', required: true, hint: 'Pastikan paspor masih berlaku minimal 6 bulan sebelum tanggal keberangkatan ke Arab Saudi.' },
+  { field: 'ktp', label: 'KTP', required: true },
+  { field: 'familyCard', label: 'Kartu Keluarga', required: true },
+  { field: 'marriageBook', label: 'Buku Nikah (jika sudah menikah)' },
+  { field: 'birthCertificate', label: 'Akta Kelahiran (jika ada anak di bawah 17 tahun)' },
+  { field: 'photo', label: 'Pas Foto', required: true, hint: 'Pas foto terbaru dengan latar belakang putih, ukuran 4×6 cm.' },
+]
+
+export function UmrahVisaFormDocsScreen({ value, onUpload, onBack, onSave }: UmrahVisaFormDocsScreenProps) {
+  const requiredComplete = useMemo(() => requiredFields.every((field) => value[field]), [value])
+
+  return (
+    <section className="phone-shell umrah-visa-shell" aria-label="Form Dokumen Visa">
+      <header className="umrah-flight-header">
+        <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
+          ←
+        </button>
+        <h1>Formulir Visa Saudi Online</h1>
+        <span className="umrah-ticket-head-spacer" aria-hidden />
+      </header>
+
+      <div className="umrah-visa-form-stepper" aria-hidden>
+        <span className="active">1 Data Pribadi -----</span>
+        <span className="active">2 Dokumen</span>
+      </div>
+
+      <div className="umrah-visa-form-scroll">
+        <h2>Dokumen</h2>
+        <p className="umrah-visa-form-intro">
+          Anda harus memenuhi persyaratan dokumen berikut untuk mendapatkan visa perjalanan untuk menerima eVisa Arab Saudi:
+        </p>
+
+        {docItems.map((item) => {
+          const selectedFile = value[item.field]
+
+          return (
+            <label key={item.field}>
+              {item.label} {item.required ? '*' : ''}
+              <span className="umrah-visa-upload-box">
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0] ?? null
+                    onUpload(item.field, file)
+                  }}
+                />
+                <strong>{selectedFile ? selectedFile.name : '+ Upload Foto'}</strong>
+              </span>
+              {item.hint ? <small>{item.hint}</small> : null}
+            </label>
+          )
+        })}
+      </div>
+
+      <footer className="umrah-ticket-footer">
+        <button type="button" className="cta-button" disabled={!requiredComplete} onClick={onSave}>
+          Simpan
+        </button>
+      </footer>
+
+      <footer className="home-indicator" aria-hidden>
+        <span />
+      </footer>
+    </section>
+  )
+}

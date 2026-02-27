@@ -21,6 +21,9 @@ import { SplashScreen } from './features/onboarding/onboarding/components/Splash
 import { UmrahQuestionScreen } from './features/onboarding/onboarding/components/UmrahQuestionScreen'
 import { UmrahTicketInfoScreen } from './features/onboarding/onboarding/components/UmrahTicketInfoScreen'
 import { UmrahTravelerScreen } from './features/onboarding/onboarding/components/UmrahTravelerScreen'
+import { UmrahVisaFormDocsScreen } from './features/onboarding/onboarding/components/UmrahVisaFormDocsScreen'
+import { UmrahVisaFormPersonalScreen } from './features/onboarding/onboarding/components/UmrahVisaFormPersonalScreen'
+import { UmrahVisaServicesScreen } from './features/onboarding/onboarding/components/UmrahVisaServicesScreen'
 import { WalkthroughScreen } from './features/onboarding/onboarding/components/WalkthroughScreen'
 import {
   articles,
@@ -180,6 +183,37 @@ function App() {
   const [selectedReturnHotelId, setSelectedReturnHotelId] = useState<string | null>(null)
   const [selectedReturnHotelRoomId, setSelectedReturnHotelRoomId] = useState<string | null>(null)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('bni-va')
+  const [hasVisa, setHasVisa] = useState(false)
+  const [selectedVisaPackage, setSelectedVisaPackage] = useState<'visa-1-bulan' | 'visa-2-minggu' | 'visa-express'>('visa-1-bulan')
+  const [visaPersonalForm, setVisaPersonalForm] = useState({
+    familyName: '',
+    givenName: '',
+    gender: '',
+    birthDay: '',
+    birthMonth: '',
+    birthYear: '',
+    birthPlace: '',
+    birthCountry: '',
+    email: onboardingConfig.defaultContact.email,
+    phone: onboardingConfig.defaultContact.phone,
+    maritalStatus: '',
+    nationality: '',
+  })
+  const [visaDocsForm, setVisaDocsForm] = useState<{
+    passport: File | null
+    ktp: File | null
+    familyCard: File | null
+    marriageBook: File | null
+    birthCertificate: File | null
+    photo: File | null
+  }>({
+    passport: null,
+    ktp: null,
+    familyCard: null,
+    marriageBook: null,
+    birthCertificate: null,
+    photo: null,
+  })
   const [travelerNames, setTravelerNames] = useState<string[]>([onboardingConfig.defaultContact.name])
   const [activePassengerIndex, setActivePassengerIndex] = useState(0)
   const [passengerForms, setPassengerForms] = useState<PassengerFormData[]>([createInitialPassengerForm()])
@@ -630,6 +664,13 @@ function App() {
   const yearOptions = Array.from({ length: onboardingConfig.passportYearSpan }, (_, index) => String(new Date().getFullYear() - index))
   const selectedPaymentLabel = onboardingConfig.paymentMethodLabels[selectedPaymentMethod]
 
+  const isVisaPersonalCompleted = useMemo(() => Object.values(visaPersonalForm).every((value) => value.trim().length > 0), [visaPersonalForm])
+  const isVisaDocsCompleted = useMemo(
+    () => Boolean(visaDocsForm.passport && visaDocsForm.ktp && visaDocsForm.familyCard && visaDocsForm.photo),
+    [visaDocsForm.familyCard, visaDocsForm.ktp, visaDocsForm.passport, visaDocsForm.photo],
+  )
+  const isVisaFormCompleted = isVisaPersonalCompleted && isVisaDocsCompleted
+
   return (
     <main className="walkthrough-page">
       {screen === 'splash' && <SplashScreen logoUrl={splashLogo} />}
@@ -990,7 +1031,7 @@ function App() {
           virtualAccountName={selectedPaymentLabel}
           totalPayment={paymentBreakdown.grandTotal}
           onBack={() => setScreen('umrah-payment-pending')}
-          onNext={() => setScreen('umrah-payment-complete')}
+          onNext={() => setScreen(hasVisa ? 'umrah-payment-complete' : 'umrah-visa-services')}
         />
       )}
 
@@ -999,6 +1040,45 @@ function App() {
           assets={umrahCompletionAssets}
           onBack={() => setScreen('umrah-payment-success')}
           onNext={() => setScreen('home')}
+        />
+      )}
+
+      {screen === 'umrah-visa-services' && (
+        <UmrahVisaServicesScreen
+          cityLabel={secondaryHotelCityLabel}
+          formCompleted={isVisaFormCompleted}
+          selectedPackageId={selectedVisaPackage}
+          travelerCount={travelerCount}
+          onBack={() => setScreen('umrah-payment-success')}
+          onSelectPackage={setSelectedVisaPackage}
+          onOpenForm={() => setScreen('umrah-visa-form-personal')}
+          onBuy={() => {
+            setHasVisa(true)
+            setScreen('umrah-payment-complete')
+          }}
+          onSkip={() => setScreen('home')}
+        />
+      )}
+
+      {screen === 'umrah-visa-form-personal' && (
+        <UmrahVisaFormPersonalScreen
+          value={visaPersonalForm}
+          onChange={(field, value) => {
+            setVisaPersonalForm((prev) => ({ ...prev, [field]: value }))
+          }}
+          onBack={() => setScreen('umrah-visa-services')}
+          onNext={() => setScreen('umrah-visa-form-docs')}
+        />
+      )}
+
+      {screen === 'umrah-visa-form-docs' && (
+        <UmrahVisaFormDocsScreen
+          value={visaDocsForm}
+          onUpload={(field, file) => {
+            setVisaDocsForm((prev) => ({ ...prev, [field]: file }))
+          }}
+          onBack={() => setScreen('umrah-visa-form-personal')}
+          onSave={() => setScreen('umrah-visa-services')}
         />
       )}
 

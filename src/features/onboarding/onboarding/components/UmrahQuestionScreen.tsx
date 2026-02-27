@@ -206,15 +206,15 @@ export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionSc
       {visaStatus === null && (
         <div className="visa-popup-backdrop" role="dialog" aria-modal="true" aria-label="Status visa">
           <div className="visa-popup-card">
-            <h3>Apakah Anda sudah punya visa?</h3>
-            <p>Pilih status visa dulu sebelum memilih tanggal keberangkatan.</p>
+            <div className="visa-popup-gradient" aria-hidden />
+            <h3>Apakah semua yang berangkat sudah memiliki Visa?</h3>
 
             <div className="visa-popup-actions">
-              <button type="button" className="visa-option primary" onClick={() => setVisaStatus('has-visa')}>
-                Sudah punya visa
+              <button type="button" className="visa-option" onClick={() => setVisaStatus('has-visa')}>
+                Sudah
               </button>
               <button type="button" className="visa-option" onClick={() => setVisaStatus('no-visa')}>
-                Belum punya visa
+                Belum
               </button>
             </div>
           </div>
