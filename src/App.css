@@ -1,10 +1,14 @@
 .walkthrough-page {
-  min-height: 100vh;
+  --phone-base-width: 375;
+  --phone-base-height: 812;
+  --phone-scale: min(1, calc(100vw / var(--phone-base-width)), calc(100dvh / var(--phone-base-height)));
+  min-height: 100dvh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background: #f5f7f9;
-  padding: 12px;
+  padding: 0;
+  overflow: hidden;
 }
 
 .phone-shell {
@@ -13,6 +17,8 @@
   height: 812px;
   background: #f5f7f9;
   overflow: hidden;
+  transform: scale(var(--phone-scale));
+  transform-origin: top center;
 }
 
 .splash-shell {
@@ -3979,12 +3985,12 @@ button.umrah-visa-package-card {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 900px) {
   .walkthrough-page {
     padding: 0;
   }
 
   .phone-shell {
-    width: 100vw;
+    transform: scale(var(--phone-scale));
   }
 }
