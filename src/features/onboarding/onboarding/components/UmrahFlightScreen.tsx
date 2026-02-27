@@ -2,11 +2,14 @@ import type { FlightOffer, UmrahFlightAssets } from '../types'
 
 type UmrahFlightScreenProps = {
   assets: UmrahFlightAssets
+  journeyLabel: 'Keberangkatan' | 'Kepulangan'
+  selectedCabinLabel: string
   departureLabel: string
   departureCode: string
   destinationLabel: string
   destinationCode: string
   dateLabel: string
+  summaryTimeRangeLabel: string
   passengerText: string
   offers: FlightOffer[]
   onSelectOffer: (offer: FlightOffer) => void
@@ -20,11 +23,14 @@ function toRupiah(amount: number) {
 
 export function UmrahFlightScreen({
   assets,
+  journeyLabel,
+  selectedCabinLabel,
   departureLabel,
   departureCode,
   destinationLabel,
   destinationCode,
   dateLabel,
+  summaryTimeRangeLabel,
   passengerText,
   offers,
   onSelectOffer,
@@ -52,7 +58,7 @@ export function UmrahFlightScreen({
 
       <section className="umrah-flight-summary">
         <p>
-          Keberangkatan <span>• Ekonomi</span>
+          {journeyLabel} <span>• {selectedCabinLabel}</span>
         </p>
         <h2>
           {departureLabel} ({departureCode}) <img src={assets.planeArrow} alt="" aria-hidden /> {destinationLabel} ({destinationCode})
@@ -62,7 +68,7 @@ export function UmrahFlightScreen({
             <img src={assets.calendarIcon} alt="" aria-hidden /> {dateLabel}
           </span>
           <span>
-            <img src={assets.clockIcon} alt="" aria-hidden /> 09:45 - 21:45
+            <img src={assets.clockIcon} alt="" aria-hidden /> {summaryTimeRangeLabel}
           </span>
           <span>
             <img src={assets.userIcon} alt="" aria-hidden /> {passengerText}
@@ -98,7 +104,15 @@ export function UmrahFlightScreen({
 
             <div className="flight-footer-row">
               <button type="button" className="flight-detail-btn" onClick={() => onSelectOffer(offer)}>
-                <span>{offer.isRecommended ? 'Tap untuk lihat detail' : 'Lihat detail'}</span>
+                <span>
+                  {journeyLabel === 'Keberangkatan'
+                    ? offer.isRecommended
+                      ? 'Tap untuk pilih keberangkatan'
+                      : 'Pilih keberangkatan'
+                    : offer.isRecommended
+                      ? 'Tap untuk pilih kepulangan'
+                      : 'Pilih kepulangan'}
+                </span>
                 <img src={assets.chevronRight} alt="" aria-hidden />
               </button>
             </div>

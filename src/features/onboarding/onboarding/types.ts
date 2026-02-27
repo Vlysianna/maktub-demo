@@ -242,6 +242,29 @@ export type UmrahCompletionAssets = {
 
 export type PaymentMethod = 'bni-va' | 'bri-va' | 'mandiri-va' | 'bca-va' | 'credit-card'
 
+export type OnboardingConfig = {
+  defaultContact: {
+    name: string
+    email: string
+    phone: string
+    virtualAccountNumber: string
+    passportNumber: string
+  }
+  defaultDepartureCode: string
+  defaultArrivalCity: string
+  defaultHotelCityLabel: string
+  defaultTravelDate: {
+    year: number
+    month: number
+    day: number
+  }
+  defaultHotelNightCount: number
+  nationalityOptions: string[]
+  monthOptions: string[]
+  passportYearSpan: number
+  paymentMethodLabels: Record<PaymentMethod, string>
+}
+
 export type PaymentBreakdown = {
   flightDeparture: number
   flightReturn: number

@@ -2,6 +2,7 @@ import type { TicketFareOption, UmrahTicketAssets } from '../types'
 
 type UmrahFlightDetailScreenProps = {
   assets: UmrahTicketAssets
+  journeyLabel: 'Keberangkatan' | 'Kepulangan'
   fareOptions: TicketFareOption[]
   travelerCount: number
   selectedFareId: TicketFareOption['id']
@@ -20,6 +21,7 @@ function toRupiah(amount: number) {
 
 export function UmrahFlightDetailScreen({
   assets,
+  journeyLabel,
   fareOptions,
   travelerCount,
   selectedFareId,
@@ -48,7 +50,7 @@ export function UmrahFlightDetailScreen({
       </div>
 
       <div className="umrah-ticket-scroll">
-        <h2 className="umrah-ticket-title">Tiket</h2>
+        <h2 className="umrah-ticket-title">Tiket {journeyLabel}</h2>
 
         <div className="umrah-ticket-card-list">
           {fareOptions.map((fare) => (

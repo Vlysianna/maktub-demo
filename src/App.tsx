@@ -46,14 +46,17 @@ import {
   umrahTicketAssets,
   umrahTravelerAssets,
   walkthroughSlides,
+  onboardingConfig,
 } from './features/onboarding/onboarding/data'
 import type { PassengerFormData, PaymentBreakdown, PaymentMethod, Screen, TicketFareOption } from './features/onboarding/onboarding/types'
 
-const budgetOffsets: Record<string, number> = {
-  'Kurang dari 25.000.000': 0,
-  '25.000.000 sampai 40.000.000': 8_000_000,
-  'Lebih dari 40.000.000': 24_000_000,
+const budgetProfiles: Record<string, { flightMultiplier: number; hotelMultiplier: number }> = {
+  'Kurang dari 25.000.000': { flightMultiplier: 0.7, hotelMultiplier: 0.52 },
+  '25.000.000 sampai 40.000.000': { flightMultiplier: 1, hotelMultiplier: 1 },
+  'Lebih dari 40.000.000': { flightMultiplier: 1.28, hotelMultiplier: 1.22 },
 }
+
+const defaultBudgetProfile = budgetProfiles['25.000.000 sampai 40.000.000']
 
 function shiftTimeLabel(timeLabel: string, hourOffset: number) {
   const [hourPart, minutePart] = timeLabel.split(':')
@@ -79,6 +82,37 @@ function addDays(date: Date, days: number) {
   return startOfDay(next)
 }
 
+function createTicketFareOptions(basePrice: number, travelerCount: number): TicketFareOption[] {
+  const premiumTopUp = Math.max(1, Math.ceil(travelerCount / 2)) * 200_000
+
+  return [
+    {
+      id: 'economy',
+      name: 'Ekonomi',
+      totalPrice: basePrice,
+      features: [
+        { label: 'Bagasi kabin 7 kg', available: true, icon: 'bag' },
+        { label: 'Bagasi check-in 0 kg', available: true, icon: 'bag' },
+        { label: 'Tidak bisa reschedule', available: false, icon: 'cancel' },
+        { label: 'Tidak bisa refund', available: false, icon: 'cancel' },
+        { label: 'Asuransi perjalanan', available: true, icon: 'check' },
+      ],
+    },
+    {
+      id: 'economy-plus',
+      name: 'Ekonomi Plus',
+      totalPrice: basePrice + premiumTopUp,
+      features: [
+        { label: 'Bagasi kabin 7 kg', available: true, icon: 'bag' },
+        { label: 'Bagasi check-in 0 kg', available: true, icon: 'bag' },
+        { label: 'Bisa reschedule', available: true, icon: 'check' },
+        { label: 'Tidak bisa refund', available: false, icon: 'cancel' },
+        { label: 'Asuransi perjalanan', available: true, icon: 'check' },
+      ],
+    },
+  ]
+}
+
 function createInitialPassengerForm(): PassengerFormData {
   return {
     firstMiddleName: '',
@@ -87,13 +121,19 @@ function createInitialPassengerForm(): PassengerFormData {
     birthMonth: '',
     birthYear: '',
     nationality: '',
-    passportNumber: 'C1234567A',
+    passportNumber: onboardingConfig.defaultContact.passportNumber,
     issuingCountry: '',
     passportExpiryDay: '',
     passportExpiryMonth: '',
     passportExpiryYear: '',
   }
 }
+
+const fallbackTravelDate = new Date(
+  onboardingConfig.defaultTravelDate.year,
+  onboardingConfig.defaultTravelDate.month,
+  onboardingConfig.defaultTravelDate.day,
+)
 
 function App() {
   const [screen, setScreen] = useState<Screen>('splash')
@@ -111,12 +151,15 @@ function App() {
   const [travelDate, setTravelDate] = useState<Date | null>(null)
   const [hotelStartDate, setHotelStartDate] = useState<Date | null>(null)
   const [hotelEndDate, setHotelEndDate] = useState<Date | null>(null)
+  const [flightSelectionLeg, setFlightSelectionLeg] = useState<'departure' | 'return'>('departure')
   const [selectedFlightId, setSelectedFlightId] = useState<string | null>(null)
-  const [selectedFareId, setSelectedFareId] = useState<TicketFareOption['id']>('economy')
+  const [selectedReturnFlightId, setSelectedReturnFlightId] = useState<string | null>(null)
+  const [selectedDepartureFareId, setSelectedDepartureFareId] = useState<TicketFareOption['id']>('economy')
+  const [selectedReturnFareId, setSelectedReturnFareId] = useState<TicketFareOption['id']>('economy')
   const [selectedHotelId, setSelectedHotelId] = useState<string | null>(null)
   const [selectedHotelRoomId, setSelectedHotelRoomId] = useState<string | null>(null)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('bni-va')
-  const [travelerNames, setTravelerNames] = useState<string[]>(['Noermansyah'])
+  const [travelerNames, setTravelerNames] = useState<string[]>([onboardingConfig.defaultContact.name])
   const [activePassengerIndex, setActivePassengerIndex] = useState(0)
   const [passengerForms, setPassengerForms] = useState<PassengerFormData[]>([createInitialPassengerForm()])
 
@@ -147,6 +190,11 @@ function App() {
     }
 
     const timer = window.setTimeout(() => {
+      setFlightSelectionLeg('departure')
+      setSelectedFlightId(null)
+      setSelectedReturnFlightId(null)
+      setSelectedDepartureFareId('economy')
+      setSelectedReturnFareId('economy')
       setScreen('umrah-flight')
     }, 2800)
 
@@ -164,9 +212,7 @@ function App() {
   const passengerText = `${travelerCount} orang`
   const roomCount = Math.max(1, Math.ceil(travelerCount / travelerRoom))
 
-  useEffect(() => {
-    const count = Math.max(totalParticipants, 1)
-
+  const syncTravelerCollections = (count: number) => {
     setTravelerNames((prev) =>
       Array.from({ length: count }, (_, index) => {
         if (prev[index]) {
@@ -174,17 +220,15 @@ function App() {
         }
 
         if (index === 0) {
-          return 'Noermansyah'
+          return onboardingConfig.defaultContact.name
         }
 
         return `Jamaah ${index + 1}`
       }),
     )
-  }, [totalParticipants])
 
-  useEffect(() => {
     setPassengerForms((prev) =>
-      Array.from({ length: travelerCount }, (_, index) => {
+      Array.from({ length: count }, (_, index) => {
         if (prev[index]) {
           return prev[index]
         }
@@ -193,17 +237,34 @@ function App() {
       }),
     )
 
-    setActivePassengerIndex((prev) => Math.min(prev, travelerCount - 1))
-  }, [travelerCount])
+    setActivePassengerIndex((prev) => Math.min(prev, count - 1))
+  }
 
-  const departureLabel =
-    departureAirportOptions.find((option) => option.code === departureCode)?.label.split(',')[0] ?? 'Jakarta'
-  const destinationLabel = arrivalCity ?? 'Jeddah'
+  const handleChangeParticipants = (key: 'dewasa' | 'anak' | 'bayi', value: number) => {
+    setTravelerParticipants((prev) => {
+      const next = { ...prev, [key]: value }
+      const nextCount = Math.max(next.dewasa + next.anak + next.bayi, 1)
+      syncTravelerCollections(nextCount)
+      return next
+    })
+  }
+
+  const fallbackDepartureLabel =
+    departureAirportOptions.find((option) => option.code === onboardingConfig.defaultDepartureCode)?.label.split(',')[0] ??
+    onboardingConfig.defaultDepartureCode
+  const departureLabel = departureAirportOptions.find((option) => option.code === departureCode)?.label.split(',')[0] ?? fallbackDepartureLabel
+  const destinationLabel = arrivalCity ?? onboardingConfig.defaultArrivalCity
   const destinationCode = cityAirportCodeMap[destinationLabel] ?? 'JED'
+  const returnDestinationLabel = returnCity ?? destinationLabel
+  const returnDestinationCode = cityAirportCodeMap[returnDestinationLabel] ?? destinationCode
 
   const dateLabel = useMemo(() => {
     if (!travelDate) {
-      return '18 Feb 2026'
+      return fallbackTravelDate.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      })
     }
 
     return travelDate.toLocaleDateString('id-ID', {
@@ -215,7 +276,10 @@ function App() {
 
   const shortDepartureDateLabel = useMemo(() => {
     if (!travelDate) {
-      return '18 Feb'
+      return fallbackTravelDate.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+      })
     }
 
     return travelDate.toLocaleDateString('id-ID', {
@@ -226,7 +290,11 @@ function App() {
 
   const shortReturnDateLabel = useMemo(() => {
     if (!travelDate) {
-      return '21 Feb'
+      const fallbackReturnDate = addDays(fallbackTravelDate, 3)
+      return fallbackReturnDate.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+      })
     }
 
     const returnDate = new Date(travelDate)
@@ -238,13 +306,14 @@ function App() {
     })
   }, [travelDate])
 
+  const activeBudgetProfile = budgetRange ? (budgetProfiles[budgetRange] ?? defaultBudgetProfile) : defaultBudgetProfile
+
   const flightOffers = useMemo(() => {
-    const budgetOffset = budgetRange ? (budgetOffsets[budgetRange] ?? 0) : 0
     const participantOffset = Math.max(0, totalParticipants - 2) * 350_000
 
     return flightOfferTemplate.map((offer, index) => ({
       ...offer,
-      price: offer.price + budgetOffset + participantOffset + index * 120_000,
+      price: Math.round((offer.price + participantOffset + index * 120_000) * activeBudgetProfile.flightMultiplier),
       segments: offer.segments.map((segment) => {
         if (segment.code === 'CGK' && departureCode) {
           return { ...segment, code: departureCode }
@@ -257,52 +326,78 @@ function App() {
         return segment
       }),
     }))
-  }, [budgetRange, departureCode, destinationCode, totalParticipants])
+  }, [activeBudgetProfile.flightMultiplier, departureCode, destinationCode, totalParticipants])
 
   const selectedFlightOffer = useMemo(
     () => flightOffers.find((offer) => offer.id === selectedFlightId) ?? flightOffers[0] ?? null,
     [flightOffers, selectedFlightId],
   )
 
+  const returnFlightOffers = useMemo(() => {
+    return flightOffers.map((offer, index) => {
+      const segments = offer.segments.map((segment, segmentIndex) => {
+        const shiftedTime = shiftTimeLabel(segment.time, 12)
+
+        if (segmentIndex === 0) {
+          return { ...segment, time: shiftedTime, code: returnDestinationCode }
+        }
+
+        if (segmentIndex === offer.segments.length - 1) {
+          return { ...segment, time: shiftedTime, code: departureCode ?? onboardingConfig.defaultDepartureCode }
+        }
+
+        return { ...segment, time: shiftedTime }
+      })
+
+      return {
+        ...offer,
+        id: `${offer.id}-return`,
+        price: offer.price + index * 90000,
+        segments,
+      }
+    })
+  }, [departureCode, flightOffers, returnDestinationCode])
+
+  const selectedReturnFlightOffer = useMemo(
+    () => returnFlightOffers.find((offer) => offer.id === selectedReturnFlightId) ?? returnFlightOffers[0] ?? null,
+    [returnFlightOffers, selectedReturnFlightId],
+  )
+
   const selectedFlightDepartureTime = selectedFlightOffer?.segments[0]?.time ?? '09:45'
   const selectedFlightArrivalTime = selectedFlightOffer?.segments[selectedFlightOffer.segments.length - 1]?.time ?? '21:45'
   const selectedFlightDuration = selectedFlightOffer?.segments.find((segment) => segment.duration)?.duration ?? '12j 16m'
+  const selectedReturnDepartureTime = selectedReturnFlightOffer?.segments[0]?.time ?? shiftTimeLabel(selectedFlightArrivalTime, 0)
+  const selectedReturnArrivalTime =
+    selectedReturnFlightOffer?.segments[selectedReturnFlightOffer.segments.length - 1]?.time ?? shiftTimeLabel(selectedFlightDepartureTime, 0)
+  const selectedReturnDuration = selectedReturnFlightOffer?.segments.find((segment) => segment.duration)?.duration ?? selectedFlightDuration
 
-  const ticketFareOptions = useMemo<TicketFareOption[]>(() => {
-    const basePrice = selectedFlightOffer?.price ?? 10_800_000
-    const premiumTopUp = Math.max(1, Math.ceil(travelerCount / 2)) * 200_000
+  const departureSummaryOffer = selectedFlightOffer ?? flightOffers[0] ?? null
+  const returnSummaryOffer = selectedReturnFlightOffer ?? returnFlightOffers[0] ?? null
+  const departureSummaryTimeRange = departureSummaryOffer
+    ? `${departureSummaryOffer.segments[0]?.time ?? '09:45'} - ${departureSummaryOffer.segments[departureSummaryOffer.segments.length - 1]?.time ?? '21:45'}`
+    : '09:45 - 21:45'
+  const returnSummaryTimeRange = returnSummaryOffer
+    ? `${returnSummaryOffer.segments[0]?.time ?? '21:45'} - ${returnSummaryOffer.segments[returnSummaryOffer.segments.length - 1]?.time ?? '09:45'}`
+    : '21:45 - 09:45'
 
-    return [
-      {
-        id: 'economy',
-        name: 'Ekonomi',
-        totalPrice: basePrice,
-        features: [
-          { label: 'Bagasi kabin 7 kg', available: true, icon: 'bag' },
-          { label: 'Bagasi check-in 0 kg', available: true, icon: 'bag' },
-          { label: 'Tidak bisa reschedule', available: false, icon: 'cancel' },
-          { label: 'Tidak bisa refund', available: false, icon: 'cancel' },
-          { label: 'Asuransi perjalanan', available: true, icon: 'check' },
-        ],
-      },
-      {
-        id: 'economy-plus',
-        name: 'Ekonomi Plus',
-        totalPrice: basePrice + premiumTopUp,
-        features: [
-          { label: 'Bagasi kabin 7 kg', available: true, icon: 'bag' },
-          { label: 'Bagasi check-in 0 kg', available: true, icon: 'bag' },
-          { label: 'Bisa reschedule', available: true, icon: 'check' },
-          { label: 'Tidak bisa refund', available: false, icon: 'cancel' },
-          { label: 'Asuransi perjalanan', available: true, icon: 'check' },
-        ],
-      },
-    ]
-  }, [selectedFlightOffer, travelerCount])
+  const departureFareOptions = useMemo(
+    () => createTicketFareOptions(selectedFlightOffer?.price ?? 10_800_000, travelerCount),
+    [selectedFlightOffer?.price, travelerCount],
+  )
 
-  const selectedFare = useMemo(
-    () => ticketFareOptions.find((fare) => fare.id === selectedFareId) ?? ticketFareOptions[0],
-    [selectedFareId, ticketFareOptions],
+  const returnFareOptions = useMemo(
+    () => createTicketFareOptions(selectedReturnFlightOffer?.price ?? selectedFlightOffer?.price ?? 10_800_000, travelerCount),
+    [selectedFlightOffer?.price, selectedReturnFlightOffer?.price, travelerCount],
+  )
+
+  const selectedDepartureFare = useMemo(
+    () => departureFareOptions.find((fare) => fare.id === selectedDepartureFareId) ?? departureFareOptions[0],
+    [departureFareOptions, selectedDepartureFareId],
+  )
+
+  const selectedReturnFare = useMemo(
+    () => returnFareOptions.find((fare) => fare.id === selectedReturnFareId) ?? returnFareOptions[0],
+    [returnFareOptions, selectedReturnFareId],
   )
 
   const hotelOffers = useMemo(() => {
@@ -310,10 +405,10 @@ function App() {
 
     return hotelOfferTemplate.map((hotel, index) => ({
       ...hotel,
-      pricePerNight: hotel.pricePerNight + participantOffset + index * 50000,
-      totalPrice: hotel.totalPrice + participantOffset * 2 + index * 350000,
+      pricePerNight: Math.round((hotel.pricePerNight + participantOffset + index * 50000) * activeBudgetProfile.hotelMultiplier),
+      totalPrice: Math.round((hotel.totalPrice + participantOffset * 2 + index * 350000) * activeBudgetProfile.hotelMultiplier),
     }))
-  }, [travelerCount])
+  }, [activeBudgetProfile.hotelMultiplier, travelerCount])
 
   const selectedHotelOffer = useMemo(
     () => hotelOffers.find((hotel) => hotel.id === selectedHotelId) ?? hotelOffers[0] ?? null,
@@ -328,13 +423,17 @@ function App() {
     return hotelOffers.find((hotel) => hotel.id !== selectedHotelOffer.id) ?? selectedHotelOffer
   }, [hotelOffers, selectedHotelOffer])
 
+  const fallbackSecondHotelCity = cityOptions.find((city) => city !== onboardingConfig.defaultHotelCityLabel) ?? 'Madinah'
+  const primaryHotelCityLabel = onboardingConfig.defaultHotelCityLabel
+  const secondaryHotelCityLabel = returnCity ?? fallbackSecondHotelCity
+
   const selectedHotelDetail = useMemo(() => {
     if (!selectedHotelOffer) {
       return null
     }
 
-    const start = startOfDay(hotelStartDate ?? travelDate ?? new Date(2026, 1, 18))
-    const end = hotelEndDate ? startOfDay(hotelEndDate) : addDays(start, 2)
+    const start = startOfDay(hotelStartDate ?? travelDate ?? fallbackTravelDate)
+    const end = hotelEndDate ? startOfDay(hotelEndDate) : addDays(start, onboardingConfig.defaultHotelNightCount)
     const diff = end.getTime() - start.getTime()
     const nights = Math.max(1, Math.round(diff / (1000 * 60 * 60 * 24)))
 
@@ -356,14 +455,14 @@ function App() {
     [selectedHotelDetail, selectedHotelRoomId],
   )
 
-  const hotelStartValue = useMemo(() => startOfDay(hotelStartDate ?? travelDate ?? new Date(2026, 1, 18)), [hotelStartDate, travelDate])
+  const hotelStartValue = useMemo(() => startOfDay(hotelStartDate ?? travelDate ?? fallbackTravelDate), [hotelStartDate, travelDate])
 
   const hotelEndValue = useMemo(() => {
     if (hotelEndDate) {
       return startOfDay(hotelEndDate)
     }
 
-    return addDays(hotelStartValue, 2)
+    return addDays(hotelStartValue, onboardingConfig.defaultHotelNightCount)
   }, [hotelEndDate, hotelStartValue])
 
   const hotelNights = useMemo(() => {
@@ -372,10 +471,10 @@ function App() {
   }, [hotelEndValue, hotelStartValue])
 
   const paymentBreakdown = useMemo<PaymentBreakdown>(() => {
-    const flightDeparture = selectedFare.totalPrice * travelerCount
-    const flightReturn = Math.round(flightDeparture * 1.067)
-    const hotelMakkah = selectedHotelRoom?.totalPrice ?? 12000000
-    const hotelMadinah = selectedHotelRoom?.totalPrice ?? 12000000
+    const flightDeparture = selectedDepartureFare.totalPrice
+    const flightReturn = selectedReturnFare.totalPrice
+    const hotelMakkah = selectedHotelRoom?.totalPrice ?? selectedHotelOffer?.totalPrice ?? 12000000
+    const hotelMadinah = secondHotelOffer?.totalPrice ?? selectedHotelOffer?.totalPrice ?? 12000000
     const subtotal = flightDeparture + flightReturn + hotelMakkah + hotelMadinah
     const serviceFee = 50000
     const taxAmount = Math.round(subtotal * 0.1)
@@ -391,7 +490,57 @@ function App() {
       taxAmount,
       grandTotal,
     }
-  }, [selectedFare.totalPrice, selectedHotelRoom?.totalPrice, travelerCount])
+  }, [
+    secondHotelOffer?.totalPrice,
+    selectedDepartureFare.totalPrice,
+    selectedHotelOffer?.totalPrice,
+    selectedHotelRoom?.totalPrice,
+    selectedReturnFare.totalPrice,
+    travelerCount,
+  ])
+
+  const hotelPaymentCards = useMemo(() => {
+    if (!selectedHotelOffer) {
+      return []
+    }
+
+    const cards = [
+      {
+        id: `${selectedHotelOffer.id}-${primaryHotelCityLabel.toLowerCase()}`,
+        name: selectedHotelOffer.name,
+        nightsLabel: `${hotelNights + 1} hari ${hotelNights} malam`,
+        rating: selectedHotelOffer.rating,
+        image: selectedHotelOffer.image,
+        pricePerNight: Math.round(paymentBreakdown.hotelMakkah / hotelNights),
+        totalPrice: paymentBreakdown.hotelMakkah,
+        travelerLabel: `${travelerCount} orang`,
+      },
+    ]
+
+    if (secondHotelOffer && secondHotelOffer.id !== selectedHotelOffer.id) {
+      cards.push({
+        id: `${secondHotelOffer.id}-${secondaryHotelCityLabel.toLowerCase()}`,
+        name: secondHotelOffer.name,
+        nightsLabel: `${hotelNights + 1} hari ${hotelNights} malam`,
+        rating: secondHotelOffer.rating,
+        image: secondHotelOffer.image,
+        pricePerNight: Math.round(paymentBreakdown.hotelMadinah / hotelNights),
+        totalPrice: paymentBreakdown.hotelMadinah,
+        travelerLabel: `${travelerCount} orang`,
+      })
+    }
+
+    return cards
+  }, [
+    hotelNights,
+    paymentBreakdown.hotelMadinah,
+    paymentBreakdown.hotelMakkah,
+    primaryHotelCityLabel,
+    secondaryHotelCityLabel,
+    secondHotelOffer,
+    selectedHotelOffer,
+    travelerCount,
+  ])
 
   const hotelCheckInLabel = useMemo(
     () =>
@@ -417,23 +566,11 @@ function App() {
 
   const activePassengerForm = passengerForms[activePassengerIndex] ?? createInitialPassengerForm()
 
-  const nationalityOptions = ['Indonesia', 'Malaysia', 'Singapura', 'Brunei', 'Arab Saudi']
+  const nationalityOptions = onboardingConfig.nationalityOptions
   const dayOptions = Array.from({ length: 31 }, (_, index) => String(index + 1).padStart(2, '0'))
-  const monthOptions = [
-    'Januari',
-    'Februari',
-    'Maret',
-    'April',
-    'Mei',
-    'Juni',
-    'Juli',
-    'Agustus',
-    'September',
-    'Oktober',
-    'November',
-    'Desember',
-  ]
-  const yearOptions = Array.from({ length: 70 }, (_, index) => String(2026 - index))
+  const monthOptions = onboardingConfig.monthOptions
+  const yearOptions = Array.from({ length: onboardingConfig.passportYearSpan }, (_, index) => String(new Date().getFullYear() - index))
+  const selectedPaymentLabel = onboardingConfig.paymentMethodLabels[selectedPaymentMethod]
 
   return (
     <main className="walkthrough-page">
@@ -464,7 +601,7 @@ function App() {
           onNext={(selectedDate) => {
             setTravelDate(selectedDate)
             setHotelStartDate(selectedDate)
-            setHotelEndDate(addDays(selectedDate, 2))
+            setHotelEndDate(addDays(selectedDate, onboardingConfig.defaultHotelNightCount))
             setScreen('umrah-traveler')
           }}
         />
@@ -475,7 +612,7 @@ function App() {
           assets={umrahTravelerAssets}
           participants={travelerParticipants}
           selectedRoom={travelerRoom}
-          onChangeParticipants={(key, value) => setTravelerParticipants((prev) => ({ ...prev, [key]: value }))}
+          onChangeParticipants={handleChangeParticipants}
           onSelectRoom={setTravelerRoom}
           onBack={() => setScreen('umrah-question')}
           onClose={() => setScreen('home')}
@@ -526,41 +663,78 @@ function App() {
       {screen === 'umrah-flight' && (
         <UmrahFlightScreen
           assets={umrahFlightAssets}
-          departureLabel={departureLabel}
-          departureCode={departureCode ?? 'CGK'}
-          destinationLabel={destinationLabel}
-          destinationCode={destinationCode}
-          dateLabel={dateLabel}
+          journeyLabel={flightSelectionLeg === 'departure' ? 'Keberangkatan' : 'Kepulangan'}
+          selectedCabinLabel={flightSelectionLeg === 'departure' ? selectedDepartureFare.name : selectedReturnFare.name}
+          departureLabel={flightSelectionLeg === 'departure' ? departureLabel : returnDestinationLabel}
+          departureCode={flightSelectionLeg === 'departure' ? departureCode ?? 'CGK' : returnDestinationCode}
+          destinationLabel={flightSelectionLeg === 'departure' ? destinationLabel : departureLabel}
+          destinationCode={flightSelectionLeg === 'departure' ? destinationCode : departureCode ?? 'CGK'}
+          dateLabel={flightSelectionLeg === 'departure' ? dateLabel : shortReturnDateLabel}
+          summaryTimeRangeLabel={flightSelectionLeg === 'departure' ? departureSummaryTimeRange : returnSummaryTimeRange}
           passengerText={passengerText}
-          offers={flightOffers}
+          offers={flightSelectionLeg === 'departure' ? flightOffers : returnFlightOffers}
           onSelectOffer={(offer) => {
-            setSelectedFlightId(offer.id)
-            setSelectedFareId('economy')
+            if (flightSelectionLeg === 'departure') {
+              setSelectedFlightId(offer.id)
+              setSelectedDepartureFareId('economy')
+              setSelectedReturnFlightId(null)
+              setSelectedReturnFareId('economy')
+              setScreen('umrah-flight-detail')
+              return
+            }
+
+            setSelectedReturnFlightId(offer.id)
+            setSelectedReturnFareId('economy')
             setScreen('umrah-flight-detail')
           }}
-          onBack={() => setScreen('umrah-budget')}
+          onBack={() => {
+            if (flightSelectionLeg === 'return') {
+              setFlightSelectionLeg('departure')
+              return
+            }
+
+            setScreen('umrah-budget')
+          }}
           onClose={() => setScreen('home')}
         />
       )}
 
-      {screen === 'umrah-flight-detail' && selectedFare && (
+      {screen === 'umrah-flight-detail' && selectedDepartureFare && selectedReturnFare && (
         <UmrahFlightDetailScreen
           assets={umrahTicketAssets}
+          journeyLabel={flightSelectionLeg === 'departure' ? 'Keberangkatan' : 'Kepulangan'}
           travelerCount={travelerCount}
-          fareOptions={ticketFareOptions}
-          selectedFareId={selectedFare.id}
-          onSelectFare={setSelectedFareId}
+          fareOptions={flightSelectionLeg === 'departure' ? departureFareOptions : returnFareOptions}
+          selectedFareId={flightSelectionLeg === 'departure' ? selectedDepartureFare.id : selectedReturnFare.id}
+          onSelectFare={(fareId) => {
+            if (flightSelectionLeg === 'departure') {
+              setSelectedDepartureFareId(fareId)
+              return
+            }
+
+            setSelectedReturnFareId(fareId)
+          }}
           onBack={() => setScreen('umrah-flight')}
           onClose={() => setScreen('home')}
-          onNext={() => setScreen('umrah-ticket-info')}
+          onNext={() => {
+            if (flightSelectionLeg === 'departure') {
+              setFlightSelectionLeg('return')
+              setScreen('umrah-flight')
+              return
+            }
+
+            setScreen('umrah-ticket-info')
+          }}
         />
       )}
 
-      {screen === 'umrah-ticket-info' && selectedFare && (
+      {screen === 'umrah-ticket-info' && selectedDepartureFare && selectedReturnFare && (
         <UmrahTicketInfoScreen
           assets={umrahTicketAssets}
           airline={selectedFlightOffer?.airline ?? 'Oman Air'}
           airlineLogo={selectedFlightOffer?.airlineLogo ?? umrahFlightAssets.omanAirLogo}
+          returnAirline={selectedReturnFlightOffer?.airline ?? selectedFlightOffer?.airline ?? 'Oman Air'}
+          returnAirlineLogo={selectedReturnFlightOffer?.airlineLogo ?? selectedFlightOffer?.airlineLogo ?? umrahFlightAssets.omanAirLogo}
           departureLabel={departureLabel}
           departureCode={departureCode ?? 'CGK'}
           destinationLabel={destinationLabel}
@@ -569,14 +743,15 @@ function App() {
           returnDateLabel={shortReturnDateLabel}
           departureTime={selectedFlightDepartureTime}
           arrivalTime={selectedFlightArrivalTime}
-          returnDepartureTime={shiftTimeLabel(selectedFlightDepartureTime, 1)}
-          returnArrivalTime={shiftTimeLabel(selectedFlightArrivalTime, 1)}
+          returnDepartureTime={selectedReturnDepartureTime}
+          returnArrivalTime={selectedReturnArrivalTime}
           durationLabel={selectedFlightDuration}
+          returnDurationLabel={selectedReturnDuration}
           travelerNames={travelerNames}
           contactName={travelerNames[0]}
-          contactEmail="noermansyah@gmail.com"
-          contactPhone="081288990011"
-          totalPrice={selectedFare.totalPrice * travelerCount}
+          contactEmail={onboardingConfig.defaultContact.email}
+          contactPhone={onboardingConfig.defaultContact.phone}
+          totalPrice={selectedDepartureFare.totalPrice + selectedReturnFare.totalPrice}
           onBack={() => setScreen('umrah-flight-detail')}
           onAddPassenger={() => {
             const nextIndex = passengerForms.findIndex((form) => !form.firstMiddleName.trim())
@@ -594,7 +769,7 @@ function App() {
       {screen === 'umrah-hotel' && (
         <UmrahHotelScreen
           assets={umrahHotelAssets}
-          cityLabel="Mekah"
+          cityLabel={onboardingConfig.defaultHotelCityLabel}
           checkInLabel={hotelCheckInLabel}
           checkOutLabel={hotelCheckOutLabel}
           nightsLabel={`${hotelNights} malam`}
@@ -635,12 +810,13 @@ function App() {
           hotelImage={selectedHotelOffer.image}
           hotelName={selectedHotelOffer.name}
           roomName={selectedHotelRoom.name}
+          travelerCount={travelerCount}
           travelerText={`${travelerParticipants.dewasa} Dewasa / Kamar`}
           checkInLabel={`${hotelCheckInLabel} (16:00)`}
           checkOutLabel={`${hotelCheckOutLabel} (12:00)`}
           contactName={travelerNames[0]}
-          contactEmail="noermansyah@gmail.com"
-          contactPhone="081288990011"
+          contactEmail={onboardingConfig.defaultContact.email}
+          contactPhone={onboardingConfig.defaultContact.phone}
           totalPrice={selectedHotelRoom.totalPrice}
           totalLabel={selectedHotelRoom.totalLabel}
           onBack={() => setScreen('umrah-hotel-detail')}
@@ -651,28 +827,7 @@ function App() {
       {screen === 'umrah-payment-overview' && selectedHotelRoom && (
         <UmrahPaymentOverviewScreen
           assets={umrahPaymentAssets}
-          hotels={[
-            {
-              id: `${selectedHotelOffer?.id ?? 'hotel-makkah'}-makkah`,
-              name: selectedHotelOffer?.name ?? 'Pullman ZamZam',
-              nightsLabel: `${hotelNights + 1} hari ${hotelNights} malam`,
-              rating: selectedHotelOffer?.rating ?? 5,
-              image: selectedHotelOffer?.image ?? hotelOffers[0]?.image ?? '',
-              pricePerNight: Math.round(paymentBreakdown.hotelMakkah / hotelNights),
-              totalPrice: paymentBreakdown.hotelMakkah,
-              travelerLabel: `${travelerCount} orang`,
-            },
-            {
-              id: `${secondHotelOffer?.id ?? 'hotel-madinah'}-madinah`,
-              name: secondHotelOffer?.name ?? 'Anjum Hotel',
-              nightsLabel: `${hotelNights + 1} hari ${hotelNights} malam`,
-              rating: secondHotelOffer?.rating ?? 5,
-              image: secondHotelOffer?.image ?? selectedHotelOffer?.image ?? '',
-              pricePerNight: Math.round(paymentBreakdown.hotelMadinah / hotelNights),
-              totalPrice: paymentBreakdown.hotelMadinah,
-              travelerLabel: `${travelerCount} orang`,
-            },
-          ]}
+          hotels={hotelPaymentCards}
           flights={[
             {
               id: 'flight-outbound',
@@ -688,13 +843,13 @@ function App() {
             },
             {
               id: 'flight-return',
-              fromTime: shiftTimeLabel(selectedFlightArrivalTime, 0),
-              fromCode: destinationCode,
-              duration: selectedFlightDuration,
+              fromTime: selectedReturnDepartureTime,
+              fromCode: returnDestinationCode,
+              duration: selectedReturnDuration,
               mode: 'Langsung',
-              toTime: shiftTimeLabel(selectedFlightDepartureTime, 0),
+              toTime: selectedReturnArrivalTime,
               toCode: departureCode ?? 'CGK',
-              airline: selectedFlightOffer?.airline ?? 'Oman Air',
+              airline: selectedReturnFlightOffer?.airline ?? selectedFlightOffer?.airline ?? 'Oman Air',
               price: paymentBreakdown.flightReturn,
               isSelected: false,
             },
@@ -702,6 +857,8 @@ function App() {
           breakdown={paymentBreakdown}
           travelerCount={travelerCount}
           hotelNightsLabel={`${hotelNights + 1} hari ${hotelNights} malam`}
+          primaryHotelCityLabel={primaryHotelCityLabel}
+          secondaryHotelCityLabel={secondaryHotelCityLabel}
           onBack={() => setScreen('umrah-hotel-ticket-info')}
           onNext={() => setScreen('umrah-payment-method')}
         />
@@ -722,8 +879,8 @@ function App() {
       {screen === 'umrah-payment-pending' && (
         <UmrahPaymentPendingScreen
           assets={umrahPaymentAssets}
-          virtualAccountNumber="8848800096475552"
-          virtualAccountName={selectedPaymentMethod === 'credit-card' ? 'Visa / Master Card' : 'BNI Virtual Account'}
+          virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
+          virtualAccountName={selectedPaymentLabel}
           totalPayment={paymentBreakdown.grandTotal}
           onBack={() => setScreen('umrah-payment-method')}
           onNext={() => setScreen('umrah-payment-success')}
@@ -733,8 +890,8 @@ function App() {
       {screen === 'umrah-payment-success' && (
         <UmrahPaymentSuccessScreen
           assets={umrahPaymentAssets}
-          virtualAccountNumber="8848800096475552"
-          virtualAccountName={selectedPaymentMethod === 'credit-card' ? 'Visa / Master Card' : 'BNI Virtual Account'}
+          virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
+          virtualAccountName={selectedPaymentLabel}
           totalPayment={paymentBreakdown.grandTotal}
           onBack={() => setScreen('umrah-payment-pending')}
           onNext={() => setScreen('umrah-payment-complete')}

@@ -288,7 +288,7 @@ export function UmrahHotelScreen({
                 {toRupiah(hotel.pricePerNight)} <span>/malam</span>
               </p>
               <p>
-                <strong>{toRupiah(hotel.totalPrice)}</strong> untuk 2 orang
+                <strong>{toRupiah(hotel.totalPrice)}</strong> untuk {passengerText}
               </p>
             </div>
 

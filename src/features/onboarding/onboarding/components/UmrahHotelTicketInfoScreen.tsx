@@ -5,6 +5,7 @@ type UmrahHotelTicketInfoScreenProps = {
   hotelImage: string
   hotelName: string
   roomName: string
+  travelerCount: number
   travelerText: string
   checkInLabel: string
   checkOutLabel: string
@@ -26,6 +27,7 @@ export function UmrahHotelTicketInfoScreen({
   hotelImage,
   hotelName,
   roomName,
+  travelerCount,
   travelerText,
   checkInLabel,
   checkOutLabel,
@@ -105,7 +107,7 @@ export function UmrahHotelTicketInfoScreen({
 
         <section className="umrah-hotel-ticket-section">
           <h2>Harga Akomodasi</h2>
-          <p className="umrah-info-caption">Harga total untuk 2 orang</p>
+          <p className="umrah-info-caption">Harga total untuk {travelerCount} orang</p>
           <p className="umrah-hotel-ticket-price">
             <strong>{toRupiah(totalPrice)}</strong> {totalLabel}
           </p>

@@ -26,6 +26,8 @@ type UmrahPaymentOverviewScreenProps = {
   breakdown: PaymentBreakdown
   travelerCount: number
   hotelNightsLabel: string
+  primaryHotelCityLabel: string
+  secondaryHotelCityLabel: string
   onBack: () => void
   onNext: () => void
 }
@@ -45,6 +47,8 @@ export function UmrahPaymentOverviewScreen({
   breakdown,
   travelerCount,
   hotelNightsLabel,
+  primaryHotelCityLabel,
+  secondaryHotelCityLabel,
   onBack,
   onNext,
 }: UmrahPaymentOverviewScreenProps) {
@@ -144,7 +148,7 @@ export function UmrahPaymentOverviewScreen({
 
           <div className="umrah-payment-line">
             <div>
-              <p>Hotel (Makah)</p>
+              <p>Hotel ({primaryHotelCityLabel})</p>
               <small>x {travelerCount} orang - {hotelNightsLabel}</small>
             </div>
             <p>{toRupiah(breakdown.hotelMakkah)}</p>
@@ -152,7 +156,7 @@ export function UmrahPaymentOverviewScreen({
 
           <div className="umrah-payment-line">
             <div>
-              <p>Hotel (Madinah)</p>
+              <p>Hotel ({secondaryHotelCityLabel})</p>
               <small>x {travelerCount} orang - {hotelNightsLabel}</small>
             </div>
             <p>{toRupiah(breakdown.hotelMadinah)}</p>

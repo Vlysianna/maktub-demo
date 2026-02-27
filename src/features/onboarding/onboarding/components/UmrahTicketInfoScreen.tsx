@@ -18,6 +18,8 @@ type UmrahTicketInfoScreenProps = {
   assets: UmrahTicketAssets
   airline: string
   airlineLogo: string
+  returnAirline: string
+  returnAirlineLogo: string
   departureLabel: string
   departureCode: string
   destinationLabel: string
@@ -29,6 +31,7 @@ type UmrahTicketInfoScreenProps = {
   returnDepartureTime: string
   returnArrivalTime: string
   durationLabel: string
+  returnDurationLabel: string
   travelerNames: string[]
   contactName: string
   contactEmail: string
@@ -132,6 +135,8 @@ export function UmrahTicketInfoScreen({
   assets,
   airline,
   airlineLogo,
+  returnAirline,
+  returnAirlineLogo,
   departureLabel,
   departureCode,
   destinationLabel,
@@ -143,6 +148,7 @@ export function UmrahTicketInfoScreen({
   returnDepartureTime,
   returnArrivalTime,
   durationLabel,
+  returnDurationLabel,
   travelerNames,
   contactName,
   contactEmail,
@@ -188,8 +194,8 @@ export function UmrahTicketInfoScreen({
 
         <h2 className="umrah-ticket-title">Kepulangan</h2>
         <RouteCard
-          airline={airline}
-          airlineLogo={airlineLogo}
+          airline={returnAirline}
+          airlineLogo={returnAirlineLogo}
           fromLabel={destinationLabel}
           fromCode={destinationCode}
           toLabel={departureLabel}
@@ -197,7 +203,7 @@ export function UmrahTicketInfoScreen({
           departTime={returnDepartureTime}
           arriveTime={returnArrivalTime}
           dateLabel={returnDateLabel}
-          durationLabel={durationLabel}
+          durationLabel={returnDurationLabel}
           assets={assets}
         />
 

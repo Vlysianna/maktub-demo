@@ -66,7 +66,7 @@ export function UmrahPaymentSuccessScreen({
               <span>⌃</span>
             </header>
             <div className="umrah-payment-steps">
-              <p>Pembayaran BNI Virtual Account dengan Mobile Banking BNI</p>
+              <p>Pembayaran {virtualAccountName} dengan Mobile Banking</p>
               <ol>
                 <li>Akses BNI Mobile Banking melalui handphone.</li>
                 <li>Masukkan User ID dan password.</li>

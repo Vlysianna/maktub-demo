@@ -24,6 +24,13 @@ function iconForFeature(feature: string, assets: UmrahHotelAssets) {
 export function UmrahHotelDetailScreen({ assets, detail, selectedRoomId, onBack, onSelectRoom }: UmrahHotelDetailScreenProps) {
   const primaryPolicy = detail.policies[0]
   const otherPolicies = detail.policies.slice(1)
+  const policyLines = primaryPolicy?.body
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+
+  const checkInLabel = policyLines?.find((line) => line.toLowerCase().startsWith('check-in')) ?? 'Check-in: Dari 16:00'
+  const checkOutLabel = policyLines?.find((line) => line.toLowerCase().startsWith('check-out')) ?? 'Check-out: Sebelum 12:00'
 
   return (
     <section className="phone-shell umrah-hotel-shell" aria-label="Detail Hotel">
@@ -139,10 +146,10 @@ export function UmrahHotelDetailScreen({ assets, detail, selectedRoomId, onBack,
             <article className="umrah-ticket-policy-item umrah-hotel-policy-split">
               <h3>{primaryPolicy.title}</h3>
               <p>
-                <span>Check-in :</span> <strong>Dari 16:00</strong>
+                <span>Check-in :</span> <strong>{checkInLabel.replace(/^Check-in\s*:\s*/i, '')}</strong>
               </p>
               <p>
-                <span>Check-out :</span> <strong>Sebelum 12:00</strong>
+                <span>Check-out :</span> <strong>{checkOutLabel.replace(/^Check-out\s*:\s*/i, '')}</strong>
               </p>
             </article>
           )}

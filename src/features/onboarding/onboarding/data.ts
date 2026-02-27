@@ -16,6 +16,7 @@ import type {
   UmrahTicketAssets,
   UmrahTravelerAssets,
   WalkthroughSlide,
+  OnboardingConfig,
 } from './types'
 
 export const splashLogo = 'https://www.figma.com/api/mcp/asset/c4989d5f-ee63-47a9-a373-06f00977a94c'
@@ -343,4 +344,46 @@ export const umrahPaymentAssets: UmrahPaymentAssets = {
 export const umrahCompletionAssets: UmrahCompletionAssets = {
   backIcon: 'https://www.figma.com/api/mcp/asset/cd2f5bf6-0efd-4acf-a72b-180c5eacd71e',
   successBadge: 'https://www.figma.com/api/mcp/asset/373a1061-a3fe-4b48-9f73-b9987f54e2cf',
+}
+
+export const onboardingConfig: OnboardingConfig = {
+  defaultContact: {
+    name: 'Noermansyah',
+    email: 'noermansyah@gmail.com',
+    phone: '081288990011',
+    virtualAccountNumber: '8848800096475552',
+    passportNumber: 'C1234567A',
+  },
+  defaultDepartureCode: 'CGK',
+  defaultArrivalCity: 'Jeddah',
+  defaultHotelCityLabel: 'Mekah',
+  defaultTravelDate: {
+    year: 2026,
+    month: 1,
+    day: 18,
+  },
+  defaultHotelNightCount: 2,
+  nationalityOptions: ['Indonesia', 'Malaysia', 'Singapura', 'Brunei', 'Arab Saudi'],
+  monthOptions: [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
+  ],
+  passportYearSpan: 70,
+  paymentMethodLabels: {
+    'bni-va': 'BNI Virtual Account',
+    'bri-va': 'BRI Virtual Account',
+    'mandiri-va': 'Mandiri Virtual Account',
+    'bca-va': 'BCA Virtual Account',
+    'credit-card': 'Visa / Master Card',
+  },
 }
