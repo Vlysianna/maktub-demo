@@ -49,11 +49,23 @@ export function UmrahFlightScreen({
         </button>
       </header>
 
-      <div className="umrah-flight-stepper" aria-hidden>
-        <span className="active">1 Flight ---</span>
-        <span>2 Hotel ---</span>
-        <span>3 Pembayaran ---</span>
-        <span>4 Visa &amp; Lainnya</span>
+      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+        <span className="umrah-flight-step active">
+          <i>1</i>
+          <b>Flight ---</b>
+        </span>
+        <span className="umrah-flight-step">
+          <i>2</i>
+          <b>Hotel ---</b>
+        </span>
+        <span className="umrah-flight-step">
+          <i>3</i>
+          <b>Pembayaran ---</b>
+        </span>
+        <span className="umrah-flight-step">
+          <i>4</i>
+          <b>Visa &amp; Lainnya</b>
+        </span>
       </div>
 
       <section className="umrah-flight-summary">
@@ -78,7 +90,19 @@ export function UmrahFlightScreen({
 
       <div className="umrah-flight-list">
         {offers.map((offer) => (
-          <article key={offer.id} className={`flight-card ${offer.isRecommended ? 'recommended' : ''}`}>
+          <article
+            key={offer.id}
+            className={`flight-card ${offer.isRecommended ? 'recommended' : ''}`}
+            role="button"
+            tabIndex={0}
+            onClick={() => onSelectOffer(offer)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                onSelectOffer(offer)
+              }
+            }}
+          >
             <div className="flight-main-row">
               <div className="flight-segments">
                 {offer.segments.map((segment, index) => (
@@ -103,7 +127,7 @@ export function UmrahFlightScreen({
             </div>
 
             <div className="flight-footer-row">
-              <button type="button" className="flight-detail-btn" onClick={() => onSelectOffer(offer)}>
+              <div className="flight-detail-btn" aria-hidden>
                 <span>
                   {journeyLabel === 'Keberangkatan'
                     ? offer.isRecommended
@@ -114,7 +138,7 @@ export function UmrahFlightScreen({
                       : 'Pilih kepulangan'}
                 </span>
                 <img src={assets.chevronRight} alt="" aria-hidden />
-              </button>
+              </div>
             </div>
 
             {offer.isRecommended && (

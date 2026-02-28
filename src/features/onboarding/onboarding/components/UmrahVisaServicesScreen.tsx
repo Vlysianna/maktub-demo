@@ -68,10 +68,19 @@ export function UmrahVisaServicesScreen({
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      <div className="umrah-flight-stepper" aria-hidden>
-        <span className="active">2 Hotel ---</span>
-        <span className="active">3 Pembayaran ---</span>
-        <span className="active">4 Visa &amp; Lainnya</span>
+      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+        <span className="umrah-flight-step active">
+          <i>2</i>
+          <b>Hotel ---</b>
+        </span>
+        <span className="umrah-flight-step active">
+          <i>3</i>
+          <b>Pembayaran ---</b>
+        </span>
+        <span className="umrah-flight-step active">
+          <i>4</i>
+          <b>Visa &amp; Lainnya</b>
+        </span>
       </div>
 
       <div className="umrah-visa-scroll">

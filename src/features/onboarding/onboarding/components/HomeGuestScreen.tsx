@@ -5,10 +5,18 @@ type HomeGuestScreenProps = {
   services: ServiceItem[]
   articles: ArticleItem[]
   onStartJourney: () => void
+  onOpenFlightSearch: () => void
   onOpenMyBooking: () => void
 }
 
-export function HomeGuestScreen({ assets, services, articles, onStartJourney, onOpenMyBooking }: HomeGuestScreenProps) {
+export function HomeGuestScreen({
+  assets,
+  services,
+  articles,
+  onStartJourney,
+  onOpenFlightSearch,
+  onOpenMyBooking,
+}: HomeGuestScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeIcon, active: true },
     { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
@@ -68,7 +76,12 @@ export function HomeGuestScreen({ assets, services, articles, onStartJourney, on
         <section className="home-content">
           <div className="services-card">
             {services.map((item) => (
-              <button key={item.label} type="button" className="service-item">
+              <button
+                key={item.label}
+                type="button"
+                className="service-item"
+                onClick={item.label === 'Pesawat' ? onOpenFlightSearch : undefined}
+              >
                 <div className="service-icon-wrap">
                   <img src={item.icon} alt={item.label} className="service-icon" />
                 </div>

@@ -6,6 +6,7 @@ import { UmrahBudgetScreen } from './features/onboarding/onboarding/components/U
 import { UmrahDepartureScreen } from './features/onboarding/onboarding/components/UmrahDepartureScreen'
 import { UmrahFlightScreen } from './features/onboarding/onboarding/components/UmrahFlightScreen'
 import { UmrahFlightDetailScreen } from './features/onboarding/onboarding/components/UmrahFlightDetailScreen'
+import { UmrahFlightSearchScreen } from './features/onboarding/onboarding/components/UmrahFlightSearchScreen'
 import { UmrahPassengerCameraScreen } from './features/onboarding/onboarding/components/UmrahPassengerCameraScreen'
 import { UmrahPassengerFormScreen } from './features/onboarding/onboarding/components/UmrahPassengerFormScreen'
 import { UmrahProcessingScreen } from './features/onboarding/onboarding/components/UmrahProcessingScreen'
@@ -27,6 +28,8 @@ import { UmrahVisaServicesScreen } from './features/onboarding/onboarding/compon
 import { WalkthroughScreen } from './features/onboarding/onboarding/components/WalkthroughScreen'
 import { MyBookingScreen } from './features/onboarding/onboarding/components/MyBookingScreen'
 import { MyBookingDetailScreen } from './features/onboarding/onboarding/components/MyBookingDetailScreen'
+import { MyBookingItineraryScreen } from './features/onboarding/onboarding/components/MyBookingItineraryScreen'
+import { MyBookingItineraryEditScreen } from './features/onboarding/onboarding/components/MyBookingItineraryEditScreen'
 import {
   articles,
   budgetOptions,
@@ -54,11 +57,13 @@ import {
   onboardingConfig,
   myBookingAssets,
   myBookingDetailAssets,
+  itinerarySuggestionGroups,
 } from './features/onboarding/onboarding/data'
 import type {
   BookingDetail,
   BookingItem,
   BookingStatus,
+  ItineraryDay,
   PassengerFormData,
   PaymentBreakdown,
   PaymentMethod,
@@ -91,6 +96,18 @@ const budgetProfiles: Record<
 }
 
 const defaultBudgetProfile = budgetProfiles['25.000.000 sampai 40.000.000']
+
+const visaPackagePricePerPerson: Record<'visa-1-bulan' | 'visa-2-minggu' | 'visa-express', number> = {
+  'visa-1-bulan': 3_000_000,
+  'visa-2-minggu': 4_000_000,
+  'visa-express': 4_000_000,
+}
+
+const visaPackageLabelMap: Record<'visa-1-bulan' | 'visa-2-minggu' | 'visa-express', string> = {
+  'visa-1-bulan': 'Visa 1 Bulan',
+  'visa-2-minggu': 'Visa 2 Minggu',
+  'visa-express': 'Visa Express',
+}
 
 function shiftTimeLabel(timeLabel: string, hourOffset: number) {
   const [hourPart, minutePart] = timeLabel.split(':')
@@ -173,10 +190,12 @@ const fallbackTravelDate = new Date(
   onboardingConfig.defaultTravelDate.day,
 )
 
+type FlightCabinSelection = 'Ekonomi' | 'Ekonomi Premium' | 'Bisnis' | 'First'
+
 function App() {
   const [screen, setScreen] = useState<Screen>('splash')
   const [selectedMyBookingId, setSelectedMyBookingId] = useState<string | null>(null)
-  const [bookingStatusSnapshot, setBookingStatusSnapshot] = useState<BookingStatus>('akan-datang')
+  const [itineraryByBookingId, setItineraryByBookingId] = useState<Record<string, ItineraryDay[]>>({})
   const [step, setStep] = useState(1)
   const [travelerParticipants, setTravelerParticipants] = useState({
     dewasa: 0,
@@ -189,6 +208,7 @@ function App() {
   const [returnCity, setReturnCity] = useState<string | null>(null)
   const [budgetRange, setBudgetRange] = useState<string | null>(null)
   const [travelDate, setTravelDate] = useState<Date | null>(null)
+  const [returnTravelDate, setReturnTravelDate] = useState<Date | null>(null)
   const [hotelStartDate, setHotelStartDate] = useState<Date | null>(null)
   const [hotelEndDate, setHotelEndDate] = useState<Date | null>(null)
   const [flightSelectionLeg, setFlightSelectionLeg] = useState<'departure' | 'return'>('departure')
@@ -196,12 +216,15 @@ function App() {
   const [selectedReturnFlightId, setSelectedReturnFlightId] = useState<string | null>(null)
   const [selectedDepartureFareId, setSelectedDepartureFareId] = useState<TicketFareOption['id']>('economy')
   const [selectedReturnFareId, setSelectedReturnFareId] = useState<TicketFareOption['id']>('economy')
+  const [selectedFlightCabinLabel, setSelectedFlightCabinLabel] = useState<FlightCabinSelection>('Ekonomi')
   const [hotelSelectionLeg, setHotelSelectionLeg] = useState<'departure' | 'return'>('departure')
   const [selectedHotelId, setSelectedHotelId] = useState<string | null>(null)
   const [selectedHotelRoomId, setSelectedHotelRoomId] = useState<string | null>(null)
   const [selectedReturnHotelId, setSelectedReturnHotelId] = useState<string | null>(null)
   const [selectedReturnHotelRoomId, setSelectedReturnHotelRoomId] = useState<string | null>(null)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('bni-va')
+  const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
+  const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
   const [hasVisa, setHasVisa] = useState(false)
   const [selectedVisaPackage, setSelectedVisaPackage] = useState<'visa-1-bulan' | 'visa-2-minggu' | 'visa-express'>('visa-1-bulan')
   const [visaPersonalForm, setVisaPersonalForm] = useState({
@@ -269,31 +292,13 @@ function App() {
       setSelectedReturnFlightId(null)
       setSelectedDepartureFareId('economy')
       setSelectedReturnFareId('economy')
-      setScreen('umrah-flight')
+      setScreen('umrah-flight-search')
     }, 2800)
 
     return () => {
       window.clearTimeout(timer)
     }
   }, [screen])
-
-  useEffect(() => {
-    if (screen === 'umrah-payment-overview' || screen === 'umrah-payment-method' || screen === 'umrah-payment-pending') {
-      setBookingStatusSnapshot((prev) => (prev === 'berlangsung' ? prev : 'menunggu-pembayaran'))
-      return
-    }
-
-    if (
-      screen === 'umrah-payment-success' ||
-      screen === 'umrah-payment-complete' ||
-      screen === 'umrah-visa-services' ||
-      screen === 'umrah-visa-form-personal' ||
-      screen === 'umrah-visa-form-docs' ||
-      hasVisa
-    ) {
-      setBookingStatusSnapshot('berlangsung')
-    }
-  }, [hasVisa, screen])
 
   const totalParticipants = useMemo(
     () => travelerParticipants.dewasa + travelerParticipants.anak + travelerParticipants.bayi,
@@ -349,6 +354,10 @@ function App() {
   const destinationCode = cityAirportCodeMap[destinationLabel] ?? 'JED'
   const returnDestinationLabel = returnCity ?? destinationLabel
   const returnDestinationCode = cityAirportCodeMap[returnDestinationLabel] ?? destinationCode
+  const flightDestinationOptions = useMemo(
+    () => cityOptions.map((city) => ({ city, code: cityAirportCodeMap[city] ?? 'JED' })),
+    [],
+  )
 
   const dateLabel = useMemo(() => {
     if (!travelDate) {
@@ -381,6 +390,13 @@ function App() {
   }, [travelDate])
 
   const shortReturnDateLabel = useMemo(() => {
+    if (returnTravelDate) {
+      return returnTravelDate.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+      })
+    }
+
     if (!travelDate) {
       const fallbackReturnDate = addDays(fallbackTravelDate, 3)
       return fallbackReturnDate.toLocaleDateString('id-ID', {
@@ -396,7 +412,7 @@ function App() {
       day: '2-digit',
       month: 'short',
     })
-  }, [travelDate])
+  }, [returnTravelDate, travelDate])
 
   const activeBudgetProfile = budgetRange ? (budgetProfiles[budgetRange] ?? defaultBudgetProfile) : defaultBudgetProfile
 
@@ -598,6 +614,48 @@ function App() {
     return Math.max(1, Math.round(diff / (1000 * 60 * 60 * 24)))
   }, [hotelEndValue, hotelStartValue])
 
+  const bookingStatusSnapshot = useMemo<BookingStatus>(() => {
+    const pendingPaymentScreens: Screen[] = ['umrah-payment-overview', 'umrah-payment-method', 'umrah-payment-pending']
+    const completedPaymentScreens: Screen[] = [
+      'umrah-payment-success',
+      'umrah-payment-complete',
+      'umrah-visa-services',
+      'umrah-visa-form-personal',
+      'umrah-visa-form-docs',
+    ]
+
+    if (pendingPaymentScreens.includes(screen)) {
+      return 'menunggu-pembayaran'
+    }
+
+    const scheduleStart = startOfDay(travelDate ?? fallbackTravelDate)
+    const scheduleEnd = addDays(scheduleStart, hotelNights)
+    const today = startOfDay(new Date())
+
+    const isPaymentSettled = completedPaymentScreens.includes(screen) || paymentCompletedAt !== null
+
+    if (paymentCompletedAt) {
+      const paidAtDay = startOfDay(paymentCompletedAt)
+      if (paidAtDay.getTime() === today.getTime()) {
+        return 'berlangsung'
+      }
+    }
+
+    if (!isPaymentSettled) {
+      return today < scheduleStart ? 'akan-datang' : 'history'
+    }
+
+    if (today < scheduleStart) {
+      return 'akan-datang'
+    }
+
+    if (today <= scheduleEnd) {
+      return 'berlangsung'
+    }
+
+    return 'history'
+  }, [hotelNights, paymentCompletedAt, screen, travelDate])
+
   const paymentBreakdown = useMemo<PaymentBreakdown>(() => {
     const flightDeparture = selectedDepartureFare.totalPrice
     const flightReturn = selectedReturnFare.totalPrice
@@ -627,6 +685,25 @@ function App() {
     selectedReturnFare.totalPrice,
     travelerCount,
   ])
+
+  const visaPaymentBreakdown = useMemo<PaymentBreakdown>(() => {
+    const subtotal = visaPackagePricePerPerson[selectedVisaPackage] * travelerCount
+    const serviceFee = 50_000
+    const taxAmount = Math.round(subtotal * 0.1)
+
+    return {
+      flightDeparture: 0,
+      flightReturn: 0,
+      hotelMakkah: 0,
+      hotelMadinah: 0,
+      subtotal,
+      serviceFee,
+      taxAmount,
+      grandTotal: subtotal + serviceFee + taxAmount,
+    }
+  }, [selectedVisaPackage, travelerCount])
+
+  const activePaymentBreakdown = paymentFlow === 'visa' ? visaPaymentBreakdown : paymentBreakdown
 
   const hotelPaymentCards = useMemo(() => {
     if (!selectedHotelOffer) {
@@ -868,6 +945,88 @@ function App() {
 
   const selectedMyBookingDetail = selectedMyBookingId ? dynamicMyBookingDetailsById[selectedMyBookingId] : null
 
+  const defaultItineraryDays = useMemo<ItineraryDay[]>(() => {
+    const itineraryStartDate = startOfDay(travelDate ?? fallbackTravelDate)
+    const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
+
+    const formatItineraryDateLabel = (date: Date) => {
+      const dayValue = date.getDate()
+      const monthLabel = date.toLocaleDateString('id-ID', { month: 'short' })
+      const yearValue = date.getFullYear()
+      return `${dayValue} ${monthLabel} ${yearValue}`
+    }
+
+    const firstDayDate = itineraryStartDate
+    const secondDayDate = addDays(itineraryStartDate, 1)
+    const thirdDayDate = addDays(itineraryStartDate, 2)
+
+    const destinationRoute = `${destinationLabel}`
+
+    return [
+      {
+        id: 'itinerary-day-1',
+        dayNumber: 1,
+        dayLabel: dayNames[firstDayDate.getDay()] ?? 'Senin',
+        dateLabel: formatItineraryDateLabel(firstDayDate),
+        routeLabel: `${departureLabel} - ${destinationRoute}`,
+        editable: false,
+        activities: [
+          { id: 'day1-1', time: '13:00', description: `Berkumpul di Bandara ${departureLabel}` },
+          {
+            id: 'day1-2',
+            time: selectedFlightDepartureTime,
+            description: `Penerbangan dari ${departureLabel} menuju ${destinationLabel}`,
+          },
+          { id: 'day1-3', time: selectedFlightArrivalTime, description: `Tiba di ${destinationLabel}` },
+          { id: 'day1-4', time: '22:30', description: `Setibanya di ${destinationLabel}, jama'ah langsung menuju hotel.` },
+          { id: 'day1-5', time: '00:30', description: 'Istirahat dan persiapan ibadah hari berikutnya.' },
+        ],
+      },
+      {
+        id: 'itinerary-day-2',
+        dayNumber: 2,
+        dayLabel: dayNames[secondDayDate.getDay()] ?? 'Selasa',
+        dateLabel: formatItineraryDateLabel(secondDayDate),
+        routeLabel: destinationRoute,
+        editable: true,
+        activities: [
+          { id: 'day2-1', time: '05:00', description: 'Shalat Subuh dan ziarah.' },
+          { id: 'day2-2', time: '06:00', description: 'Shalat sunah dan doa.' },
+          { id: 'day2-3', time: '08:00', description: 'Kunjungan area bersejarah dan wisata religi.' },
+          { id: 'day2-4', time: '16:00', description: 'Kembali ke hotel dan melanjutkan ibadah.' },
+        ],
+      },
+      {
+        id: 'itinerary-day-3',
+        dayNumber: 3,
+        dayLabel: dayNames[thirdDayDate.getDay()] ?? 'Rabu',
+        dateLabel: formatItineraryDateLabel(thirdDayDate),
+        routeLabel: destinationRoute,
+        editable: true,
+        activities: [
+          { id: 'day3-1', time: '05:00', description: 'Shalat Subuh dan ziarah.' },
+          { id: 'day3-2', time: '06:00', description: 'Shalat sunah dan doa.' },
+          { id: 'day3-3', time: '08:00', description: 'Eksplorasi lokasi ibadah dan wisata kota.' },
+          { id: 'day3-4', time: '16:00', description: 'Kembali ke hotel dan persiapan agenda selanjutnya.' },
+        ],
+      },
+    ]
+  }, [departureLabel, destinationLabel, selectedFlightArrivalTime, selectedFlightDepartureTime, travelDate])
+
+  const activeItineraryDays = selectedMyBookingId
+    ? itineraryByBookingId[selectedMyBookingId] ?? defaultItineraryDays
+    : defaultItineraryDays
+
+  const minimumFlightDepartureDate = addDays(startOfDay(new Date()), 1)
+  const initialFlightSearchDepartureDate =
+    (travelDate ?? fallbackTravelDate).getTime() < minimumFlightDepartureDate.getTime()
+      ? minimumFlightDepartureDate
+      : travelDate ?? fallbackTravelDate
+  const initialFlightSearchReturnDate = (() => {
+    const baseReturnDate = returnTravelDate ?? addDays(initialFlightSearchDepartureDate, 3)
+    return baseReturnDate.getTime() < initialFlightSearchDepartureDate.getTime() ? initialFlightSearchDepartureDate : baseReturnDate
+  })()
+
   return (
     <main className="walkthrough-page">
       {screen === 'splash' && <SplashScreen logoUrl={splashLogo} />}
@@ -887,6 +1046,10 @@ function App() {
           services={services}
           articles={articles}
           onStartJourney={() => setScreen('umrah-question')}
+          onOpenFlightSearch={() => {
+            setFlightSelectionLeg('departure')
+            setScreen('umrah-flight-search')
+          }}
           onOpenMyBooking={() => setScreen('my-booking')}
         />
       )}
@@ -909,6 +1072,34 @@ function App() {
           assets={myBookingDetailAssets}
           detail={selectedMyBookingDetail}
           onBack={() => setScreen('my-booking')}
+          onOpenItinerary={() => setScreen('my-booking-itinerary')}
+        />
+      )}
+
+      {screen === 'my-booking-itinerary' && (
+        <MyBookingItineraryScreen
+          assets={myBookingAssets}
+          detailAssets={myBookingDetailAssets}
+          days={activeItineraryDays}
+          onBack={() => setScreen('my-booking-detail')}
+          onEdit={() => setScreen('my-booking-itinerary-edit')}
+        />
+      )}
+
+      {screen === 'my-booking-itinerary-edit' && (
+        <MyBookingItineraryEditScreen
+          assets={myBookingAssets}
+          detailAssets={myBookingDetailAssets}
+          initialDays={activeItineraryDays}
+          suggestionGroups={itinerarySuggestionGroups}
+          onBack={() => setScreen('my-booking-itinerary')}
+          onSave={(days) => {
+            if (selectedMyBookingId) {
+              setItineraryByBookingId((prev) => ({ ...prev, [selectedMyBookingId]: days }))
+            }
+
+            setScreen('my-booking-itinerary')
+          }}
         />
       )}
 
@@ -916,10 +1107,12 @@ function App() {
         <UmrahQuestionScreen
           assets={umrahQuestionAssets}
           onClose={() => setScreen('home')}
-          onNext={(selectedDate) => {
+          onNext={(selectedDate, alreadyHasVisa) => {
             setTravelDate(selectedDate)
             setHotelStartDate(selectedDate)
             setHotelEndDate(addDays(selectedDate, onboardingConfig.defaultHotelNightCount))
+            setHasVisa(alreadyHasVisa)
+            setPaymentCompletedAt(null)
             setScreen('umrah-traveler')
           }}
         />
@@ -982,7 +1175,7 @@ function App() {
         <UmrahFlightScreen
           assets={umrahFlightAssets}
           journeyLabel={flightSelectionLeg === 'departure' ? 'Keberangkatan' : 'Kepulangan'}
-          selectedCabinLabel={flightSelectionLeg === 'departure' ? selectedDepartureFare.name : selectedReturnFare.name}
+          selectedCabinLabel={selectedFlightCabinLabel}
           departureLabel={flightSelectionLeg === 'departure' ? departureLabel : returnDestinationLabel}
           departureCode={flightSelectionLeg === 'departure' ? departureCode ?? 'CGK' : returnDestinationCode}
           destinationLabel={flightSelectionLeg === 'departure' ? destinationLabel : departureLabel}
@@ -1011,9 +1204,52 @@ function App() {
               return
             }
 
-            setScreen('umrah-budget')
+            setScreen('umrah-flight-search')
           }}
           onClose={() => setScreen('home')}
+        />
+      )}
+
+      {screen === 'umrah-flight-search' && (
+        <UmrahFlightSearchScreen
+          blurImage={umrahProcessingAssets.blur}
+          departureOptions={departureAirportOptions}
+          destinationOptions={flightDestinationOptions}
+          initialDepartureCode={departureCode}
+          initialDestinationCity={arrivalCity}
+          initialDepartureDate={initialFlightSearchDepartureDate}
+          initialReturnDate={initialFlightSearchReturnDate}
+          initialPassengers={travelerParticipants}
+          initialCabinClass={selectedFlightCabinLabel}
+          onBack={() => setScreen('umrah-budget')}
+          onClose={() => setScreen('home')}
+          onSearch={(payload) => {
+            const nextTravelerCount = Math.max(payload.passengers.dewasa + payload.passengers.anak + payload.passengers.bayi, 1)
+
+            setDepartureCode(payload.departureCode)
+            setArrivalCity(payload.destinationCity)
+            setReturnCity(payload.destinationCity)
+            setTravelDate(payload.departureDate)
+            setReturnTravelDate(payload.returnDate)
+            setHotelStartDate(payload.departureDate)
+            setHotelEndDate(addDays(payload.departureDate, onboardingConfig.defaultHotelNightCount))
+            setTravelerParticipants(payload.passengers)
+            syncTravelerCollections(nextTravelerCount)
+            setSelectedFlightCabinLabel(payload.cabinClass)
+
+            if (payload.cabinClass === 'Ekonomi') {
+              setSelectedDepartureFareId('economy')
+              setSelectedReturnFareId('economy')
+            } else {
+              setSelectedDepartureFareId('economy-plus')
+              setSelectedReturnFareId('economy-plus')
+            }
+
+            setFlightSelectionLeg('departure')
+            setSelectedFlightId(null)
+            setSelectedReturnFlightId(null)
+            setScreen('umrah-flight')
+          }}
         />
       )}
 
@@ -1216,15 +1452,21 @@ function App() {
             setHotelSelectionLeg('return')
             setScreen('umrah-hotel-ticket-info')
           }}
-          onNext={() => setScreen('umrah-payment-method')}
+          onNext={() => {
+            setPaymentFlow('package')
+            setScreen('umrah-payment-method')
+          }}
         />
       )}
 
       {screen === 'umrah-payment-method' && (
         <UmrahPaymentMethodScreen
           assets={umrahPaymentAssets}
-          breakdown={paymentBreakdown}
-          onBack={() => setScreen('umrah-payment-overview')}
+          breakdown={activePaymentBreakdown}
+          paymentFor={paymentFlow}
+          visaLabel={visaPackageLabelMap[selectedVisaPackage]}
+          travelerCount={travelerCount}
+          onBack={() => setScreen(paymentFlow === 'visa' ? 'umrah-visa-services' : 'umrah-payment-overview')}
           onPay={(method) => {
             setSelectedPaymentMethod(method)
             setScreen('umrah-payment-pending')
@@ -1237,9 +1479,12 @@ function App() {
           assets={umrahPaymentAssets}
           virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
           virtualAccountName={selectedPaymentLabel}
-          totalPayment={paymentBreakdown.grandTotal}
+          totalPayment={activePaymentBreakdown.grandTotal}
           onBack={() => setScreen('umrah-payment-method')}
-          onNext={() => setScreen('umrah-payment-success')}
+          onNext={() => {
+            setPaymentCompletedAt(new Date())
+            setScreen('umrah-payment-success')
+          }}
         />
       )}
 
@@ -1248,7 +1493,7 @@ function App() {
           assets={umrahPaymentAssets}
           virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
           virtualAccountName={selectedPaymentLabel}
-          totalPayment={paymentBreakdown.grandTotal}
+          totalPayment={activePaymentBreakdown.grandTotal}
           onBack={() => setScreen('umrah-payment-pending')}
           onNext={() => setScreen(hasVisa ? 'umrah-payment-complete' : 'umrah-visa-services')}
         />
@@ -1272,8 +1517,9 @@ function App() {
           onSelectPackage={setSelectedVisaPackage}
           onOpenForm={() => setScreen('umrah-visa-form-personal')}
           onBuy={() => {
+            setPaymentFlow('visa')
             setHasVisa(true)
-            setScreen('umrah-payment-complete')
+            setScreen('umrah-payment-method')
           }}
           onSkip={() => setScreen('home')}
         />

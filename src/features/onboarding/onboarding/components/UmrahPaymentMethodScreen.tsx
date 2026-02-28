@@ -4,6 +4,9 @@ import type { PaymentBreakdown, PaymentMethod, UmrahPaymentAssets } from '../typ
 type UmrahPaymentMethodScreenProps = {
   assets: UmrahPaymentAssets
   breakdown: PaymentBreakdown
+  paymentFor?: 'package' | 'visa'
+  visaLabel?: string
+  travelerCount?: number
   onBack: () => void
   onPay: (method: PaymentMethod) => void
 }
@@ -12,7 +15,15 @@ function toRupiah(amount: number) {
   return `Rp ${amount.toLocaleString('id-ID')}`
 }
 
-export function UmrahPaymentMethodScreen({ assets, breakdown, onBack, onPay }: UmrahPaymentMethodScreenProps) {
+export function UmrahPaymentMethodScreen({
+  assets,
+  breakdown,
+  paymentFor = 'package',
+  visaLabel,
+  travelerCount = 1,
+  onBack,
+  onPay,
+}: UmrahPaymentMethodScreenProps) {
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('bni-va')
   const [referralCode, setReferralCode] = useState('')
   const isCard = selectedMethod === 'credit-card'
@@ -29,10 +40,19 @@ export function UmrahPaymentMethodScreen({ assets, breakdown, onBack, onPay }: U
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      <div className="umrah-flight-stepper" aria-hidden>
-        <span className="active">2 Hotel ---</span>
-        <span className="active">3 Pembayaran ---</span>
-        <span>4 Visa &amp; Lainnya</span>
+      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+        <span className="umrah-flight-step active">
+          <i>2</i>
+          <b>Hotel ---</b>
+        </span>
+        <span className="umrah-flight-step active">
+          <i>3</i>
+          <b>Pembayaran ---</b>
+        </span>
+        <span className="umrah-flight-step">
+          <i>4</i>
+          <b>Visa &amp; Lainnya</b>
+        </span>
       </div>
 
       <div className="umrah-payment-scroll">
@@ -45,9 +65,15 @@ export function UmrahPaymentMethodScreen({ assets, breakdown, onBack, onPay }: U
 
             <div className="umrah-payment-summary-lines">
               <p>
-                <span>Harga paket hotel &amp; flight</span>
+                <span>{paymentFor === 'visa' ? `Harga ${visaLabel ?? 'Visa Umrah'}` : 'Harga paket hotel &amp; flight'}</span>
                 <span>{toRupiah(breakdown.subtotal)}</span>
               </p>
+              {paymentFor === 'visa' && (
+                <p>
+                  <span>Jumlah jamaah</span>
+                  <span>x{travelerCount} orang</span>
+                </p>
+              )}
               <p>
                 <span>Biaya layanan</span>
                 <span>{toRupiah(breakdown.serviceFee)}</span>

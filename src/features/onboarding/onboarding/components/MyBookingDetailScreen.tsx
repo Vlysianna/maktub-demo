@@ -4,6 +4,7 @@ type MyBookingDetailScreenProps = {
   assets: MyBookingDetailAssets
   detail: BookingDetail
   onBack: () => void
+  onOpenItinerary: () => void
 }
 
 const statusBadgeLabel: Record<BookingStatus, string> = {
@@ -20,7 +21,9 @@ const statusBadgeClassName: Record<BookingStatus, string> = {
   history: 'neutral',
 }
 
-export function MyBookingDetailScreen({ assets, detail, onBack }: MyBookingDetailScreenProps) {
+export function MyBookingDetailScreen({ assets, detail, onBack, onOpenItinerary }: MyBookingDetailScreenProps) {
+  const showPayNow = detail.status === 'menunggu-pembayaran'
+
   return (
     <section className="phone-shell my-booking-detail-shell" aria-label="My Booking Detail">
       <header className="my-booking-detail-header">
@@ -30,7 +33,7 @@ export function MyBookingDetailScreen({ assets, detail, onBack }: MyBookingDetai
         <h1>Detail Umrah</h1>
       </header>
 
-      <div className="my-booking-detail-scroll">
+      <div className={`my-booking-detail-scroll ${showPayNow ? 'with-pay' : 'without-pay'}`}>
         <section className="my-booking-detail-summary">
           <div className="my-booking-detail-title-row">
             <p>{detail.title}</p>
@@ -202,14 +205,18 @@ export function MyBookingDetailScreen({ assets, detail, onBack }: MyBookingDetai
         </section>
       </div>
 
-      <button type="button" className="my-booking-itinerary-btn">
-        <span>Lihat itinerary perjalanan</span>
-        <img src={assets.itineraryArrowIcon} alt="Lihat itinerary" />
-      </button>
+      <div className="my-booking-detail-actions">
+        <button type="button" className="my-booking-itinerary-btn" onClick={onOpenItinerary}>
+          <span>Lihat itinerary perjalanan</span>
+          <img src={assets.itineraryArrowIcon} alt="Lihat itinerary" />
+        </button>
 
-      <button type="button" className="my-booking-pay-btn">
-        Bayar Sekarang
-      </button>
+        {showPayNow && (
+          <button type="button" className="my-booking-pay-btn">
+            Bayar Sekarang
+          </button>
+        )}
+      </div>
 
       <footer className="home-indicator" aria-hidden>
         <span />

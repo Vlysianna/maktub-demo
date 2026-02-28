@@ -6,6 +6,7 @@ import type {
   FlightOffer,
   HotelDetail,
   HotelOffer,
+  ItinerarySuggestionGroup,
   MyBookingDetailAssets,
   MyBookingAssets,
   UmrahCompletionAssets,
@@ -124,6 +125,35 @@ export const myBookingDetailAssets: MyBookingDetailAssets = {
   bankLogo: 'https://www.figma.com/api/mcp/asset/936e35be-3c08-492f-ba4c-063fc1f18f22',
 }
 
+export const itinerarySuggestionGroups: ItinerarySuggestionGroup[] = [
+  {
+    id: 'religious',
+    title: 'Wisata Religi & Ziarah',
+    options: [
+      { id: 'masjid-quba', label: 'Masjid Quba: Masjid pertama yang dibangun Nabi Muhammad SAW, disunnahkan shalat di sini.' },
+      { id: 'jabal-uhud', label: 'Jabal Uhud: Ziarah ke makam para syuhada Uhud, lokasi perang bersejarah.' },
+      { id: 'jabal-rahmah', label: 'Jabal Rahmah: Bukit kasih sayang, diyakini tempat bertemunya Nabi Adam dan Hawa. Gua Hira' },
+    ],
+  },
+  {
+    id: 'city-tour',
+    title: 'Wisata Kota',
+    options: [
+      { id: 'padel', label: 'Padel: Bermain olahraga padel' },
+      { id: 'tour-jeddah', label: 'Tour: Kunjungan ke Laut Merah, Corniche, dan pusat perbelanjaan di Jeddah.' },
+    ],
+  },
+  {
+    id: 'education-shopping',
+    title: 'Wisata Edukasi & Belanja',
+    options: [
+      { id: 'kebun-kurma', label: 'Kebun Kurma: Mengunjungi kebun kurma di Madinah untuk edukasi dan membeli oleh-oleh.' },
+      { id: 'pasar-zakfariyah', label: 'Pasar Zakfariyah: Berbelanja kebutuhan oleh-oleh khas di Mekkah.' },
+      { id: 'jabal-magnet', label: 'Jabal Magnet: Lokasi fenomena alam unik di luar kota Madinah.' },
+    ],
+  },
+]
+
 const defaultBookingDetail: Omit<BookingDetail, 'bookingId' | 'title' | 'status'> = {
   invoiceId: 'INV0123JNDN123',
   transactionDateLabel: '18 Februari 2025, 18:00 WIB',
@@ -233,7 +263,9 @@ export const homeAssets: HomeAssets = {
   arrowRight: 'https://www.figma.com/api/mcp/asset/1c8f6e3f-9ee8-498e-a251-f9cbd8a9ffa3',
   chatbot: 'https://www.figma.com/api/mcp/asset/014c5f02-b4c7-4743-9622-8cd8592dd92d',
   navHomeIcon: 'https://www.figma.com/api/mcp/asset/6d2fcfe4-f277-42bf-a91e-cbd3c3b0466a',
+  navHomeInactiveIcon: 'https://www.figma.com/api/mcp/asset/a028ad61-b776-4906-b67f-15da8514b0d5',
   navBookingIcon: 'https://www.figma.com/api/mcp/asset/10455ef3-9f71-4b4f-996c-83dcc948ca95',
+  navBookingActiveIcon: 'https://www.figma.com/api/mcp/asset/7ced23ec-e00b-4972-8ca4-c244282dac46',
   navServicesIcon: 'https://www.figma.com/api/mcp/asset/8af8d036-30ba-48d4-8767-072c8b763262',
   navInfoIcon: 'https://www.figma.com/api/mcp/asset/1df397f5-9f40-4fcb-82e3-f0c76edf8842',
   navAccountIcon: 'https://www.figma.com/api/mcp/asset/e56f81eb-4a8b-4503-89ca-b1ac651315bc',

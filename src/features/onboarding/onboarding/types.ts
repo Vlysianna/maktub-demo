@@ -4,12 +4,15 @@ export type Screen =
   | 'home'
   | 'my-booking'
   | 'my-booking-detail'
+  | 'my-booking-itinerary'
+  | 'my-booking-itinerary-edit'
   | 'umrah-question'
   | 'umrah-traveler'
   | 'umrah-departure'
   | 'umrah-arrival-return'
   | 'umrah-budget'
   | 'umrah-processing'
+  | 'umrah-flight-search'
   | 'umrah-flight'
   | 'umrah-flight-detail'
   | 'umrah-ticket-info'
@@ -134,6 +137,33 @@ export type MyBookingDetailAssets = {
   bankLogo: string
 }
 
+export type ItineraryActivity = {
+  id: string
+  time: string
+  description: string
+}
+
+export type ItineraryDay = {
+  id: string
+  dayNumber: number
+  dayLabel: string
+  dateLabel: string
+  routeLabel: string
+  activities: ItineraryActivity[]
+  editable?: boolean
+}
+
+export type ItinerarySuggestionOption = {
+  id: string
+  label: string
+}
+
+export type ItinerarySuggestionGroup = {
+  id: string
+  title: string
+  options: ItinerarySuggestionOption[]
+}
+
 export type ServiceItem = {
   label: string
   icon: string
@@ -156,7 +186,9 @@ export type HomeAssets = {
   arrowRight: string
   chatbot: string
   navHomeIcon: string
+  navHomeInactiveIcon: string
   navBookingIcon: string
+  navBookingActiveIcon: string
   navServicesIcon: string
   navInfoIcon: string
   navAccountIcon: string

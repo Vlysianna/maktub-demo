@@ -4,7 +4,7 @@ import type { UmrahQuestionAssets } from '../types'
 type UmrahQuestionScreenProps = {
   assets: UmrahQuestionAssets
   onClose: () => void
-  onNext: (selectedDate: Date) => void
+  onNext: (selectedDate: Date, alreadyHasVisa: boolean) => void
 }
 
 const weekdayHeaders = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
@@ -216,8 +216,8 @@ export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionSc
           className="umrah-next-btn"
           disabled={!selectedStartDate || !selectedEndDate}
           onClick={() => {
-            if (selectedStartDate && selectedEndDate) {
-              onNext(selectedStartDate)
+            if (selectedStartDate && selectedEndDate && visaStatus) {
+              onNext(selectedStartDate, visaStatus === 'has-visa')
             }
           }}
         >
