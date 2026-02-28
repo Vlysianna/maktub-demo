@@ -196,6 +196,7 @@ type FlightCabinSelection = 'Ekonomi' | 'Ekonomi Premium' | 'Bisnis' | 'First'
 
 function App() {
   const [screen, setScreen] = useState<Screen>('splash')
+  const [flightSearchEntry, setFlightSearchEntry] = useState<'home' | 'maktub-ai'>('home')
   const [selectedMyBookingId, setSelectedMyBookingId] = useState<string | null>(null)
   const [itineraryByBookingId, setItineraryByBookingId] = useState<Record<string, ItineraryDay[]>>({})
   const [step, setStep] = useState(1)
@@ -273,6 +274,30 @@ function App() {
     setScreen('home')
   }
 
+  const resetMaktubAiFlowState = () => {
+    setDepartureCode(null)
+    setArrivalCity(null)
+    setReturnCity(null)
+    setBudgetRange(null)
+    setTravelDate(null)
+    setReturnTravelDate(null)
+    setHotelStartDate(null)
+    setHotelEndDate(null)
+    setFlightSelectionLeg('departure')
+    setSelectedFlightId(null)
+    setSelectedReturnFlightId(null)
+    setSelectedDepartureFareId('economy')
+    setSelectedReturnFareId('economy')
+    setHotelSelectionLeg('departure')
+    setSelectedHotelId(null)
+    setSelectedHotelRoomId(null)
+    setSelectedReturnHotelId(null)
+    setSelectedReturnHotelRoomId(null)
+    setPaymentFlow('package')
+    setPaymentCompletedAt(null)
+    setHasVisa(false)
+  }
+
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setScreen('walkthrough')
@@ -312,7 +337,8 @@ function App() {
       setSelectedReturnFlightId(null)
       setSelectedDepartureFareId('economy')
       setSelectedReturnFareId('economy')
-      setScreen('umrah-flight-search')
+      setFlightSearchEntry('maktub-ai')
+      setScreen('umrah-flight')
     }, 2800)
 
     return () => {
@@ -1065,9 +1091,14 @@ function App() {
           assets={homeAssets}
           services={services}
           articles={articles}
-          onStartJourney={() => setScreen('umrah-question')}
+          onStartJourney={() => {
+            resetMaktubAiFlowState()
+            setFlightSearchEntry('maktub-ai')
+            setScreen('umrah-question')
+          }}
           onOpenFlightSearch={() => {
             setFlightSelectionLeg('departure')
+            setFlightSearchEntry('home')
             setScreen('umrah-flight-search')
           }}
           onOpenMyBooking={() => setScreen('my-booking')}
@@ -1224,7 +1255,7 @@ function App() {
               return
             }
 
-            setScreen('umrah-flight-search')
+            setScreen(flightSearchEntry === 'maktub-ai' ? 'umrah-budget' : 'umrah-flight-search')
           }}
           onClose={() => setScreen('home')}
         />
@@ -1241,7 +1272,7 @@ function App() {
           initialReturnDate={initialFlightSearchReturnDate}
           initialPassengers={travelerParticipants}
           initialCabinClass={selectedFlightCabinLabel}
-          onBack={() => setScreen('umrah-budget')}
+          onBack={() => setScreen(flightSearchEntry === 'maktub-ai' ? 'umrah-budget' : 'home')}
           onClose={() => setScreen('home')}
           onSearch={(payload) => {
             const nextTravelerCount = Math.max(payload.passengers.dewasa + payload.passengers.anak + payload.passengers.bayi, 1)
