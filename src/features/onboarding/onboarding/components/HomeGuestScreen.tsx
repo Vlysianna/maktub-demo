@@ -5,12 +5,13 @@ type HomeGuestScreenProps = {
   services: ServiceItem[]
   articles: ArticleItem[]
   onStartJourney: () => void
+  onOpenMyBooking: () => void
 }
 
-export function HomeGuestScreen({ assets, services, articles, onStartJourney }: HomeGuestScreenProps) {
+export function HomeGuestScreen({ assets, services, articles, onStartJourney, onOpenMyBooking }: HomeGuestScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeIcon, active: true },
-    { label: 'My Booking', icon: assets.navBookingIcon, active: false },
+    { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
     { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false },
     { label: 'Informasi', icon: assets.navInfoIcon, active: false },
     { label: 'Akun', icon: assets.navAccountIcon, active: false },
@@ -95,7 +96,12 @@ export function HomeGuestScreen({ assets, services, articles, onStartJourney }: 
 
       <nav className="home-nav" aria-label="Bottom Navigation">
         {navItems.map((item) => (
-          <button key={item.label} type="button" className={`home-nav-item ${item.active ? 'active' : ''}`}>
+          <button
+            key={item.label}
+            type="button"
+            className={`home-nav-item ${item.active ? 'active' : ''}`}
+            onClick={item.onClick}
+          >
             <img src={item.icon} alt="" aria-hidden className="home-nav-icon" />
             <span>{item.label}</span>
           </button>

@@ -2,6 +2,8 @@ export type Screen =
   | 'splash'
   | 'walkthrough'
   | 'home'
+  | 'my-booking'
+  | 'my-booking-detail'
   | 'umrah-question'
   | 'umrah-traveler'
   | 'umrah-departure'
@@ -28,6 +30,108 @@ export type Screen =
 export type WalkthroughSlide = {
   image: string
   text: string[]
+}
+
+export type BookingStatus = 'menunggu-pembayaran' | 'berlangsung' | 'akan-datang' | 'history'
+
+export type BookingItem = {
+  id: string
+  packageName: string
+  status: BookingStatus
+  durationLabel: string
+  bookingDateLabel: string
+  departureRouteLabel: string
+  arrivalRouteLabel: string
+  departureDateLabel: string
+  travelerLabel: string
+  totalPriceLabel: string
+}
+
+export type MyBookingAssets = {
+  clockIcon: string
+  calendarIcon: string
+  calendarMutedIcon: string
+  userIcon: string
+  routeArrowIcon: string
+  chevronRightIcon: string
+}
+
+export type BookingFlightDetail = {
+  departureTime: string
+  departureDate: string
+  duration: string
+  arrivalTime: string
+  arrivalDate: string
+  departureAirport: string
+  departureTerminal: string
+  arrivalAirport: string
+  arrivalTerminal: string
+  airlineName: string
+  airlineCode: string
+  cabinLabel: string
+  baggageLabel: string
+  aircraftLabel: string
+  seatLayoutLabel: string
+  seatPitchLabel: string
+}
+
+export type BookingHotelDetail = {
+  id: string
+  name: string
+  nightsLabel: string
+  cityLabel: string
+  checkInTitle: string
+  checkInDate: string
+  checkInTime: string
+  checkOutTitle: string
+  checkOutDate: string
+  checkOutTime: string
+  roomLabel: string
+  guestLabel: string
+}
+
+export type BookingPaymentLine = {
+  label: string
+  amountLabel: string
+  emphasized?: boolean
+}
+
+export type BookingParticipantSummary = {
+  maleLabel: string
+  femaleLabel: string
+}
+
+export type BookingPaymentSummary = {
+  totalLabel: string
+  noteLabel: string
+  breakdown: BookingPaymentLine[]
+  methodLabel: string
+}
+
+export type BookingDetail = {
+  bookingId: string
+  title: string
+  status: BookingStatus
+  invoiceId: string
+  transactionDateLabel: string
+  helperTitle: string
+  helperSubtitle: string
+  flight: BookingFlightDetail
+  hotels: BookingHotelDetail[]
+  participants: BookingParticipantSummary
+  payment: BookingPaymentSummary
+}
+
+export type MyBookingDetailAssets = {
+  backIcon: string
+  itineraryArrowIcon: string
+  bedIcon: string
+  userIcon: string
+  routeTimelineIcon: string
+  airlineLogo: string
+  baggageIcon: string
+  infoIcon: string
+  bankLogo: string
 }
 
 export type ServiceItem = {

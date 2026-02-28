@@ -25,6 +25,8 @@ import { UmrahVisaFormDocsScreen } from './features/onboarding/onboarding/compon
 import { UmrahVisaFormPersonalScreen } from './features/onboarding/onboarding/components/UmrahVisaFormPersonalScreen'
 import { UmrahVisaServicesScreen } from './features/onboarding/onboarding/components/UmrahVisaServicesScreen'
 import { WalkthroughScreen } from './features/onboarding/onboarding/components/WalkthroughScreen'
+import { MyBookingScreen } from './features/onboarding/onboarding/components/MyBookingScreen'
+import { MyBookingDetailScreen } from './features/onboarding/onboarding/components/MyBookingDetailScreen'
 import {
   articles,
   budgetOptions,
@@ -50,8 +52,19 @@ import {
   umrahTravelerAssets,
   walkthroughSlides,
   onboardingConfig,
+  myBookingAssets,
+  myBookingDetailAssets,
 } from './features/onboarding/onboarding/data'
-import type { PassengerFormData, PaymentBreakdown, PaymentMethod, Screen, TicketFareOption } from './features/onboarding/onboarding/types'
+import type {
+  BookingDetail,
+  BookingItem,
+  BookingStatus,
+  PassengerFormData,
+  PaymentBreakdown,
+  PaymentMethod,
+  Screen,
+  TicketFareOption,
+} from './features/onboarding/onboarding/types'
 
 const budgetProfiles: Record<
   string,
@@ -101,6 +114,10 @@ function addDays(date: Date, days: number) {
   const next = new Date(date)
   next.setDate(next.getDate() + days)
   return startOfDay(next)
+}
+
+function formatCurrency(amount: number) {
+  return `Rp ${amount.toLocaleString('id-ID')}`
 }
 
 function createTicketFareOptions(basePrice: number, travelerCount: number): TicketFareOption[] {
@@ -158,6 +175,8 @@ const fallbackTravelDate = new Date(
 
 function App() {
   const [screen, setScreen] = useState<Screen>('splash')
+  const [selectedMyBookingId, setSelectedMyBookingId] = useState<string | null>(null)
+  const [bookingStatusSnapshot, setBookingStatusSnapshot] = useState<BookingStatus>('akan-datang')
   const [step, setStep] = useState(1)
   const [travelerParticipants, setTravelerParticipants] = useState({
     dewasa: 0,
@@ -257,6 +276,24 @@ function App() {
       window.clearTimeout(timer)
     }
   }, [screen])
+
+  useEffect(() => {
+    if (screen === 'umrah-payment-overview' || screen === 'umrah-payment-method' || screen === 'umrah-payment-pending') {
+      setBookingStatusSnapshot((prev) => (prev === 'berlangsung' ? prev : 'menunggu-pembayaran'))
+      return
+    }
+
+    if (
+      screen === 'umrah-payment-success' ||
+      screen === 'umrah-payment-complete' ||
+      screen === 'umrah-visa-services' ||
+      screen === 'umrah-visa-form-personal' ||
+      screen === 'umrah-visa-form-docs' ||
+      hasVisa
+    ) {
+      setBookingStatusSnapshot('berlangsung')
+    }
+  }, [hasVisa, screen])
 
   const totalParticipants = useMemo(
     () => travelerParticipants.dewasa + travelerParticipants.anak + travelerParticipants.bayi,
@@ -670,6 +707,166 @@ function App() {
     [visaDocsForm.familyCard, visaDocsForm.ktp, visaDocsForm.passport, visaDocsForm.photo],
   )
   const isVisaFormCompleted = isVisaPersonalCompleted && isVisaDocsCompleted
+  const primaryBookingId = 'booking-dynamic-1'
+
+  const bookingDateLabel = useMemo(() => {
+    const source = travelDate ?? fallbackTravelDate
+    return source.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    })
+  }, [travelDate])
+
+  const bookingRouteDepartureCode = departureCode ?? onboardingConfig.defaultDepartureCode
+  const bookingRouteArrivalCode = destinationCode
+  const bookingPackageName = `Paket Umrah ${travelerCount + 2} Hari`
+
+  const dynamicBookingItems = useMemo<BookingItem[]>(
+    () => [
+      {
+        id: primaryBookingId,
+        packageName: bookingPackageName,
+        status: bookingStatusSnapshot,
+        durationLabel: `${hotelNights + 1} hari`,
+        bookingDateLabel,
+        departureRouteLabel: `${departureLabel} (${bookingRouteDepartureCode})`,
+        arrivalRouteLabel: `${destinationLabel} (${bookingRouteArrivalCode})`,
+        departureDateLabel: bookingDateLabel,
+        travelerLabel: `${travelerCount} person`,
+        totalPriceLabel: formatCurrency(paymentBreakdown.grandTotal),
+      },
+    ],
+    [
+      bookingDateLabel,
+      bookingPackageName,
+      bookingRouteArrivalCode,
+      bookingRouteDepartureCode,
+      bookingStatusSnapshot,
+      departureLabel,
+      destinationLabel,
+      hotelNights,
+      paymentBreakdown.grandTotal,
+      travelerCount,
+    ],
+  )
+
+  const dynamicMyBookingDetailsById = useMemo<Record<string, BookingDetail>>(() => {
+    const hotelBlocks = [
+      {
+        id: 'hotel-primary',
+        name: selectedHotelOffer?.name ?? 'Pullman ZamZam',
+        nightsLabel: `${hotelNights + 1} hari ${hotelNights} malam`,
+        cityLabel: primaryHotelCityLabel,
+        checkInTitle: 'Check-in',
+        checkInDate: hotelCheckInLabel,
+        checkInTime: '14:00 - 23:59',
+        checkOutTitle: 'Check-out',
+        checkOutDate: hotelCheckOutLabel,
+        checkOutTime: '12:00',
+        roomLabel: selectedHotelRoom ? `1x ${selectedHotelRoom.name}` : '1x Deluxe (King Bed)',
+        guestLabel: `${travelerCount}x Tamu (Dewasa)`,
+      },
+    ]
+
+    if (selectedReturnHotelOffer) {
+      hotelBlocks.push({
+        id: 'hotel-secondary',
+        name: selectedReturnHotelOffer.name,
+        nightsLabel: `${hotelNights + 1} hari ${hotelNights} malam`,
+        cityLabel: secondaryHotelCityLabel,
+        checkInTitle: 'Check-in',
+        checkInDate: hotelCheckInLabel,
+        checkInTime: '14:00 - 23:59',
+        checkOutTitle: 'Check-out',
+        checkOutDate: hotelCheckOutLabel,
+        checkOutTime: '12:00',
+        roomLabel: selectedReturnHotelRoom ? `1x ${selectedReturnHotelRoom.name}` : '1x Deluxe (Twin Bed)',
+        guestLabel: `${travelerCount}x Tamu (Dewasa)`,
+      })
+    }
+
+    return {
+      [primaryBookingId]: {
+        bookingId: primaryBookingId,
+        title: bookingPackageName,
+        status: bookingStatusSnapshot,
+        invoiceId: `INV${bookingRouteDepartureCode}${bookingRouteArrivalCode}${String(travelerCount).padStart(2, '0')}`,
+        transactionDateLabel: `${bookingDateLabel}, 18:00 WIB`,
+        helperTitle: 'Butuh layanan tambahan?',
+        helperSubtitle: 'Assistant, kendaraan, visa lainnya',
+        flight: {
+          departureTime: selectedFlightDepartureTime,
+          departureDate: shortDepartureDateLabel,
+          duration: selectedFlightDuration,
+          arrivalTime: selectedFlightArrivalTime,
+          arrivalDate: shortDepartureDateLabel,
+          departureAirport: `${departureLabel} (${bookingRouteDepartureCode})`,
+          departureTerminal: 'Terminal 3E International',
+          arrivalAirport: `${destinationLabel} (${bookingRouteArrivalCode})`,
+          arrivalTerminal: 'Terminal 1E International',
+          airlineName: selectedFlightOffer?.airline ?? 'Oman Air',
+          airlineCode: selectedFlightOffer?.id.toUpperCase() ?? 'JT-690',
+          cabinLabel: selectedDepartureFare.name,
+          baggageLabel: 'Bagasi Kabin 7kg',
+          aircraftLabel: 'Boeing 737',
+          seatLayoutLabel: '3-3',
+          seatPitchLabel: '29 inches (Standar)',
+        },
+        hotels: hotelBlocks,
+        participants: {
+          maleLabel: `${travelerParticipants.dewasa} Peserta dewasa`,
+          femaleLabel: `${travelerParticipants.anak + travelerParticipants.bayi} Peserta anak/bayi`,
+        },
+        payment: {
+          totalLabel: formatCurrency(paymentBreakdown.grandTotal),
+          noteLabel: 'Lebih sedikit',
+          breakdown: [
+            { label: 'Harga paket, hotel & flight', amountLabel: formatCurrency(paymentBreakdown.subtotal) },
+            { label: 'Biaya layanan', amountLabel: formatCurrency(paymentBreakdown.serviceFee) },
+            { label: 'Pajak 11%', amountLabel: formatCurrency(paymentBreakdown.taxAmount) },
+            { label: 'Total harga', amountLabel: formatCurrency(paymentBreakdown.grandTotal), emphasized: true },
+          ],
+          methodLabel: selectedPaymentLabel,
+        },
+      },
+    }
+  }, [
+    bookingDateLabel,
+    bookingPackageName,
+    bookingRouteArrivalCode,
+    bookingRouteDepartureCode,
+    bookingStatusSnapshot,
+    departureLabel,
+    destinationLabel,
+    hotelCheckInLabel,
+    hotelCheckOutLabel,
+    hotelNights,
+    paymentBreakdown.grandTotal,
+    paymentBreakdown.serviceFee,
+    paymentBreakdown.subtotal,
+    paymentBreakdown.taxAmount,
+    primaryHotelCityLabel,
+    secondaryHotelCityLabel,
+    selectedDepartureFare.name,
+    selectedFlightArrivalTime,
+    selectedFlightDepartureTime,
+    selectedFlightDuration,
+    selectedFlightOffer?.airline,
+    selectedFlightOffer?.id,
+    selectedHotelOffer?.name,
+    selectedHotelRoom,
+    selectedPaymentLabel,
+    selectedReturnHotelOffer,
+    selectedReturnHotelRoom,
+    shortDepartureDateLabel,
+    travelerCount,
+    travelerParticipants.anak,
+    travelerParticipants.bayi,
+    travelerParticipants.dewasa,
+  ])
+
+  const selectedMyBookingDetail = selectedMyBookingId ? dynamicMyBookingDetailsById[selectedMyBookingId] : null
 
   return (
     <main className="walkthrough-page">
@@ -690,6 +887,28 @@ function App() {
           services={services}
           articles={articles}
           onStartJourney={() => setScreen('umrah-question')}
+          onOpenMyBooking={() => setScreen('my-booking')}
+        />
+      )}
+
+      {screen === 'my-booking' && (
+        <MyBookingScreen
+          assets={homeAssets}
+          bookingAssets={myBookingAssets}
+          bookings={dynamicBookingItems}
+          onBackHome={() => setScreen('home')}
+          onOpenDetail={(bookingId) => {
+            setSelectedMyBookingId(bookingId)
+            setScreen('my-booking-detail')
+          }}
+        />
+      )}
+
+      {screen === 'my-booking-detail' && selectedMyBookingDetail && (
+        <MyBookingDetailScreen
+          assets={myBookingDetailAssets}
+          detail={selectedMyBookingDetail}
+          onBack={() => setScreen('my-booking')}
         />
       )}
 
