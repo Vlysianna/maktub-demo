@@ -83,6 +83,33 @@
   height: 3px;
   border-radius: 8px;
   background: rgba(44, 50, 72, 0.25);
+  overflow: hidden;
+}
+
+.progress-item-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #2c3248;
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.progress-item.done .progress-item-fill {
+  transform: scaleX(1);
+}
+
+.progress-item.current .progress-item-fill {
+  animation: walkthrough-progress-fill 3.2s linear forwards;
+}
+
+@keyframes walkthrough-progress-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 .progress-item.active {

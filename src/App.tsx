@@ -190,6 +190,8 @@ const fallbackTravelDate = new Date(
   onboardingConfig.defaultTravelDate.day,
 )
 
+const walkthroughSlideDurationMs = 3200
+
 type FlightCabinSelection = 'Ekonomi' | 'Ekonomi Premium' | 'Bisnis' | 'First'
 
 function App() {
@@ -280,6 +282,24 @@ function App() {
       window.clearTimeout(timer)
     }
   }, [])
+
+  useEffect(() => {
+    if (screen !== 'walkthrough') {
+      return
+    }
+
+    if (step >= walkthroughSlides.length) {
+      return
+    }
+
+    const timer = window.setTimeout(() => {
+      setStep((prev) => Math.min(prev + 1, walkthroughSlides.length))
+    }, walkthroughSlideDurationMs)
+
+    return () => {
+      window.clearTimeout(timer)
+    }
+  }, [screen, step])
 
   useEffect(() => {
     if (screen !== 'umrah-processing') {

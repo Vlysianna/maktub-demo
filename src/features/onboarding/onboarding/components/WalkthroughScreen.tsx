@@ -8,6 +8,8 @@ type WalkthroughScreenProps = {
 }
 
 export function WalkthroughScreen({ step, totalSteps, currentSlide, onNext }: WalkthroughScreenProps) {
+  const isLastStep = step === totalSteps
+
   return (
     <section className="phone-shell walkthrough-shell">
       <div className="decorative-shape" aria-hidden />
@@ -15,7 +17,12 @@ export function WalkthroughScreen({ step, totalSteps, currentSlide, onNext }: Wa
       <div className="walkthrough-content">
         <div className="progress" aria-label={`Step ${step} dari ${totalSteps}`}>
           {Array.from({ length: totalSteps }).map((_, index) => (
-            <span key={index} className={`progress-item ${index < step ? 'active' : ''}`} />
+            <span
+              key={index}
+              className={`progress-item ${index < step - 1 ? 'done' : ''} ${index === step - 1 ? 'current' : ''}`}
+            >
+              <span className="progress-item-fill" />
+            </span>
           ))}
         </div>
 
@@ -32,11 +39,13 @@ export function WalkthroughScreen({ step, totalSteps, currentSlide, onNext }: Wa
         </div>
       </div>
 
-      <div className="cta-wrap">
-        <button type="button" className="cta-button" onClick={onNext}>
-          Mulai Perjalanan
-        </button>
-      </div>
+      {isLastStep && (
+        <div className="cta-wrap">
+          <button type="button" className="cta-button" onClick={onNext}>
+            Mulai Perjalanan
+          </button>
+        </div>
+      )}
 
       <footer className="home-indicator" aria-hidden>
         <span />
