@@ -2,6 +2,7 @@ import type { FlightOffer, UmrahFlightAssets } from '../types'
 
 type UmrahFlightScreenProps = {
   assets: UmrahFlightAssets
+  flightOnly?: boolean
   journeyLabel: 'Keberangkatan' | 'Kepulangan'
   selectedCabinLabel: string
   departureLabel: string
@@ -23,6 +24,7 @@ function toRupiah(amount: number) {
 
 export function UmrahFlightScreen({
   assets,
+  flightOnly = false,
   journeyLabel,
   selectedCabinLabel,
   departureLabel,
@@ -49,24 +51,37 @@ export function UmrahFlightScreen({
         </button>
       </header>
 
-      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-        <span className="umrah-flight-step active">
-          <i>1</i>
-          <b>Flight ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>2</i>
-          <b>Hotel ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>3</i>
-          <b>Pembayaran ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>4</i>
-          <b>Visa &amp; Lainnya</b>
-        </span>
-      </div>
+      {flightOnly ? (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>1</i>
+            <b>Pilih Tiket ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>2</i>
+            <b>Pembayaran</b>
+          </span>
+        </div>
+      ) : (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>1</i>
+            <b>Flight ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>2</i>
+            <b>Hotel ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>3</i>
+            <b>Pembayaran ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>4</i>
+            <b>Visa &amp; Lainnya</b>
+          </span>
+        </div>
+      )}
 
       <section className="umrah-flight-summary">
         <p>

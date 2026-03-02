@@ -4,6 +4,17 @@ import type { HotelOffer, UmrahHotelAssets } from '../types'
 type UmrahHotelScreenProps = {
   assets: UmrahHotelAssets
   cityLabel: string
+  guestSummaryText?: string
+  isSearchHotelOnly?: boolean
+  sortOptions?: string[]
+  priceRanges?: Array<{
+    id: string
+    label: string
+    min: number
+    max: number | null
+  }>
+  propertyTypes?: string[]
+  facilityOptions?: string[]
   checkInLabel: string
   checkOutLabel: string
   nightsLabel: string
@@ -74,9 +85,20 @@ function renderStars(count: number) {
   return '★'.repeat(count)
 }
 
+function parseDistanceKm(distanceLabel: string) {
+  const numericText = distanceLabel.replace(',', '.').match(/\d+(?:\.\d+)?/)?.[0]
+  return numericText ? Number(numericText) : Number.POSITIVE_INFINITY
+}
+
 export function UmrahHotelScreen({
   assets,
   cityLabel,
+  guestSummaryText,
+  isSearchHotelOnly = false,
+  sortOptions = [],
+  priceRanges = [],
+  propertyTypes = [],
+  facilityOptions = [],
   checkInLabel,
   checkOutLabel,
   nightsLabel,
@@ -90,6 +112,15 @@ export function UmrahHotelScreen({
   onSaveDateRange,
 }: UmrahHotelScreenProps) {
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
+  const [isSortModalOpen, setIsSortModalOpen] = useState(false)
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+  const [selectedSort, setSelectedSort] = useState<string | null>(sortOptions[0] ?? null)
+  const [selectedPriceRangeId, setSelectedPriceRangeId] = useState<string | null>(null)
+  const [selectedPropertyType, setSelectedPropertyType] = useState<string | null>(null)
+  const [selectedFacilities, setSelectedFacilities] = useState<string[]>([])
+  const [draftPriceRangeId, setDraftPriceRangeId] = useState<string | null>(selectedPriceRangeId)
+  const [draftPropertyType, setDraftPropertyType] = useState<string | null>(selectedPropertyType)
+  const [draftFacilities, setDraftFacilities] = useState<string[]>(selectedFacilities)
   const [draftStartDate, setDraftStartDate] = useState<Date | null>(null)
   const [draftEndDate, setDraftEndDate] = useState<Date | null>(null)
   const [firstVisibleMonth, setFirstVisibleMonth] = useState(() => new Date(initialStartDate.getFullYear(), initialStartDate.getMonth(), 1))
@@ -180,57 +211,155 @@ export function UmrahHotelScreen({
     </section>
   )
 
+  const compactCheckInLabel = useMemo(
+    () =>
+      initialStartDate.toLocaleDateString('id-ID', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+      }),
+    [initialStartDate],
+  )
+
+  const searchMetaGuestLabel = guestSummaryText ?? passengerText
+
+  const displayedHotels = useMemo(() => {
+    if (!isSearchHotelOnly) {
+      return hotels
+    }
+
+    const activeRange = priceRanges.find((item) => item.id === selectedPriceRangeId)
+
+    const filtered = hotels.filter((hotel) => {
+      const inPriceRange =
+        !activeRange ||
+        (activeRange.max === null
+          ? hotel.pricePerNight >= activeRange.min
+          : hotel.pricePerNight >= activeRange.min && hotel.pricePerNight <= activeRange.max)
+
+      const inPropertyType = !selectedPropertyType || hotel.propertyType === selectedPropertyType
+
+      const inFacilities =
+        selectedFacilities.length === 0 ||
+        selectedFacilities.every((facility) => (hotel.facilities ?? []).includes(facility))
+
+      return inPriceRange && inPropertyType && inFacilities
+    })
+
+    const sorted = [...filtered]
+
+    if (selectedSort === 'Harga: Rendah ke Tinggi') {
+      sorted.sort((left, right) => left.pricePerNight - right.pricePerNight)
+    } else if (selectedSort === 'Harga: Tinggi ke Rendah') {
+      sorted.sort((left, right) => right.pricePerNight - left.pricePerNight)
+    } else if (selectedSort === 'Peringkat: Tinggi ke Rendah') {
+      sorted.sort((left, right) => right.rating - left.rating)
+    } else if (selectedSort === 'Jarak: Terdekat dari Ka’bah' || selectedSort === 'Jarak: Terdekat dari Masjid Nabawi') {
+      sorted.sort((left, right) => parseDistanceKm(left.distanceLabel) - parseDistanceKm(right.distanceLabel))
+    }
+
+    return sorted
+  }, [
+    hotels,
+    isSearchHotelOnly,
+    priceRanges,
+    selectedFacilities,
+    selectedPriceRangeId,
+    selectedPropertyType,
+    selectedSort,
+  ])
+
   return (
-    <section className="phone-shell umrah-hotel-shell" aria-label="Daftar Hotel">
-      <header className="umrah-flight-header">
-        <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
-        </button>
-        <h1>Hotel</h1>
-        <span className="umrah-ticket-head-spacer" aria-hidden />
-      </header>
+    <section className={`phone-shell umrah-hotel-shell${isSearchHotelOnly ? ' search-only' : ''}`} aria-label="Daftar Hotel">
+      {isSearchHotelOnly ? (
+        <>
+          <header className="umrah-hotel-search-head">
+            <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
+              ←
+            </button>
+            <div>
+              <h1>{`Di sekitar saya (${cityLabel})`}</h1>
+              <p>
+                <span>{compactCheckInLabel}</span>
+                <span>{searchMetaGuestLabel}</span>
+              </p>
+            </div>
+          </header>
 
-      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-        <span className="umrah-flight-step active">
-          <i>1</i>
-          <b>Flight ---</b>
-        </span>
-        <span className="umrah-flight-step active">
-          <i>2</i>
-          <b>Hotel ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>3</i>
-          <b>Pembayaran ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>4</i>
-          <b>Visa &amp; Lainnya</b>
-        </span>
-      </div>
+          <div className="umrah-hotel-search-toolbar" aria-label="Sort dan filter">
+            <button type="button" aria-label="Sort" onClick={() => setIsSortModalOpen(true)}>
+              <img src={assets.sortIcon} alt="" aria-hidden />
+              Sort
+            </button>
+            <i aria-hidden />
+            <button
+              type="button"
+              aria-label="Filter"
+              onClick={() => {
+                setDraftPriceRangeId(selectedPriceRangeId)
+                setDraftPropertyType(selectedPropertyType)
+                setDraftFacilities(selectedFacilities)
+                setIsFilterModalOpen(true)
+              }}
+            >
+              <img src={assets.filterIcon} alt="" aria-hidden />
+              Filter
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <header className="umrah-flight-header">
+            <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
+              ←
+            </button>
+            <h1>Hotel</h1>
+            <span className="umrah-ticket-head-spacer" aria-hidden />
+          </header>
 
-      <button type="button" className="umrah-hotel-summary" onClick={openDateModal}>
-        <div>
-          <p>{cityLabel}</p>
-          <div>
-            <span>
-              <img src={assets.calendarIcon} alt="" aria-hidden />
-              {checkInLabel}
+          <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+            <span className="umrah-flight-step active">
+              <i>1</i>
+              <b>Flight ---</b>
             </span>
-            <span>
-              <img src={assets.userIcon} alt="" aria-hidden />
-              {passengerText}
+            <span className="umrah-flight-step active">
+              <i>2</i>
+              <b>Hotel ---</b>
             </span>
-            <span>
-              <img src={assets.roomIcon} alt="" aria-hidden />
-              {roomText}
+            <span className="umrah-flight-step">
+              <i>3</i>
+              <b>Pembayaran ---</b>
+            </span>
+            <span className="umrah-flight-step">
+              <i>4</i>
+              <b>Visa &amp; Lainnya</b>
             </span>
           </div>
-        </div>
-        <strong>Ubah</strong>
-      </button>
 
-      {isDateModalOpen && (
+          <button type="button" className="umrah-hotel-summary" onClick={openDateModal}>
+            <div>
+              <p>{cityLabel}</p>
+              <div>
+                <span>
+                  <img src={assets.calendarIcon} alt="" aria-hidden />
+                  {checkInLabel}
+                </span>
+                <span>
+                  <img src={assets.userIcon} alt="" aria-hidden />
+                  {passengerText}
+                </span>
+                <span>
+                  <img src={assets.roomIcon} alt="" aria-hidden />
+                  {roomText}
+                </span>
+              </div>
+            </div>
+            <strong>Ubah</strong>
+          </button>
+        </>
+      )}
+
+      {!isSearchHotelOnly && isDateModalOpen && (
         <div className="umrah-hotel-date-modal" role="dialog" aria-modal="true" aria-label="Ubah tanggal hotel">
           <div className="umrah-hotel-date-sheet">
             <span className="umrah-hotel-date-handle" aria-hidden />
@@ -278,11 +407,11 @@ export function UmrahHotelScreen({
         </div>
       )}
 
-      <div className="umrah-hotel-list">
-        {hotels.map((hotel) => (
+      <div className={`umrah-hotel-list${isSearchHotelOnly ? ' search-only' : ''}`}>
+        {displayedHotels.map((hotel) => (
           <article
             key={hotel.id}
-            className={`umrah-hotel-card ${hotel.isRecommended ? 'recommended' : ''}`}
+            className={`umrah-hotel-card ${!isSearchHotelOnly && hotel.isRecommended ? 'recommended' : ''}`}
             role="button"
             tabIndex={0}
             onClick={() => onSelectHotel(hotel)}
@@ -321,7 +450,7 @@ export function UmrahHotelScreen({
               <img src={assets.chevronRight} alt="" aria-hidden />
             </div>
 
-            {hotel.isRecommended && (
+            {!isSearchHotelOnly && hotel.isRecommended && (
               <div className="umrah-hotel-recommend-badge">
                 <img src={assets.sparkleIcon} alt="" aria-hidden /> Paling sesuai dengan budget Anda.
               </div>
@@ -330,11 +459,135 @@ export function UmrahHotelScreen({
         ))}
       </div>
 
-      <footer className="umrah-hotel-costs" aria-hidden>
-        <span className="active">Pesawat 60%</span>
-        <span className="active">Hotel 30%</span>
-        <span>Lainnya 10%</span>
-      </footer>
+      {!isSearchHotelOnly && (
+        <footer className="umrah-hotel-costs" aria-hidden>
+          <span className="active">Pesawat 60%</span>
+          <span className="active">Hotel 30%</span>
+          <span>Lainnya 10%</span>
+        </footer>
+      )}
+
+      {isSearchHotelOnly && isSortModalOpen && <div className="flight-search-sheet-overlay" />}
+
+      {isSearchHotelOnly && isSortModalOpen && (
+        <section className="flight-search-sheet hotel-toolbar-sheet" role="dialog" aria-modal="true" aria-label="Sort hotel">
+          <header>
+            <h2>Sort</h2>
+            <button type="button" aria-label="Tutup" onClick={() => setIsSortModalOpen(false)}>
+              ×
+            </button>
+          </header>
+
+          <p className="hotel-toolbar-label">Urut Berdasarkan</p>
+          <div className="hotel-sort-list">
+            {sortOptions.map((option) => (
+              <button
+                key={option}
+                type="button"
+                className="hotel-sort-item"
+                onClick={() => {
+                  setSelectedSort(option)
+                  setIsSortModalOpen(false)
+                }}
+              >
+                <i className={selectedSort === option ? 'active' : ''} aria-hidden />
+                <span>{option}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {isSearchHotelOnly && isFilterModalOpen && <div className="flight-search-sheet-overlay" />}
+
+      {isSearchHotelOnly && isFilterModalOpen && (
+        <section className="flight-search-sheet hotel-filter-sheet" role="dialog" aria-modal="true" aria-label="Filter hotel">
+          <header>
+            <h2>Filter</h2>
+            <button type="button" aria-label="Tutup" onClick={() => setIsFilterModalOpen(false)}>
+              ×
+            </button>
+          </header>
+
+          <div className="hotel-filter-scroll">
+            <p className="hotel-toolbar-label">Harga per malam</p>
+            <div className="hotel-price-chip-list">
+              {priceRanges.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`hotel-price-chip${draftPriceRangeId === item.id ? ' active' : ''}`}
+                  onClick={() => setDraftPriceRangeId(item.id)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            <hr />
+
+            <p className="hotel-toolbar-label">Tipe Properti</p>
+            <div className="hotel-filter-radio-list">
+              {propertyTypes.map((type) => (
+                <button key={type} type="button" className="hotel-filter-radio-item" onClick={() => setDraftPropertyType(type)}>
+                  <span>{type}</span>
+                  <i className={draftPropertyType === type ? 'active' : ''} aria-hidden />
+                </button>
+              ))}
+            </div>
+
+            <hr />
+
+            <p className="hotel-toolbar-label">Fasilitas Properti</p>
+            <div className="hotel-filter-check-list">
+              {facilityOptions.map((facility) => {
+                const isChecked = draftFacilities.includes(facility)
+                return (
+                  <button
+                    key={facility}
+                    type="button"
+                    className="hotel-filter-check-item"
+                    onClick={() => {
+                      setDraftFacilities((prev) =>
+                        prev.includes(facility) ? prev.filter((item) => item !== facility) : [...prev, facility],
+                      )
+                    }}
+                  >
+                    <i className={isChecked ? 'active' : ''} aria-hidden />
+                    <span>{facility}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="hotel-filter-actions">
+            <button
+              type="button"
+              className="hotel-filter-reset"
+              onClick={() => {
+                setDraftPriceRangeId(null)
+                setDraftPropertyType(null)
+                setDraftFacilities([])
+              }}
+            >
+              Hapus Filter
+            </button>
+            <button
+              type="button"
+              className="hotel-filter-apply"
+              onClick={() => {
+                setSelectedPriceRangeId(draftPriceRangeId)
+                setSelectedPropertyType(draftPropertyType)
+                setSelectedFacilities(draftFacilities)
+                setIsFilterModalOpen(false)
+              }}
+            >
+              Terapkan
+            </button>
+          </div>
+        </section>
+      )}
 
       <footer className="home-indicator" aria-hidden>
         <span />

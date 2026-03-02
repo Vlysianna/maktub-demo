@@ -1,16 +1,7 @@
 import { useMemo, useState } from 'react'
-import type { AirportOption } from '../types'
-
-const iconTakeOff = 'https://www.figma.com/api/mcp/asset/092d46f6-7d23-4f7d-b169-11a0eaeca787'
-const iconLanding = 'https://www.figma.com/api/mcp/asset/db56c24b-822b-4d66-87ca-9e1b5cf6283a'
-const iconCalendar = 'https://www.figma.com/api/mcp/asset/b6bad521-4bc7-411a-a70d-2c02a8c3f378'
-const iconPassenger = 'https://www.figma.com/api/mcp/asset/4b8645af-ffe9-47c8-bc61-53118eaa9979'
-const iconSeat = 'https://www.figma.com/api/mcp/asset/6a410462-9ea6-403d-b1f3-814b1f1ac4e0'
-const iconSwap = 'https://www.figma.com/api/mcp/asset/3b08b953-71de-4411-b922-3fd624a10668'
-const iconSearch = 'https://www.figma.com/api/mcp/asset/39ce97cb-9ca4-4fec-a2fa-49a64dd3d2fa'
+import type { AirportOption, UmrahFlightSearchAssets } from '../types'
 
 const weekdayHeaders = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
-const cabinClasses = ['Ekonomi', 'Ekonomi Premium', 'Bisnis', 'First'] as const
 
 type PassengerState = {
   dewasa: number
@@ -18,11 +9,12 @@ type PassengerState = {
   bayi: number
 }
 
-type FlightCabinClass = (typeof cabinClasses)[number]
+type FlightCabinClass = string
 
 type DestinationOption = {
   city: string
   code: string
+  country?: string
 }
 
 type FlightSearchResult = {
@@ -35,7 +27,9 @@ type FlightSearchResult = {
 }
 
 type UmrahFlightSearchScreenProps = {
+  assets: UmrahFlightSearchAssets
   blurImage: string
+  cabinClasses: string[]
   departureOptions: AirportOption[]
   destinationOptions: DestinationOption[]
   initialDepartureCode: string | null
@@ -106,7 +100,9 @@ function buildCalendarCells(visibleMonth: Date) {
 }
 
 export function UmrahFlightSearchScreen({
+  assets,
   blurImage,
+  cabinClasses,
   departureOptions,
   destinationOptions,
   initialDepartureCode,
@@ -145,6 +141,8 @@ export function UmrahFlightSearchScreen({
   const [destinationQuery, setDestinationQuery] = useState('')
   const [departureMonth, setDepartureMonth] = useState<Date>(new Date(departureDate.getFullYear(), departureDate.getMonth(), 1))
   const [returnMonth, setReturnMonth] = useState<Date>(new Date(returnDate.getFullYear(), returnDate.getMonth(), 1))
+
+  const [hasAttemptedSearch, setHasAttemptedSearch] = useState(false)
 
   const departureOption = departureOptions.find((option) => option.code === departureCode)
   const destinationOption = destinationOptions.find((option) => option.city === destinationCity)
@@ -211,7 +209,7 @@ export function UmrahFlightSearchScreen({
     setActiveSheet('class')
   }
 
-  const canSearch = Boolean(departureOption && destinationOption && cabinClass && passengerTotal > 0)
+  const canSearch = Boolean(departureOption && destinationOption && cabinClass && passengers.dewasa >= 1)
 
   return (
     <section className="phone-shell umrah-flight-search-shell" aria-label="Cari tiket pesawat">
@@ -224,8 +222,8 @@ export function UmrahFlightSearchScreen({
       <img src={blurImage} alt="" className="umrah-flight-search-blur" aria-hidden />
 
       <div className="umrah-flight-search-fields">
-        <button type="button" className="flight-search-field" onClick={openDepartureSheet}>
-          <img src={iconTakeOff} alt="" aria-hidden />
+        <button type="button" className={`flight-search-field${hasAttemptedSearch && !departureOption ? ' invalid' : ''}`} onClick={openDepartureSheet}>
+          <img src={assets.iconTakeOff} alt="" aria-hidden />
           <span className={departureOption ? 'filled' : ''}>
             {departureOption ? (
               <>
@@ -237,9 +235,12 @@ export function UmrahFlightSearchScreen({
             )}
           </span>
         </button>
+        {hasAttemptedSearch && !departureOption && (
+          <p className="flight-field-error">Pilih kota keberangkatan</p>
+        )}
 
-        <button type="button" className="flight-search-field" onClick={openDestinationSheet}>
-          <img src={iconLanding} alt="" aria-hidden />
+        <button type="button" className={`flight-search-field${hasAttemptedSearch && !destinationOption ? ' invalid' : ''}`} onClick={openDestinationSheet}>
+          <img src={assets.iconLanding} alt="" aria-hidden />
           <span className={destinationOption ? 'filled' : ''}>
             {destinationOption ? (
               <>
@@ -251,6 +252,9 @@ export function UmrahFlightSearchScreen({
             )}
           </span>
         </button>
+        {hasAttemptedSearch && !destinationOption && (
+          <p className="flight-field-error">Pilih kota tujuan</p>
+        )}
 
         <button
           type="button"
@@ -273,48 +277,54 @@ export function UmrahFlightSearchScreen({
             setDestinationCity(nextDestination.city)
           }}
         >
-          <img src={iconSwap} alt="" aria-hidden />
+          <img src={assets.iconSwap} alt="" aria-hidden />
         </button>
       </div>
 
       <div className="umrah-flight-search-row">
         <button type="button" className="flight-search-field half" onClick={openDepartureDateSheet}>
-          <img src={iconCalendar} alt="" aria-hidden />
+          <img src={assets.iconCalendar} alt="" aria-hidden />
           <span className="filled">{formatDateLabel(departureDate)}</span>
         </button>
 
         <button type="button" className="flight-search-field half" onClick={openReturnDateSheet}>
-          <img src={iconCalendar} alt="" aria-hidden />
+          <img src={assets.iconCalendar} alt="" aria-hidden />
           <span className="filled">{formatDateLabel(returnDate)}</span>
         </button>
       </div>
 
-      <button type="button" className="flight-search-field" onClick={openPassengerSheet}>
-        <img src={iconPassenger} alt="" aria-hidden />
+      <button type="button" className={`flight-search-field${hasAttemptedSearch && passengers.dewasa < 1 ? ' invalid' : ''}`} onClick={openPassengerSheet}>
+        <img src={assets.iconPassenger} alt="" aria-hidden />
         <span className={passengerTotal > 0 ? 'filled' : ''}>{passengerTotal > 0 ? `${passengerTotal} Penumpang` : 'Penumpang'}</span>
       </button>
+      {hasAttemptedSearch && passengers.dewasa < 1 && (
+        <p className="flight-field-error">Minimal 1 penumpang dewasa</p>
+      )}
 
-      <button type="button" className="flight-search-field" onClick={openClassSheet}>
-        <img src={iconSeat} alt="" aria-hidden />
+      <button type="button" className={`flight-search-field${hasAttemptedSearch && !cabinClass ? ' invalid' : ''}`} onClick={openClassSheet}>
+        <img src={assets.iconSeat} alt="" aria-hidden />
         <span className={cabinClass ? 'filled' : ''}>{cabinClass ?? 'Kelas'}</span>
       </button>
+      {hasAttemptedSearch && !cabinClass && (
+        <p className="flight-field-error">Pilih kelas penerbangan</p>
+      )}
 
       <button
         type="button"
         className="umrah-flight-search-submit"
-        disabled={!canSearch}
         onClick={() => {
-          if (!departureOption || !destinationOption || !cabinClass) {
+          if (!canSearch) {
+            setHasAttemptedSearch(true)
             return
           }
 
           onSearch({
-            departureCode: departureOption.code,
-            destinationCity: destinationOption.city,
+            departureCode: departureOption!.code,
+            destinationCity: destinationOption!.city,
             departureDate,
             returnDate,
             passengers,
-            cabinClass,
+            cabinClass: cabinClass!,
           })
         }}
       >
@@ -333,7 +343,7 @@ export function UmrahFlightSearchScreen({
           </header>
 
           <label className="flight-search-box">
-            <img src={iconSearch} alt="" aria-hidden />
+            <img src={assets.iconSearch} alt="" aria-hidden />
             <input value={departureQuery} onChange={(event) => setDepartureQuery(event.target.value)} placeholder="Masukan nama kota.." />
           </label>
 
@@ -372,7 +382,7 @@ export function UmrahFlightSearchScreen({
           </header>
 
           <label className="flight-search-box">
-            <img src={iconSearch} alt="" aria-hidden />
+            <img src={assets.iconSearch} alt="" aria-hidden />
             <input value={destinationQuery} onChange={(event) => setDestinationQuery(event.target.value)} placeholder="Masukan nama kota.." />
           </label>
 
@@ -380,7 +390,7 @@ export function UmrahFlightSearchScreen({
             {filteredDestinationOptions.map((option) => (
               <button key={option.city} type="button" className="flight-radio-row" onClick={() => setDraftDestinationCity(option.city)}>
                 <span>
-                  <strong>{option.city}, Arab Saudi</strong>
+                  <strong>{option.city}{option.country ? `, ${option.country}` : ''}</strong>
                   <em>{option.code}</em>
                 </span>
                 <i className={draftDestinationCity === option.city ? 'active' : ''} aria-hidden />
@@ -556,7 +566,8 @@ export function UmrahFlightSearchScreen({
                 <button
                   type="button"
                   className="minus"
-                  onClick={() => setDraftPassengers((prev) => ({ ...prev, [key]: Math.max(prev[key] - 1, 0) }))}
+                  disabled={key === 'dewasa' ? draftPassengers[key] <= 1 : draftPassengers[key] <= 0}
+                  onClick={() => setDraftPassengers((prev) => ({ ...prev, [key]: Math.max(prev[key] - 1, key === 'dewasa' ? 1 : 0) }))}
                 >
                   −
                 </button>

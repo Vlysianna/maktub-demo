@@ -5,8 +5,10 @@ type UmrahPaymentMethodScreenProps = {
   assets: UmrahPaymentAssets
   breakdown: PaymentBreakdown
   paymentFor?: 'package' | 'visa'
+  packageSummaryLabel?: string
   visaLabel?: string
   travelerCount?: number
+  flightOnly?: boolean
   onBack: () => void
   onPay: (method: PaymentMethod) => void
 }
@@ -19,8 +21,10 @@ export function UmrahPaymentMethodScreen({
   assets,
   breakdown,
   paymentFor = 'package',
+  packageSummaryLabel,
   visaLabel,
   travelerCount = 1,
+  flightOnly = false,
   onBack,
   onPay,
 }: UmrahPaymentMethodScreenProps) {
@@ -40,20 +44,33 @@ export function UmrahPaymentMethodScreen({
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-        <span className="umrah-flight-step active">
-          <i>2</i>
-          <b>Hotel ---</b>
-        </span>
-        <span className="umrah-flight-step active">
-          <i>3</i>
-          <b>Pembayaran ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>4</i>
-          <b>Visa &amp; Lainnya</b>
-        </span>
-      </div>
+      {flightOnly ? (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step">
+            <i>1</i>
+            <b>Pilih Tiket ---</b>
+          </span>
+          <span className="umrah-flight-step active">
+            <i>2</i>
+            <b>Pembayaran</b>
+          </span>
+        </div>
+      ) : (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>2</i>
+            <b>Hotel ---</b>
+          </span>
+          <span className="umrah-flight-step active">
+            <i>3</i>
+            <b>Pembayaran ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>4</i>
+            <b>Visa &amp; Lainnya</b>
+          </span>
+        </div>
+      )}
 
       <div className="umrah-payment-scroll">
         <section className="umrah-payment-block">
@@ -65,7 +82,13 @@ export function UmrahPaymentMethodScreen({
 
             <div className="umrah-payment-summary-lines">
               <p>
-                <span>{paymentFor === 'visa' ? `Harga ${visaLabel ?? 'Visa Umrah'}` : 'Harga paket hotel &amp; flight'}</span>
+                <span>
+                  {paymentFor === 'visa'
+                    ? `Harga ${visaLabel ?? 'Visa Umrah'}`
+                    : flightOnly
+                      ? 'Harga tiket pesawat'
+                      : packageSummaryLabel ?? 'Harga paket hotel &amp; flight'}
+                </span>
                 <span>{toRupiah(breakdown.subtotal)}</span>
               </p>
               {paymentFor === 'visa' && (

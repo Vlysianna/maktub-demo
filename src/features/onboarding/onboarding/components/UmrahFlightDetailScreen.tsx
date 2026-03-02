@@ -2,6 +2,7 @@ import type { TicketFareOption, UmrahTicketAssets } from '../types'
 
 type UmrahFlightDetailScreenProps = {
   assets: UmrahTicketAssets
+  flightOnly?: boolean
   journeyLabel: 'Keberangkatan' | 'Kepulangan'
   fareOptions: TicketFareOption[]
   travelerCount: number
@@ -21,6 +22,7 @@ function toRupiah(amount: number) {
 
 export function UmrahFlightDetailScreen({
   assets,
+  flightOnly = false,
   journeyLabel,
   fareOptions,
   travelerCount,
@@ -42,24 +44,37 @@ export function UmrahFlightDetailScreen({
         </button>
       </header>
 
-      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-        <span className="umrah-flight-step active">
-          <i>1</i>
-          <b>Flight ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>2</i>
-          <b>Hotel ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>3</i>
-          <b>Pembayaran ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>4</i>
-          <b>Visa &amp; Lainnya</b>
-        </span>
-      </div>
+      {flightOnly ? (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>1</i>
+            <b>Pilih Tiket ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>2</i>
+            <b>Pembayaran</b>
+          </span>
+        </div>
+      ) : (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>1</i>
+            <b>Flight ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>2</i>
+            <b>Hotel ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>3</i>
+            <b>Pembayaran ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>4</i>
+            <b>Visa &amp; Lainnya</b>
+          </span>
+        </div>
+      )}
 
       <div className="umrah-ticket-scroll">
         <h2 className="umrah-ticket-title">Tiket {journeyLabel}</h2>

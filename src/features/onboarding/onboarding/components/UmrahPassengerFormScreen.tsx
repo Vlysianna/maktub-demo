@@ -31,13 +31,11 @@ function SelectInput({
   placeholder,
   options,
   onChange,
-  assets,
 }: {
   value: string
   placeholder: string
   options: string[]
   onChange: (value: string) => void
-  assets: UmrahTicketAssets
 }) {
   return (
     <div className="umrah-passenger-select-wrap">
@@ -49,7 +47,9 @@ function SelectInput({
           </option>
         ))}
       </select>
-      <img src={assets.chevronDownIcon} alt="" aria-hidden />
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+        <path d="M4 6L8 10L12 6" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     </div>
   )
 }
@@ -109,21 +109,18 @@ export function UmrahPassengerFormScreen({
               placeholder="Tanggal"
               options={dayOptions}
               onChange={(value) => onChange('birthDay', value)}
-              assets={assets}
             />
             <SelectInput
               value={form.birthMonth}
               placeholder="Bulan"
               options={monthOptions}
               onChange={(value) => onChange('birthMonth', value)}
-              assets={assets}
             />
             <SelectInput
               value={form.birthYear}
               placeholder="Tahun"
               options={yearOptions}
               onChange={(value) => onChange('birthYear', value)}
-              assets={assets}
             />
           </div>
         </LabeledField>
@@ -134,7 +131,6 @@ export function UmrahPassengerFormScreen({
             placeholder="Pilih kewarganegaraan"
             options={nationalityOptions}
             onChange={(value) => onChange('nationality', value)}
-            assets={assets}
           />
         </LabeledField>
 
@@ -161,7 +157,6 @@ export function UmrahPassengerFormScreen({
             placeholder="Pilih kewarganegaraan"
             options={nationalityOptions}
             onChange={(value) => onChange('issuingCountry', value)}
-            assets={assets}
           />
         </LabeledField>
 
@@ -172,21 +167,18 @@ export function UmrahPassengerFormScreen({
               placeholder="Tanggal"
               options={dayOptions}
               onChange={(value) => onChange('passportExpiryDay', value)}
-              assets={assets}
             />
             <SelectInput
               value={form.passportExpiryMonth}
               placeholder="Bulan"
               options={monthOptions}
               onChange={(value) => onChange('passportExpiryMonth', value)}
-              assets={assets}
             />
             <SelectInput
               value={form.passportExpiryYear}
               placeholder="Tahun"
               options={yearOptions}
               onChange={(value) => onChange('passportExpiryYear', value)}
-              assets={assets}
             />
           </div>
         </LabeledField>
@@ -194,7 +186,11 @@ export function UmrahPassengerFormScreen({
 
       <footer className="umrah-passenger-footer">
         <button type="button" className="umrah-passport-photo-btn" onClick={onOpenCamera}>
-          <img src={assets.cameraIcon} alt="" aria-hidden /> Foto Passport
+          {form.passportPhoto ? (
+            <img src={form.passportPhoto} alt="Foto Passport" className="umrah-passport-thumb" />
+          ) : (
+            <><img src={assets.cameraIcon} alt="" aria-hidden /> Foto Passport</>
+          )}
         </button>
         <button type="button" className="cta-button" onClick={onSave}>
           Simpan

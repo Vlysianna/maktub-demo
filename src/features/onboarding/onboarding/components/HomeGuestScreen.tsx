@@ -6,6 +6,7 @@ type HomeGuestScreenProps = {
   articles: ArticleItem[]
   onStartJourney: () => void
   onOpenFlightSearch: () => void
+  onOpenHotelSearch: () => void
   onOpenMyBooking: () => void
 }
 
@@ -15,6 +16,7 @@ export function HomeGuestScreen({
   articles,
   onStartJourney,
   onOpenFlightSearch,
+  onOpenHotelSearch,
   onOpenMyBooking,
 }: HomeGuestScreenProps) {
   const navItems = [
@@ -80,7 +82,7 @@ export function HomeGuestScreen({
                 key={item.label}
                 type="button"
                 className="service-item"
-                onClick={item.label === 'Pesawat' ? onOpenFlightSearch : undefined}
+                onClick={item.label === 'Pesawat' ? onOpenFlightSearch : item.label === 'Hotel' ? onOpenHotelSearch : undefined}
               >
                 <div className="service-icon-wrap">
                   <img src={item.icon} alt={item.label} className="service-icon" />

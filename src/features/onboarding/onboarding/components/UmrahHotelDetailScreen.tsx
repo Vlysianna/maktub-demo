@@ -4,6 +4,7 @@ type UmrahHotelDetailScreenProps = {
   assets: UmrahHotelAssets
   detail: HotelDetail
   selectedRoomId: string | null
+  isSearchHotelOnly?: boolean
   onBack: () => void
   onSelectRoom: (room: HotelRoomOption) => void
 }
@@ -21,7 +22,14 @@ function iconForFeature(feature: string, assets: UmrahHotelAssets) {
   return assets.noSmokingIcon
 }
 
-export function UmrahHotelDetailScreen({ assets, detail, selectedRoomId, onBack, onSelectRoom }: UmrahHotelDetailScreenProps) {
+export function UmrahHotelDetailScreen({
+  assets,
+  detail,
+  selectedRoomId,
+  isSearchHotelOnly = false,
+  onBack,
+  onSelectRoom,
+}: UmrahHotelDetailScreenProps) {
   const primaryPolicy = detail.policies[0]
   const otherPolicies = detail.policies.slice(1)
   const policyLines = primaryPolicy?.body
@@ -33,7 +41,7 @@ export function UmrahHotelDetailScreen({ assets, detail, selectedRoomId, onBack,
   const checkOutLabel = policyLines?.find((line) => line.toLowerCase().startsWith('check-out')) ?? 'Check-out: Sebelum 12:00'
 
   return (
-    <section className="phone-shell umrah-hotel-shell" aria-label="Detail Hotel">
+    <section className={`phone-shell umrah-hotel-shell${isSearchHotelOnly ? ' search-only' : ''}`} aria-label="Detail Hotel">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
           ←
@@ -42,24 +50,26 @@ export function UmrahHotelDetailScreen({ assets, detail, selectedRoomId, onBack,
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-        <span className="umrah-flight-step active">
-          <i>1</i>
-          <b>Flight ---</b>
-        </span>
-        <span className="umrah-flight-step active">
-          <i>2</i>
-          <b>Hotel ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>3</i>
-          <b>Pembayaran ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>4</i>
-          <b>Visa &amp; Lainnya</b>
-        </span>
-      </div>
+      {!isSearchHotelOnly && (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>1</i>
+            <b>Flight ---</b>
+          </span>
+          <span className="umrah-flight-step active">
+            <i>2</i>
+            <b>Hotel ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>3</i>
+            <b>Pembayaran ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>4</i>
+            <b>Visa &amp; Lainnya</b>
+          </span>
+        </div>
+      )}
 
       <div className="umrah-hotel-detail-scroll">
         <img src={detail.heroImage} alt={detail.name} className="umrah-hotel-hero" />

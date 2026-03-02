@@ -16,6 +16,7 @@ export type Screen =
   | 'umrah-flight'
   | 'umrah-flight-detail'
   | 'umrah-ticket-info'
+  | 'umrah-hotel-search'
   | 'umrah-hotel'
   | 'umrah-hotel-detail'
   | 'umrah-hotel-ticket-info'
@@ -223,6 +224,16 @@ export type AirportOption = {
   code: string
 }
 
+export type UmrahFlightSearchAssets = {
+  iconTakeOff: string
+  iconLanding: string
+  iconCalendar: string
+  iconPassenger: string
+  iconSeat: string
+  iconSwap: string
+  iconSearch: string
+}
+
 export type UmrahProcessingAssets = {
   blur: string
   aiMagic: string
@@ -262,9 +273,16 @@ export type TicketFareFeature = {
 }
 
 export type TicketFareOption = {
-  id: 'economy' | 'economy-plus'
+  id: string
   name: string
   totalPrice: number
+  features: TicketFareFeature[]
+}
+
+export type FlightFareTemplate = {
+  id: string
+  name: string
+  premiumTopUpPerPair: number
   features: TicketFareFeature[]
 }
 
@@ -301,10 +319,13 @@ export type PassengerFormData = {
   passportExpiryDay: string
   passportExpiryMonth: string
   passportExpiryYear: string
+  passportPhoto: string | null
 }
 
 export type UmrahHotelAssets = {
   chevronRight: string
+  sortIcon: string
+  filterIcon: string
   calendarIcon: string
   userIcon: string
   roomIcon: string
@@ -320,6 +341,16 @@ export type UmrahHotelAssets = {
   policyIcon: string
 }
 
+export type UmrahHotelSearchAssets = {
+  iconLocation: string
+  iconCalendar: string
+  iconGuest: string
+  iconSearch: string
+  iconNearMe: string
+  iconMap: string
+  iconClock: string
+}
+
 export type HotelOffer = {
   id: string
   name: string
@@ -329,6 +360,8 @@ export type HotelOffer = {
   totalPrice: number
   rating: number
   image: string
+  propertyType?: string
+  facilities?: string[]
   isRecommended?: boolean
 }
 
@@ -381,6 +414,16 @@ export type UmrahCompletionAssets = {
 
 export type PaymentMethod = 'bni-va' | 'bri-va' | 'mandiri-va' | 'bca-va' | 'credit-card'
 
+export type VisaPackageId = 'visa-1-bulan' | 'visa-2-minggu' | 'visa-express'
+
+export type VisaPackage = {
+  id: VisaPackageId
+  title: string
+  subtitle: string
+  priceLabel: string
+  price: number
+}
+
 export type OnboardingConfig = {
   defaultContact: {
     name: string
@@ -398,10 +441,28 @@ export type OnboardingConfig = {
     day: number
   }
   defaultHotelNightCount: number
+  defaultHotelGuestCount: number
+  hotelNearbyCity: string
+  hotelRecentCities: string[]
+  hotelSortOptions: string[]
+  hotelPriceRanges: Array<{
+    id: string
+    label: string
+    min: number
+    max: number | null
+  }>
+  hotelPropertyTypes: string[]
+  hotelFacilityOptions: string[]
   nationalityOptions: string[]
   monthOptions: string[]
   passportYearSpan: number
   paymentMethodLabels: Record<PaymentMethod, string>
+  visaPackages: VisaPackage[]
+  visaLandArrangementPrices: string[]
+  visaAdditionalServices: string[]
+  visaIncludedServices: string[]
+  flightCabinClasses: string[]
+  flightFareTemplates: FlightFareTemplate[]
 }
 
 export type PaymentBreakdown = {

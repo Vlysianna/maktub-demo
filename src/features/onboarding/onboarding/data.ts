@@ -3,6 +3,7 @@ import type {
   ArticleItem,
   BookingDetail,
   BookingItem,
+  FlightFareTemplate,
   FlightOffer,
   HotelDetail,
   HotelOffer,
@@ -14,12 +15,15 @@ import type {
   HomeAssets,
   ServiceItem,
   UmrahFlightAssets,
+  UmrahFlightSearchAssets,
   UmrahHotelAssets,
+  UmrahHotelSearchAssets,
   UmrahProcessingAssets,
   UmrahQuestionAssets,
   UmrahStepAssets,
   UmrahTicketAssets,
   UmrahTravelerAssets,
+  VisaPackage,
   WalkthroughSlide,
   OnboardingConfig,
 } from './types'
@@ -63,6 +67,7 @@ export const myBookingAssets: MyBookingAssets = {
 }
 
 export const myBookingItems: BookingItem[] = [
+  // Berlangsung
   {
     id: 'booking-1',
     packageName: 'Paket Umrah 4 Hari',
@@ -76,6 +81,19 @@ export const myBookingItems: BookingItem[] = [
     totalPriceLabel: 'Rp 48.180.000',
   },
   {
+    id: 'booking-5',
+    packageName: 'Paket Umrah Plus Madinah 7 Hari',
+    status: 'berlangsung',
+    durationLabel: '7 hari',
+    bookingDateLabel: '20 Feb 2026',
+    departureRouteLabel: 'Surabaya (SUB)',
+    arrivalRouteLabel: 'Madinah (MED)',
+    departureDateLabel: '20 Feb 2026',
+    travelerLabel: '4 person',
+    totalPriceLabel: 'Rp 103.600.000',
+  },
+  // Menunggu Pembayaran
+  {
     id: 'booking-2',
     packageName: 'Paket Umrah 4 Hari',
     status: 'menunggu-pembayaran',
@@ -87,6 +105,19 @@ export const myBookingItems: BookingItem[] = [
     travelerLabel: '2 person',
     totalPriceLabel: 'Rp 48.180.000',
   },
+  {
+    id: 'booking-6',
+    packageName: 'Paket Umrah Ramadan 10 Hari',
+    status: 'menunggu-pembayaran',
+    durationLabel: '10 hari',
+    bookingDateLabel: '1 Mar 2026',
+    departureRouteLabel: 'Medan (KNO)',
+    arrivalRouteLabel: 'Jeddah (JED)',
+    departureDateLabel: '1 Mar 2026',
+    travelerLabel: '3 person',
+    totalPriceLabel: 'Rp 87.450.000',
+  },
+  // Akan Datang
   {
     id: 'booking-3',
     packageName: 'Paket Umrah 4 Hari',
@@ -100,6 +131,31 @@ export const myBookingItems: BookingItem[] = [
     totalPriceLabel: 'Rp 48.180.000',
   },
   {
+    id: 'booking-7',
+    packageName: 'Paket Umrah Keluarga 5 Hari',
+    status: 'akan-datang',
+    durationLabel: '5 hari',
+    bookingDateLabel: '10 Mar 2026',
+    departureRouteLabel: 'Jakarta (CGK)',
+    arrivalRouteLabel: 'Jeddah (JED)',
+    departureDateLabel: '15 Apr 2026',
+    travelerLabel: '5 person',
+    totalPriceLabel: 'Rp 129.750.000',
+  },
+  {
+    id: 'booking-8',
+    packageName: 'Paket Umrah Plus Tour Jeddah 6 Hari',
+    status: 'akan-datang',
+    durationLabel: '6 hari',
+    bookingDateLabel: '12 Mar 2026',
+    departureRouteLabel: 'Bandung (BDO)',
+    arrivalRouteLabel: 'Jeddah (JED)',
+    departureDateLabel: '20 Apr 2026',
+    travelerLabel: '2 person',
+    totalPriceLabel: 'Rp 56.900.000',
+  },
+  // History
+  {
     id: 'booking-4',
     packageName: 'Paket Umrah 4 Hari',
     status: 'history',
@@ -110,6 +166,30 @@ export const myBookingItems: BookingItem[] = [
     departureDateLabel: '18 Feb 2026',
     travelerLabel: '2 person',
     totalPriceLabel: 'Rp 48.180.000',
+  },
+  {
+    id: 'booking-9',
+    packageName: 'Paket Umrah Plus Madinah 7 Hari',
+    status: 'history',
+    durationLabel: '7 hari',
+    bookingDateLabel: '5 Jan 2026',
+    departureRouteLabel: 'Jakarta (CGK)',
+    arrivalRouteLabel: 'Madinah (MED)',
+    departureDateLabel: '10 Jan 2026',
+    travelerLabel: '2 person',
+    totalPriceLabel: 'Rp 76.200.000',
+  },
+  {
+    id: 'booking-10',
+    packageName: 'Paket Umrah Ekonomis 4 Hari',
+    status: 'history',
+    durationLabel: '4 hari',
+    bookingDateLabel: '20 Nov 2025',
+    departureRouteLabel: 'Surabaya (SUB)',
+    arrivalRouteLabel: 'Jeddah (JED)',
+    departureDateLabel: '1 Dec 2025',
+    travelerLabel: '1 person',
+    totalPriceLabel: 'Rp 22.500.000',
   },
 ]
 
@@ -351,6 +431,26 @@ export const umrahProcessingAssets: UmrahProcessingAssets = {
   aiMagic: 'https://www.figma.com/api/mcp/asset/6da643ed-f854-4183-90d0-b1f428712cc7',
 }
 
+export const umrahFlightSearchAssets: UmrahFlightSearchAssets = {
+  iconTakeOff: 'https://www.figma.com/api/mcp/asset/092d46f6-7d23-4f7d-b169-11a0eaeca787',
+  iconLanding: 'https://www.figma.com/api/mcp/asset/db56c24b-822b-4d66-87ca-9e1b5cf6283a',
+  iconCalendar: 'https://www.figma.com/api/mcp/asset/b6bad521-4bc7-411a-a70d-2c02a8c3f378',
+  iconPassenger: 'https://www.figma.com/api/mcp/asset/4b8645af-ffe9-47c8-bc61-53118eaa9979',
+  iconSeat: 'https://www.figma.com/api/mcp/asset/6a410462-9ea6-403d-b1f3-814b1f1ac4e0',
+  iconSwap: 'https://www.figma.com/api/mcp/asset/3b08b953-71de-4411-b922-3fd624a10668',
+  iconSearch: 'https://www.figma.com/api/mcp/asset/39ce97cb-9ca4-4fec-a2fa-49a64dd3d2fa',
+}
+
+export const umrahHotelSearchAssets: UmrahHotelSearchAssets = {
+  iconLocation: 'https://www.figma.com/api/mcp/asset/03b3e842-1914-4706-9ea1-70cbd1d6aaf6',
+  iconCalendar: 'https://www.figma.com/api/mcp/asset/ad87ffeb-a104-4976-aef5-bc76abad9a8f',
+  iconGuest: 'https://www.figma.com/api/mcp/asset/87379399-e322-44d0-8ea1-afa952a33903',
+  iconSearch: 'https://www.figma.com/api/mcp/asset/10fb2bb7-1570-40de-976f-f5d8b60c3475',
+  iconNearMe: 'https://www.figma.com/api/mcp/asset/4c6e8642-f8d5-4751-8106-9eb50a564080',
+  iconMap: 'https://www.figma.com/api/mcp/asset/ef86a6c3-438a-4fd2-bf86-cd903574f85d',
+  iconClock: 'https://www.figma.com/api/mcp/asset/355510cb-684f-4fd2-9933-91348527420b',
+}
+
 export const umrahFlightAssets: UmrahFlightAssets = {
   chevronRight: 'https://www.figma.com/api/mcp/asset/2909023e-2b4e-45be-90c0-4046f05ddf6f',
   planeArrow: 'https://www.figma.com/api/mcp/asset/688642d2-4cbb-4446-8c03-fca5f6f79fb5',
@@ -428,6 +528,8 @@ export const flightOfferTemplate: FlightOffer[] = [
 
 export const umrahHotelAssets: UmrahHotelAssets = {
   chevronRight: 'https://www.figma.com/api/mcp/asset/2ccd8fb3-cbbc-4b67-bb88-9725a7b8c843',
+  sortIcon: 'https://www.figma.com/api/mcp/asset/cf251695-41f5-4018-bed5-f89aa9d08dcc',
+  filterIcon: 'https://www.figma.com/api/mcp/asset/50f5038a-530c-4a22-ace9-1129547bed19',
   calendarIcon: 'https://www.figma.com/api/mcp/asset/ddb86521-8919-4954-8b59-3f732a0a912c',
   userIcon: 'https://www.figma.com/api/mcp/asset/752ee1b6-50f7-48a6-8333-1e8958fee749',
   roomIcon: 'https://www.figma.com/api/mcp/asset/6383630d-21f0-41ab-9f1f-535275a685a2',
@@ -453,6 +555,8 @@ export const hotelOfferTemplate: HotelOffer[] = [
     totalPrice: 12000000,
     rating: 5,
     image: 'https://www.figma.com/api/mcp/asset/5eb9c5c6-52fc-4c37-8cf1-526464a5b58c',
+    propertyType: 'Hotel',
+    facilities: ['Layanan Kamar', 'Free WiFi', 'TV'],
     isRecommended: true,
   },
   {
@@ -464,6 +568,8 @@ export const hotelOfferTemplate: HotelOffer[] = [
     totalPrice: 16500000,
     rating: 5,
     image: 'https://www.figma.com/api/mcp/asset/ec3c22ee-8727-49dd-ac6c-702da916e5cb',
+    propertyType: 'Apartment',
+    facilities: ['Free WiFi', 'Kolam Renang', 'Smoking Area'],
   },
   {
     id: 'hotel-3',
@@ -474,6 +580,8 @@ export const hotelOfferTemplate: HotelOffer[] = [
     totalPrice: 18600000,
     rating: 5,
     image: 'https://www.figma.com/api/mcp/asset/859548e7-3f5c-41c0-8e0b-e13d013fc76d',
+    propertyType: 'Home Stays',
+    facilities: ['TV', 'Smoking Area'],
   },
 ]
 
@@ -568,6 +676,25 @@ export const onboardingConfig: OnboardingConfig = {
     day: 18,
   },
   defaultHotelNightCount: 2,
+  defaultHotelGuestCount: 2,
+  hotelNearbyCity: 'Jeddah',
+  hotelRecentCities: ['Jakarta', 'Madinah', 'Jeddah', 'Riyadh'],
+  hotelSortOptions: [
+    'Popularitas',
+    'Harga: Rendah ke Tinggi',
+    'Harga: Tinggi ke Rendah',
+    'Peringkat: Tinggi ke Rendah',
+    'Jarak: Terdekat dari Ka’bah',
+    'Jarak: Terdekat dari Masjid Nabawi',
+  ],
+  hotelPriceRanges: [
+    { id: '0-500k', label: 'Rp 0 - Rp 500.000', min: 0, max: 500000 },
+    { id: '500k-1m', label: 'Rp 500.000 - Rp 1.000.000', min: 500000, max: 1000000 },
+    { id: '1m-5m', label: 'Rp 1.000.000 - Rp 5.000.000', min: 1000000, max: 5000000 },
+    { id: '5m-plus', label: 'Di atas Rp5.000.000', min: 5000000, max: null },
+  ],
+  hotelPropertyTypes: ['Hotel', 'Apartment', 'Home Stays'],
+  hotelFacilityOptions: ['Layanan Kamar', 'Free WiFi', 'TV', 'Kolam Renang', 'Smoking Area'],
   nationalityOptions: ['Indonesia', 'Malaysia', 'Singapura', 'Brunei', 'Arab Saudi'],
   monthOptions: [
     'Januari',
@@ -591,4 +718,50 @@ export const onboardingConfig: OnboardingConfig = {
     'bca-va': 'BCA Virtual Account',
     'credit-card': 'Visa / Master Card',
   },
+  visaPackages: [
+    { id: 'visa-1-bulan', title: 'Visa 1 Bulan', subtitle: 'Mulai dari', priceLabel: 'Rp 3.000.000 /orang', price: 3_000_000 },
+    { id: 'visa-2-minggu', title: 'Visa 2 Minggu', subtitle: 'Mulai dari', priceLabel: 'Rp 4.000.000 /orang', price: 4_000_000 },
+    { id: 'visa-express', title: 'Visa Express', subtitle: 'Hubungi customer support kami', priceLabel: '', price: 4_000_000 },
+  ] satisfies VisaPackage[],
+  visaLandArrangementPrices: [
+    'Rp 200.000 /hari',
+    'Rp 300.000 /hari',
+    'Rp 400.000 /hari',
+    'Rp 500.000 /hari',
+    'Rp 600.000 /hari',
+    'Rp 700.000 /hari',
+  ],
+  visaAdditionalServices: ['Mutawif', 'Travel Insurance', 'Support Disabilitas', 'Rawdah', 'Paket Wisata'],
+  visaIncludedServices: [
+    'Penjemputan kedatangan di bandara',
+    'Membantu penanganan force majeure (sakit / meninggal)',
+    'Layanan online selama perjalanan',
+  ],
+  flightCabinClasses: ['Ekonomi', 'Ekonomi Premium', 'Bisnis', 'First'],
+  flightFareTemplates: [
+    {
+      id: 'economy',
+      name: 'Ekonomi',
+      premiumTopUpPerPair: 0,
+      features: [
+        { label: 'Bagasi kabin 7 kg', available: true, icon: 'bag' },
+        { label: 'Bagasi check-in 0 kg', available: true, icon: 'bag' },
+        { label: 'Tidak bisa reschedule', available: false, icon: 'cancel' },
+        { label: 'Tidak bisa refund', available: false, icon: 'cancel' },
+        { label: 'Asuransi perjalanan', available: true, icon: 'check' },
+      ],
+    },
+    {
+      id: 'economy-plus',
+      name: 'Ekonomi Plus',
+      premiumTopUpPerPair: 200_000,
+      features: [
+        { label: 'Bagasi kabin 7 kg', available: true, icon: 'bag' },
+        { label: 'Bagasi check-in 0 kg', available: true, icon: 'bag' },
+        { label: 'Bisa reschedule', available: true, icon: 'check' },
+        { label: 'Tidak bisa refund', available: false, icon: 'cancel' },
+        { label: 'Asuransi perjalanan', available: true, icon: 'check' },
+      ],
+    },
+  ] satisfies FlightFareTemplate[],
 }

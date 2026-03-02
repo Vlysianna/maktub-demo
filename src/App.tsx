@@ -11,6 +11,7 @@ import { UmrahPassengerCameraScreen } from './features/onboarding/onboarding/com
 import { UmrahPassengerFormScreen } from './features/onboarding/onboarding/components/UmrahPassengerFormScreen'
 import { UmrahProcessingScreen } from './features/onboarding/onboarding/components/UmrahProcessingScreen'
 import { UmrahHotelDetailScreen } from './features/onboarding/onboarding/components/UmrahHotelDetailScreen'
+import { UmrahHotelSearchScreen } from './features/onboarding/onboarding/components/UmrahHotelSearchScreen'
 import { UmrahHotelScreen } from './features/onboarding/onboarding/components/UmrahHotelScreen'
 import { UmrahHotelTicketInfoScreen } from './features/onboarding/onboarding/components/UmrahHotelTicketInfoScreen'
 import { UmrahPaymentMethodScreen } from './features/onboarding/onboarding/components/UmrahPaymentMethodScreen'
@@ -44,7 +45,9 @@ import {
   splashLogo,
   umrahArrivalReturnAssets,
   umrahFlightAssets,
+  umrahFlightSearchAssets,
   umrahHotelAssets,
+  umrahHotelSearchAssets,
   umrahPaymentAssets,
   umrahCompletionAssets,
   umrahBudgetAssets,
@@ -69,6 +72,7 @@ import type {
   PaymentMethod,
   Screen,
   TicketFareOption,
+  VisaPackageId,
 } from './features/onboarding/onboarding/types'
 
 const budgetProfiles: Record<
@@ -97,17 +101,13 @@ const budgetProfiles: Record<
 
 const defaultBudgetProfile = budgetProfiles['25.000.000 sampai 40.000.000']
 
-const visaPackagePricePerPerson: Record<'visa-1-bulan' | 'visa-2-minggu' | 'visa-express', number> = {
-  'visa-1-bulan': 3_000_000,
-  'visa-2-minggu': 4_000_000,
-  'visa-express': 4_000_000,
-}
+const visaPackagePricePerPerson = Object.fromEntries(
+  onboardingConfig.visaPackages.map((p) => [p.id, p.price]),
+) as Record<VisaPackageId, number>
 
-const visaPackageLabelMap: Record<'visa-1-bulan' | 'visa-2-minggu' | 'visa-express', string> = {
-  'visa-1-bulan': 'Visa 1 Bulan',
-  'visa-2-minggu': 'Visa 2 Minggu',
-  'visa-express': 'Visa Express',
-}
+const visaPackageLabelMap = Object.fromEntries(
+  onboardingConfig.visaPackages.map((p) => [p.id, p.title]),
+) as Record<VisaPackageId, string>
 
 function shiftTimeLabel(timeLabel: string, hourOffset: number) {
   const [hourPart, minutePart] = timeLabel.split(':')
@@ -133,39 +133,27 @@ function addDays(date: Date, days: number) {
   return startOfDay(next)
 }
 
+function createBookingId() {
+  return `booking-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+}
+
 function formatCurrency(amount: number) {
   return `Rp ${amount.toLocaleString('id-ID')}`
 }
 
 function createTicketFareOptions(basePrice: number, travelerCount: number): TicketFareOption[] {
-  const premiumTopUp = Math.max(1, Math.ceil(travelerCount / 2)) * 200_000
-
-  return [
-    {
-      id: 'economy',
-      name: 'Ekonomi',
-      totalPrice: basePrice,
-      features: [
-        { label: 'Bagasi kabin 7 kg', available: true, icon: 'bag' },
-        { label: 'Bagasi check-in 0 kg', available: true, icon: 'bag' },
-        { label: 'Tidak bisa reschedule', available: false, icon: 'cancel' },
-        { label: 'Tidak bisa refund', available: false, icon: 'cancel' },
-        { label: 'Asuransi perjalanan', available: true, icon: 'check' },
-      ],
-    },
-    {
-      id: 'economy-plus',
-      name: 'Ekonomi Plus',
-      totalPrice: basePrice + premiumTopUp,
-      features: [
-        { label: 'Bagasi kabin 7 kg', available: true, icon: 'bag' },
-        { label: 'Bagasi check-in 0 kg', available: true, icon: 'bag' },
-        { label: 'Bisa reschedule', available: true, icon: 'check' },
-        { label: 'Tidak bisa refund', available: false, icon: 'cancel' },
-        { label: 'Asuransi perjalanan', available: true, icon: 'check' },
-      ],
-    },
-  ]
+  return onboardingConfig.flightFareTemplates.map((template) => {
+    const topUp =
+      template.premiumTopUpPerPair > 0
+        ? Math.max(1, Math.ceil(travelerCount / 2)) * template.premiumTopUpPerPair
+        : 0
+    return {
+      id: template.id,
+      name: template.name,
+      totalPrice: basePrice + topUp,
+      features: template.features,
+    }
+  })
 }
 
 function createInitialPassengerForm(): PassengerFormData {
@@ -181,6 +169,7 @@ function createInitialPassengerForm(): PassengerFormData {
     passportExpiryDay: '',
     passportExpiryMonth: '',
     passportExpiryYear: '',
+    passportPhoto: null,
   }
 }
 
@@ -190,13 +179,32 @@ const fallbackTravelDate = new Date(
   onboardingConfig.defaultTravelDate.day,
 )
 
-const walkthroughSlideDurationMs = 3200
+function resolveSettledBookingStatus(travelDate: Date | null, hotelNights: number): BookingStatus {
+  const scheduleStart = startOfDay(travelDate ?? fallbackTravelDate)
+  const scheduleEnd = addDays(scheduleStart, hotelNights)
+  const today = startOfDay(new Date())
 
-type FlightCabinSelection = 'Ekonomi' | 'Ekonomi Premium' | 'Bisnis' | 'First'
+  if (today < scheduleStart) {
+    return 'akan-datang'
+  }
+
+  if (today <= scheduleEnd) {
+    return 'berlangsung'
+  }
+
+  return 'history'
+}
+
+const walkthroughSlideDurationMs = 3200
+const bookingItemsStorageKey = 'maktub-booking-items'
+const bookingDetailsStorageKey = 'maktub-booking-details'
+
+type FlightCabinSelection = string
 
 function App() {
   const [screen, setScreen] = useState<Screen>('splash')
   const [flightSearchEntry, setFlightSearchEntry] = useState<'home' | 'maktub-ai'>('home')
+  const [isHotelOnlyFlow, setIsHotelOnlyFlow] = useState(false)
   const [selectedMyBookingId, setSelectedMyBookingId] = useState<string | null>(null)
   const [itineraryByBookingId, setItineraryByBookingId] = useState<Record<string, ItineraryDay[]>>({})
   const [step, setStep] = useState(1)
@@ -217,9 +225,9 @@ function App() {
   const [flightSelectionLeg, setFlightSelectionLeg] = useState<'departure' | 'return'>('departure')
   const [selectedFlightId, setSelectedFlightId] = useState<string | null>(null)
   const [selectedReturnFlightId, setSelectedReturnFlightId] = useState<string | null>(null)
-  const [selectedDepartureFareId, setSelectedDepartureFareId] = useState<TicketFareOption['id']>('economy')
-  const [selectedReturnFareId, setSelectedReturnFareId] = useState<TicketFareOption['id']>('economy')
-  const [selectedFlightCabinLabel, setSelectedFlightCabinLabel] = useState<FlightCabinSelection>('Ekonomi')
+  const [selectedDepartureFareId, setSelectedDepartureFareId] = useState<TicketFareOption['id']>(onboardingConfig.flightFareTemplates[0].id)
+  const [selectedReturnFareId, setSelectedReturnFareId] = useState<TicketFareOption['id']>(onboardingConfig.flightFareTemplates[0].id)
+  const [selectedFlightCabinLabel, setSelectedFlightCabinLabel] = useState<FlightCabinSelection>(onboardingConfig.flightCabinClasses[0])
   const [hotelSelectionLeg, setHotelSelectionLeg] = useState<'departure' | 'return'>('departure')
   const [selectedHotelId, setSelectedHotelId] = useState<string | null>(null)
   const [selectedHotelRoomId, setSelectedHotelRoomId] = useState<string | null>(null)
@@ -229,7 +237,9 @@ function App() {
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
   const [hasVisa, setHasVisa] = useState(false)
-  const [selectedVisaPackage, setSelectedVisaPackage] = useState<'visa-1-bulan' | 'visa-2-minggu' | 'visa-express'>('visa-1-bulan')
+  const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId>(
+    onboardingConfig.visaPackages[0].id,
+  )
   const [visaPersonalForm, setVisaPersonalForm] = useState({
     familyName: '',
     givenName: '',
@@ -259,9 +269,52 @@ function App() {
     birthCertificate: null,
     photo: null,
   })
-  const [travelerNames, setTravelerNames] = useState<string[]>([onboardingConfig.defaultContact.name])
+  const [travelerNames, setTravelerNames] = useState<string[]>(['Jamaah 1'])
   const [activePassengerIndex, setActivePassengerIndex] = useState(0)
   const [passengerForms, setPassengerForms] = useState<PassengerFormData[]>([createInitialPassengerForm()])
+  const [savedBookingItems, setSavedBookingItems] = useState<BookingItem[]>([])
+  const [savedBookingDetailsById, setSavedBookingDetailsById] = useState<Record<string, BookingDetail>>({})
+
+  useEffect(() => {
+    try {
+      const storedItemsRaw = window.localStorage.getItem(bookingItemsStorageKey)
+      if (storedItemsRaw) {
+        const parsedItems = JSON.parse(storedItemsRaw)
+        if (Array.isArray(parsedItems)) {
+          setSavedBookingItems(parsedItems as BookingItem[])
+        }
+      }
+
+      const storedDetailsRaw = window.localStorage.getItem(bookingDetailsStorageKey)
+      if (storedDetailsRaw) {
+        const parsedDetails = JSON.parse(storedDetailsRaw)
+        if (parsedDetails && typeof parsedDetails === 'object' && !Array.isArray(parsedDetails)) {
+          setSavedBookingDetailsById(parsedDetails as Record<string, BookingDetail>)
+        }
+      }
+    } catch {
+      window.localStorage.removeItem(bookingItemsStorageKey)
+      window.localStorage.removeItem(bookingDetailsStorageKey)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (savedBookingItems.length === 0) {
+      window.localStorage.removeItem(bookingItemsStorageKey)
+      return
+    }
+
+    window.localStorage.setItem(bookingItemsStorageKey, JSON.stringify(savedBookingItems))
+  }, [savedBookingItems])
+
+  useEffect(() => {
+    if (Object.keys(savedBookingDetailsById).length === 0) {
+      window.localStorage.removeItem(bookingDetailsStorageKey)
+      return
+    }
+
+    window.localStorage.setItem(bookingDetailsStorageKey, JSON.stringify(savedBookingDetailsById))
+  }, [savedBookingDetailsById])
 
   const currentSlide = useMemo(() => walkthroughSlides[step - 1], [step])
 
@@ -286,8 +339,8 @@ function App() {
     setFlightSelectionLeg('departure')
     setSelectedFlightId(null)
     setSelectedReturnFlightId(null)
-    setSelectedDepartureFareId('economy')
-    setSelectedReturnFareId('economy')
+    setSelectedDepartureFareId(onboardingConfig.flightFareTemplates[0].id)
+    setSelectedReturnFareId(onboardingConfig.flightFareTemplates[0].id)
     setHotelSelectionLeg('departure')
     setSelectedHotelId(null)
     setSelectedHotelRoomId(null)
@@ -296,6 +349,7 @@ function App() {
     setPaymentFlow('package')
     setPaymentCompletedAt(null)
     setHasVisa(false)
+    setIsHotelOnlyFlow(false)
   }
 
   useEffect(() => {
@@ -335,8 +389,8 @@ function App() {
       setFlightSelectionLeg('departure')
       setSelectedFlightId(null)
       setSelectedReturnFlightId(null)
-      setSelectedDepartureFareId('economy')
-      setSelectedReturnFareId('economy')
+      setSelectedDepartureFareId(onboardingConfig.flightFareTemplates[0].id)
+      setSelectedReturnFareId(onboardingConfig.flightFareTemplates[0].id)
       setFlightSearchEntry('maktub-ai')
       setScreen('umrah-flight')
     }, 2800)
@@ -360,10 +414,6 @@ function App() {
       Array.from({ length: count }, (_, index) => {
         if (prev[index]) {
           return prev[index]
-        }
-
-        if (index === 0) {
-          return onboardingConfig.defaultContact.name
         }
 
         return `Jamaah ${index + 1}`
@@ -401,7 +451,7 @@ function App() {
   const returnDestinationLabel = returnCity ?? destinationLabel
   const returnDestinationCode = cityAirportCodeMap[returnDestinationLabel] ?? destinationCode
   const flightDestinationOptions = useMemo(
-    () => cityOptions.map((city) => ({ city, code: cityAirportCodeMap[city] ?? 'JED' })),
+    () => cityOptions.map((city) => ({ city, code: cityAirportCodeMap[city] ?? 'JED', country: 'Arab Saudi' })),
     [],
   )
 
@@ -749,7 +799,50 @@ function App() {
     }
   }, [selectedVisaPackage, travelerCount])
 
-  const activePaymentBreakdown = paymentFlow === 'visa' ? visaPaymentBreakdown : paymentBreakdown
+  const flightOnlyPaymentBreakdown = useMemo<PaymentBreakdown>(() => {
+    const flightDeparture = selectedDepartureFare.totalPrice
+    const flightReturn = selectedReturnFare.totalPrice
+    const subtotal = flightDeparture + flightReturn
+    const serviceFee = 50_000
+    const taxAmount = Math.round(subtotal * 0.1)
+    return {
+      flightDeparture,
+      flightReturn,
+      hotelMakkah: 0,
+      hotelMadinah: 0,
+      subtotal,
+      serviceFee,
+      taxAmount,
+      grandTotal: subtotal + serviceFee + taxAmount,
+    }
+  }, [selectedDepartureFare.totalPrice, selectedReturnFare.totalPrice])
+
+  const hotelOnlyPaymentBreakdown = useMemo<PaymentBreakdown>(() => {
+    const hotelMakkah = selectedHotelRoom?.totalPrice ?? selectedHotelOffer?.totalPrice ?? 12000000
+    const subtotal = hotelMakkah
+    const serviceFee = 50_000
+    const taxAmount = Math.round(subtotal * 0.1)
+
+    return {
+      flightDeparture: 0,
+      flightReturn: 0,
+      hotelMakkah,
+      hotelMadinah: 0,
+      subtotal,
+      serviceFee,
+      taxAmount,
+      grandTotal: subtotal + serviceFee + taxAmount,
+    }
+  }, [selectedHotelOffer?.totalPrice, selectedHotelRoom?.totalPrice])
+
+  const activePaymentBreakdown =
+    paymentFlow === 'visa'
+      ? visaPaymentBreakdown
+      : isHotelOnlyFlow
+        ? hotelOnlyPaymentBreakdown
+      : flightSearchEntry === 'home'
+        ? flightOnlyPaymentBreakdown
+        : paymentBreakdown
 
   const hotelPaymentCards = useMemo(() => {
     if (!selectedHotelOffer) {
@@ -989,7 +1082,9 @@ function App() {
     travelerParticipants.dewasa,
   ])
 
-  const selectedMyBookingDetail = selectedMyBookingId ? dynamicMyBookingDetailsById[selectedMyBookingId] : null
+  const bookingItems = savedBookingItems.length > 0 ? savedBookingItems : dynamicBookingItems
+  const bookingDetailsById = savedBookingItems.length > 0 ? savedBookingDetailsById : dynamicMyBookingDetailsById
+  const selectedMyBookingDetail = selectedMyBookingId ? bookingDetailsById[selectedMyBookingId] : null
 
   const defaultItineraryDays = useMemo<ItineraryDay[]>(() => {
     const itineraryStartDate = startOfDay(travelDate ?? fallbackTravelDate)
@@ -1073,6 +1168,22 @@ function App() {
     return baseReturnDate.getTime() < initialFlightSearchDepartureDate.getTime() ? initialFlightSearchDepartureDate : baseReturnDate
   })()
 
+  const minimumHotelCheckInDate = addDays(startOfDay(new Date()), 1)
+  const initialHotelSearchCheckInDate = (() => {
+    const baseDate = hotelStartDate ?? travelDate ?? fallbackTravelDate
+    return startOfDay(baseDate).getTime() < minimumHotelCheckInDate.getTime() ? minimumHotelCheckInDate : startOfDay(baseDate)
+  })()
+  const initialHotelSearchCheckOutDate = (() => {
+    const baseDate = hotelEndDate ?? addDays(initialHotelSearchCheckInDate, onboardingConfig.defaultHotelNightCount)
+    return startOfDay(baseDate).getTime() <= initialHotelSearchCheckInDate.getTime()
+      ? addDays(initialHotelSearchCheckInDate, 1)
+      : startOfDay(baseDate)
+  })()
+  const hotelDestinationOptions = useMemo(
+    () => Array.from(new Set([onboardingConfig.defaultHotelCityLabel, ...cityOptions])),
+    [],
+  )
+
   return (
     <main className="walkthrough-page">
       {screen === 'splash' && <SplashScreen logoUrl={splashLogo} />}
@@ -1097,9 +1208,20 @@ function App() {
             setScreen('umrah-question')
           }}
           onOpenFlightSearch={() => {
+            setIsHotelOnlyFlow(false)
             setFlightSelectionLeg('departure')
             setFlightSearchEntry('home')
             setScreen('umrah-flight-search')
+          }}
+          onOpenHotelSearch={() => {
+            setIsHotelOnlyFlow(true)
+            setHotelSelectionLeg('departure')
+            setSelectedHotelId(null)
+            setSelectedHotelRoomId(null)
+            setSelectedReturnHotelId(null)
+            setSelectedReturnHotelRoomId(null)
+            setPaymentFlow('package')
+            setScreen('umrah-hotel-search')
           }}
           onOpenMyBooking={() => setScreen('my-booking')}
         />
@@ -1109,7 +1231,7 @@ function App() {
         <MyBookingScreen
           assets={homeAssets}
           bookingAssets={myBookingAssets}
-          bookings={dynamicBookingItems}
+          bookings={bookingItems}
           onBackHome={() => setScreen('home')}
           onOpenDetail={(bookingId) => {
             setSelectedMyBookingId(bookingId)
@@ -1225,6 +1347,7 @@ function App() {
       {screen === 'umrah-flight' && (
         <UmrahFlightScreen
           assets={umrahFlightAssets}
+          flightOnly={flightSearchEntry === 'home'}
           journeyLabel={flightSelectionLeg === 'departure' ? 'Keberangkatan' : 'Kepulangan'}
           selectedCabinLabel={selectedFlightCabinLabel}
           departureLabel={flightSelectionLeg === 'departure' ? departureLabel : returnDestinationLabel}
@@ -1238,15 +1361,15 @@ function App() {
           onSelectOffer={(offer) => {
             if (flightSelectionLeg === 'departure') {
               setSelectedFlightId(offer.id)
-              setSelectedDepartureFareId('economy')
+              setSelectedDepartureFareId(onboardingConfig.flightFareTemplates[0].id)
               setSelectedReturnFlightId(null)
-              setSelectedReturnFareId('economy')
+              setSelectedReturnFareId(onboardingConfig.flightFareTemplates[0].id)
               setScreen('umrah-flight-detail')
               return
             }
 
             setSelectedReturnFlightId(offer.id)
-            setSelectedReturnFareId('economy')
+            setSelectedReturnFareId(onboardingConfig.flightFareTemplates[0].id)
             setScreen('umrah-flight-detail')
           }}
           onBack={() => {
@@ -1263,7 +1386,9 @@ function App() {
 
       {screen === 'umrah-flight-search' && (
         <UmrahFlightSearchScreen
+          assets={umrahFlightSearchAssets}
           blurImage={umrahProcessingAssets.blur}
+          cabinClasses={onboardingConfig.flightCabinClasses}
           departureOptions={departureAirportOptions}
           destinationOptions={flightDestinationOptions}
           initialDepartureCode={departureCode}
@@ -1288,13 +1413,12 @@ function App() {
             syncTravelerCollections(nextTravelerCount)
             setSelectedFlightCabinLabel(payload.cabinClass)
 
-            if (payload.cabinClass === 'Ekonomi') {
-              setSelectedDepartureFareId('economy')
-              setSelectedReturnFareId('economy')
-            } else {
-              setSelectedDepartureFareId('economy-plus')
-              setSelectedReturnFareId('economy-plus')
-            }
+            const defaultFareId = onboardingConfig.flightFareTemplates[0].id
+            const premiumFareId = onboardingConfig.flightFareTemplates[1]?.id ?? defaultFareId
+            const isBaseCabin = payload.cabinClass === onboardingConfig.flightCabinClasses[0]
+            const fareId = isBaseCabin ? defaultFareId : premiumFareId
+            setSelectedDepartureFareId(fareId)
+            setSelectedReturnFareId(fareId)
 
             setFlightSelectionLeg('departure')
             setSelectedFlightId(null)
@@ -1304,9 +1428,42 @@ function App() {
         />
       )}
 
+      {screen === 'umrah-hotel-search' && (
+        <UmrahHotelSearchScreen
+          assets={umrahHotelSearchAssets}
+          blurImage={umrahProcessingAssets.blur}
+          destinationOptions={hotelDestinationOptions}
+          recentDestinations={onboardingConfig.hotelRecentCities}
+          nearbyDestination={onboardingConfig.hotelNearbyCity}
+          initialDestinationCity={arrivalCity}
+          initialCheckInDate={initialHotelSearchCheckInDate}
+          initialCheckOutDate={initialHotelSearchCheckOutDate}
+          initialGuests={Math.max(totalParticipants, onboardingConfig.defaultHotelGuestCount)}
+          onBack={() => setScreen('home')}
+          onSearch={(payload) => {
+            const nextGuestCount = Math.max(payload.guests, 1)
+
+            setArrivalCity(payload.destinationCity)
+            setReturnCity(payload.destinationCity)
+            setHotelStartDate(payload.checkInDate)
+            setHotelEndDate(payload.checkOutDate)
+            setTravelDate(payload.checkInDate)
+            setTravelerParticipants({ dewasa: nextGuestCount, anak: 0, bayi: 0 })
+            syncTravelerCollections(nextGuestCount)
+            setHotelSelectionLeg('departure')
+            setSelectedHotelId(null)
+            setSelectedHotelRoomId(null)
+            setSelectedReturnHotelId(null)
+            setSelectedReturnHotelRoomId(null)
+            setScreen('umrah-hotel')
+          }}
+        />
+      )}
+
       {screen === 'umrah-flight-detail' && selectedDepartureFare && selectedReturnFare && (
         <UmrahFlightDetailScreen
           assets={umrahTicketAssets}
+          flightOnly={flightSearchEntry === 'home'}
           journeyLabel={flightSelectionLeg === 'departure' ? 'Keberangkatan' : 'Kepulangan'}
           travelerCount={travelerCount}
           fareOptions={flightSelectionLeg === 'departure' ? departureFareOptions : returnFareOptions}
@@ -1325,6 +1482,11 @@ function App() {
             if (flightSelectionLeg === 'departure') {
               setFlightSelectionLeg('return')
               setScreen('umrah-flight')
+              return
+            }
+
+            if (flightSearchEntry === 'home') {
+              setScreen('umrah-ticket-info')
               return
             }
 
@@ -1352,11 +1514,24 @@ function App() {
           returnArrivalTime={selectedReturnArrivalTime}
           durationLabel={selectedFlightDuration}
           returnDurationLabel={selectedReturnDuration}
+          departureFlightCode={selectedFlightOffer?.id.toUpperCase() ?? 'JT-690'}
+          departureCabinLabel={selectedDepartureFare.name}
+          departureBaggageLabel={selectedDepartureFare.features.find((f) => f.icon === 'bag' && f.available)?.label ?? 'Bagasi Kabin 7kg'}
+          departureAircraftLabel={selectedFlightOffer?.airline === 'Saudi Arabia Airlines' ? 'Boeing 777' : 'Boeing 737'}
+          departureSeatLayoutLabel="3-3"
+          departureSeatPitchLabel="29 inches (Standar)"
+          returnFlightCode={selectedReturnFlightOffer?.id.toUpperCase() ?? selectedFlightOffer?.id.toUpperCase() ?? 'JT-690'}
+          returnCabinLabel={selectedReturnFare.name}
+          returnBaggageLabel={selectedReturnFare.features.find((f) => f.icon === 'bag' && f.available)?.label ?? 'Bagasi Kabin 7kg'}
+          returnAircraftLabel={(selectedReturnFlightOffer ?? selectedFlightOffer)?.airline === 'Saudi Arabia Airlines' ? 'Boeing 777' : 'Boeing 737'}
+          returnSeatLayoutLabel="3-3"
+          returnSeatPitchLabel="29 inches (Standar)"
           travelerNames={travelerNames}
           contactName={travelerNames[0]}
           contactEmail={onboardingConfig.defaultContact.email}
           contactPhone={onboardingConfig.defaultContact.phone}
           totalPrice={selectedDepartureFare.totalPrice + selectedReturnFare.totalPrice}
+          flightOnly={flightSearchEntry === 'home'}
           onBack={() => setScreen('umrah-flight-detail')}
           onAddPassenger={() => {
             const nextIndex = passengerForms.findIndex((form) => !form.firstMiddleName.trim())
@@ -1368,6 +1543,12 @@ function App() {
             setScreen('umrah-passenger-form')
           }}
           onNext={() => {
+            if (flightSearchEntry === 'home') {
+              setPaymentFlow('package')
+              setScreen('umrah-payment-method')
+              return
+            }
+
             setHotelSelectionLeg('departure')
             setSelectedReturnHotelId(null)
             setSelectedReturnHotelRoomId(null)
@@ -1379,7 +1560,19 @@ function App() {
       {screen === 'umrah-hotel' && (
         <UmrahHotelScreen
           assets={umrahHotelAssets}
-          cityLabel={hotelSelectionLeg === 'departure' ? onboardingConfig.defaultHotelCityLabel : secondaryHotelCityLabel}
+          cityLabel={
+            isHotelOnlyFlow
+              ? arrivalCity ?? onboardingConfig.hotelNearbyCity
+              : hotelSelectionLeg === 'departure'
+                ? onboardingConfig.defaultHotelCityLabel
+                : secondaryHotelCityLabel
+          }
+          guestSummaryText={`${travelerParticipants.dewasa} Dewasa`}
+          isSearchHotelOnly={isHotelOnlyFlow}
+          sortOptions={onboardingConfig.hotelSortOptions}
+          priceRanges={onboardingConfig.hotelPriceRanges}
+          propertyTypes={onboardingConfig.hotelPropertyTypes}
+          facilityOptions={onboardingConfig.hotelFacilityOptions}
           checkInLabel={hotelCheckInLabel}
           checkOutLabel={hotelCheckOutLabel}
           nightsLabel={`${hotelNights} malam`}
@@ -1389,6 +1582,11 @@ function App() {
           roomText={`${roomCount} kamar`}
           hotels={hotelOffers}
           onBack={() => {
+            if (isHotelOnlyFlow) {
+              setScreen('umrah-hotel-search')
+              return
+            }
+
             if (hotelSelectionLeg === 'return') {
               setHotelSelectionLeg('departure')
               setScreen('umrah-hotel-ticket-info')
@@ -1420,6 +1618,7 @@ function App() {
           assets={umrahHotelAssets}
           detail={hotelSelectionLeg === 'departure' ? selectedHotelDetail! : selectedReturnHotelDetail!}
           selectedRoomId={hotelSelectionLeg === 'departure' ? selectedHotelRoomId : selectedReturnHotelRoomId}
+          isSearchHotelOnly={isHotelOnlyFlow}
           onBack={() => setScreen('umrah-hotel')}
           onSelectRoom={(room) => {
             if (hotelSelectionLeg === 'departure') {
@@ -1453,6 +1652,12 @@ function App() {
           totalLabel={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalLabel : selectedReturnHotelRoom!.totalLabel}
           onBack={() => setScreen('umrah-hotel-detail')}
           onNext={() => {
+            if (isHotelOnlyFlow) {
+              setPaymentFlow('package')
+              setScreen('umrah-payment-overview')
+              return
+            }
+
             if (hotelSelectionLeg === 'departure') {
               setHotelSelectionLeg('return')
               setScreen('umrah-hotel')
@@ -1494,12 +1699,18 @@ function App() {
               isSelected: false,
             },
           ]}
-          breakdown={paymentBreakdown}
+          breakdown={isHotelOnlyFlow ? activePaymentBreakdown : paymentBreakdown}
           travelerCount={travelerCount}
           hotelNightsLabel={`${hotelNights + 1} hari ${hotelNights} malam`}
-          primaryHotelCityLabel={primaryHotelCityLabel}
+          primaryHotelCityLabel={isHotelOnlyFlow ? arrivalCity ?? onboardingConfig.hotelNearbyCity : primaryHotelCityLabel}
           secondaryHotelCityLabel={secondaryHotelCityLabel}
+          isHotelOnly={isHotelOnlyFlow}
           onBack={() => {
+            if (isHotelOnlyFlow) {
+              setScreen('umrah-hotel-ticket-info')
+              return
+            }
+
             setHotelSelectionLeg('return')
             setScreen('umrah-hotel-ticket-info')
           }}
@@ -1515,9 +1726,23 @@ function App() {
           assets={umrahPaymentAssets}
           breakdown={activePaymentBreakdown}
           paymentFor={paymentFlow}
+          packageSummaryLabel={isHotelOnlyFlow && paymentFlow === 'package' ? 'Harga tiket hotel' : undefined}
           visaLabel={visaPackageLabelMap[selectedVisaPackage]}
           travelerCount={travelerCount}
-          onBack={() => setScreen(paymentFlow === 'visa' ? 'umrah-visa-services' : 'umrah-payment-overview')}
+          flightOnly={flightSearchEntry === 'home' && paymentFlow !== 'visa'}
+          onBack={() => {
+            if (paymentFlow === 'visa') {
+              setScreen('umrah-visa-services')
+              return
+            }
+
+            if (isHotelOnlyFlow) {
+              setScreen('umrah-payment-overview')
+              return
+            }
+
+            setScreen(flightSearchEntry === 'home' ? 'umrah-ticket-info' : 'umrah-payment-overview')
+          }}
           onPay={(method) => {
             setSelectedPaymentMethod(method)
             setScreen('umrah-payment-pending')
@@ -1533,7 +1758,25 @@ function App() {
           totalPayment={activePaymentBreakdown.grandTotal}
           onBack={() => setScreen('umrah-payment-method')}
           onNext={() => {
-            setPaymentCompletedAt(new Date())
+            const paidAt = new Date()
+            setPaymentCompletedAt(paidAt)
+
+            if (paymentFlow === 'package' && !isHotelOnlyFlow) {
+              const bookingTemplate = dynamicBookingItems[0]
+              const detailTemplate = dynamicMyBookingDetailsById[primaryBookingId]
+
+              if (bookingTemplate && detailTemplate) {
+                const bookingId = createBookingId()
+                const settledStatus = resolveSettledBookingStatus(travelDate, hotelNights)
+
+                setSavedBookingItems((prev) => [{ ...bookingTemplate, id: bookingId, status: settledStatus }, ...prev])
+                setSavedBookingDetailsById((prev) => ({
+                  ...prev,
+                  [bookingId]: { ...detailTemplate, bookingId, status: settledStatus },
+                }))
+              }
+            }
+
             setScreen('umrah-payment-success')
           }}
         />
@@ -1546,7 +1789,7 @@ function App() {
           virtualAccountName={selectedPaymentLabel}
           totalPayment={activePaymentBreakdown.grandTotal}
           onBack={() => setScreen('umrah-payment-pending')}
-          onNext={() => setScreen(hasVisa ? 'umrah-payment-complete' : 'umrah-visa-services')}
+          onNext={() => setScreen(flightSearchEntry === 'home' || hasVisa || isHotelOnlyFlow ? 'umrah-payment-complete' : 'umrah-visa-services')}
         />
       )}
 
@@ -1560,6 +1803,11 @@ function App() {
 
       {screen === 'umrah-visa-services' && (
         <UmrahVisaServicesScreen
+          packages={onboardingConfig.visaPackages}
+          landArrangementPrices={onboardingConfig.visaLandArrangementPrices}
+          additionalServices={onboardingConfig.visaAdditionalServices}
+          includedServices={onboardingConfig.visaIncludedServices}
+          pairedCityLabel={onboardingConfig.defaultHotelCityLabel}
           cityLabel={secondaryHotelCityLabel}
           formCompleted={isVisaFormCompleted}
           selectedPackageId={selectedVisaPackage}
@@ -1579,6 +1827,8 @@ function App() {
       {screen === 'umrah-visa-form-personal' && (
         <UmrahVisaFormPersonalScreen
           value={visaPersonalForm}
+          monthOptions={onboardingConfig.monthOptions}
+          yearSpan={onboardingConfig.passportYearSpan}
           onChange={(field, value) => {
             setVisaPersonalForm((prev) => ({ ...prev, [field]: value }))
           }}
@@ -1636,7 +1886,15 @@ function App() {
         <UmrahPassengerCameraScreen
           assets={umrahTicketAssets}
           onBack={() => setScreen('umrah-passenger-form')}
-          onCapture={() => setScreen('umrah-passenger-form')}
+          onCapture={() => {
+            setPassengerForms((prev) => {
+              const next = [...prev]
+              const current = next[activePassengerIndex] ?? createInitialPassengerForm()
+              next[activePassengerIndex] = { ...current, passportPhoto: umrahTicketAssets.cameraSamplePassport }
+              return next
+            })
+            setScreen('umrah-passenger-form')
+          }}
         />
       )}
     </main>

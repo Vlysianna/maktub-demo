@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 type VisaDocumentField = 'passport' | 'ktp' | 'familyCard' | 'marriageBook' | 'birthCertificate' | 'photo'
 
@@ -23,6 +23,7 @@ const docItems: Array<{ field: VisaDocumentField; label: string; hint?: string; 
 ]
 
 export function UmrahVisaFormDocsScreen({ value, onUpload, onBack, onSave }: UmrahVisaFormDocsScreenProps) {
+  const [hasAttempted, setHasAttempted] = useState(false)
   const requiredComplete = useMemo(() => requiredFields.every((field) => value[field]), [value])
 
   return (
@@ -52,7 +53,7 @@ export function UmrahVisaFormDocsScreen({ value, onUpload, onBack, onSave }: Umr
           return (
             <label key={item.field}>
               {item.label} {item.required ? '*' : ''}
-              <span className="umrah-visa-upload-box">
+              <span className={`umrah-visa-upload-box${hasAttempted && item.required && !selectedFile ? ' upload-invalid' : ''}`}>
                 <input
                   type="file"
                   accept="image/*,.pdf"
@@ -64,13 +65,26 @@ export function UmrahVisaFormDocsScreen({ value, onUpload, onBack, onSave }: Umr
                 <strong>{selectedFile ? selectedFile.name : '+ Upload Foto'}</strong>
               </span>
               {item.hint ? <small>{item.hint}</small> : null}
+              {hasAttempted && item.required && !selectedFile && (
+                <span className="visa-field-error">Dokumen wajib diupload</span>
+              )}
             </label>
           )
         })}
       </div>
 
       <footer className="umrah-ticket-footer">
-        <button type="button" className="cta-button" disabled={!requiredComplete} onClick={onSave}>
+        <button
+          type="button"
+          className="cta-button"
+          onClick={() => {
+            if (!requiredComplete) {
+              setHasAttempted(true)
+              return
+            }
+            onSave()
+          }}
+        >
           Simpan
         </button>
       </footer>

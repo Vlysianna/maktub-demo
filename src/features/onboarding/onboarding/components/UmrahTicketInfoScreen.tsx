@@ -3,6 +3,12 @@ import type { UmrahTicketAssets } from '../types'
 type RouteCardProps = {
   airline: string
   airlineLogo: string
+  flightCode: string
+  cabinLabel: string
+  baggageLabel: string
+  aircraftLabel: string
+  seatLayoutLabel: string
+  seatPitchLabel: string
   fromLabel: string
   fromCode: string
   toLabel: string
@@ -32,11 +38,24 @@ type UmrahTicketInfoScreenProps = {
   returnArrivalTime: string
   durationLabel: string
   returnDurationLabel: string
+  departureFlightCode: string
+  departureCabinLabel: string
+  departureBaggageLabel: string
+  departureAircraftLabel: string
+  departureSeatLayoutLabel: string
+  departureSeatPitchLabel: string
+  returnFlightCode: string
+  returnCabinLabel: string
+  returnBaggageLabel: string
+  returnAircraftLabel: string
+  returnSeatLayoutLabel: string
+  returnSeatPitchLabel: string
   travelerNames: string[]
   contactName: string
   contactEmail: string
   contactPhone: string
   totalPrice: number
+  flightOnly?: boolean
   onBack: () => void
   onAddPassenger: () => void
   onEditPassenger: (index: number) => void
@@ -50,6 +69,12 @@ function toRupiah(amount: number) {
 function RouteCard({
   airline,
   airlineLogo,
+  flightCode,
+  cabinLabel,
+  baggageLabel,
+  aircraftLabel,
+  seatLayoutLabel,
+  seatPitchLabel,
   fromLabel,
   fromCode,
   toLabel,
@@ -91,14 +116,14 @@ function RouteCard({
             <img src={airlineLogo} alt={airline} />
             <div>
               <p>{airline}</p>
-              <small>JT-690 | Ekonomi</small>
+              <small>{flightCode} | {cabinLabel}</small>
             </div>
           </div>
 
           <img src={assets.routeDivider} alt="" aria-hidden className="umrah-info-divider" />
 
           <p className="umrah-info-bag-row">
-            <img src={assets.bagIcon} alt="" aria-hidden /> Bagasi Kabin 7kg
+            <img src={assets.bagIcon} alt="" aria-hidden /> {baggageLabel}
           </p>
 
           <div className="umrah-info-seat-row">
@@ -106,15 +131,15 @@ function RouteCard({
             <div>
               <p>
                 <span>Pesawat</span>
-                <span>: Boeing 737</span>
+                <span>: {aircraftLabel}</span>
               </p>
               <p>
                 <span>Tata kursi</span>
-                <span>: 3-3</span>
+                <span>: {seatLayoutLabel}</span>
               </p>
               <p>
                 <span>Jakar antar kursi</span>
-                <span>: 29 inches (Standar)</span>
+                <span>: {seatPitchLabel}</span>
               </p>
             </div>
           </div>
@@ -149,11 +174,24 @@ export function UmrahTicketInfoScreen({
   returnArrivalTime,
   durationLabel,
   returnDurationLabel,
+  departureFlightCode,
+  departureCabinLabel,
+  departureBaggageLabel,
+  departureAircraftLabel,
+  departureSeatLayoutLabel,
+  departureSeatPitchLabel,
+  returnFlightCode,
+  returnCabinLabel,
+  returnBaggageLabel,
+  returnAircraftLabel,
+  returnSeatLayoutLabel,
+  returnSeatPitchLabel,
   travelerNames,
   contactName,
   contactEmail,
   contactPhone,
   totalPrice,
+  flightOnly = false,
   onBack,
   onAddPassenger,
   onEditPassenger,
@@ -169,30 +207,49 @@ export function UmrahTicketInfoScreen({
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-        <span className="umrah-flight-step active">
-          <i>1</i>
-          <b>Flight ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>2</i>
-          <b>Hotel ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>3</i>
-          <b>Pembayaran ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>4</i>
-          <b>Visa &amp; Lainnya</b>
-        </span>
-      </div>
+      {flightOnly ? (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>1</i>
+            <b>Pilih Tiket ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>2</i>
+            <b>Pembayaran</b>
+          </span>
+        </div>
+      ) : (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>1</i>
+            <b>Flight ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>2</i>
+            <b>Hotel ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>3</i>
+            <b>Pembayaran ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>4</i>
+            <b>Visa &amp; Lainnya</b>
+          </span>
+        </div>
+      )}
 
       <div className="umrah-ticket-scroll umrah-ticket-scroll-info">
         <h2 className="umrah-ticket-title">Keberangkatan</h2>
         <RouteCard
           airline={airline}
           airlineLogo={airlineLogo}
+          flightCode={departureFlightCode}
+          cabinLabel={departureCabinLabel}
+          baggageLabel={departureBaggageLabel}
+          aircraftLabel={departureAircraftLabel}
+          seatLayoutLabel={departureSeatLayoutLabel}
+          seatPitchLabel={departureSeatPitchLabel}
           fromLabel={departureLabel}
           fromCode={departureCode}
           toLabel={destinationLabel}
@@ -208,6 +265,12 @@ export function UmrahTicketInfoScreen({
         <RouteCard
           airline={returnAirline}
           airlineLogo={returnAirlineLogo}
+          flightCode={returnFlightCode}
+          cabinLabel={returnCabinLabel}
+          baggageLabel={returnBaggageLabel}
+          aircraftLabel={returnAircraftLabel}
+          seatLayoutLabel={returnSeatLayoutLabel}
+          seatPitchLabel={returnSeatPitchLabel}
           fromLabel={destinationLabel}
           fromCode={destinationCode}
           toLabel={departureLabel}

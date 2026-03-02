@@ -1,11 +1,11 @@
-type VisaPackage = {
-  id: 'visa-1-bulan' | 'visa-2-minggu' | 'visa-express'
-  title: string
-  subtitle: string
-  priceLabel: string
-}
+import type { VisaPackage } from '../types'
 
 type UmrahVisaServicesScreenProps = {
+  packages: VisaPackage[]
+  landArrangementPrices: string[]
+  additionalServices: string[]
+  includedServices: string[]
+  pairedCityLabel: string
   cityLabel: string
   formCompleted: boolean
   selectedPackageId: VisaPackage['id']
@@ -17,37 +17,12 @@ type UmrahVisaServicesScreenProps = {
   onSkip: () => void
 }
 
-const visaPackages: VisaPackage[] = [
-  {
-    id: 'visa-1-bulan',
-    title: 'Visa 1 Bulan',
-    subtitle: 'Mulai dari',
-    priceLabel: 'Rp 3.000.000 /orang',
-  },
-  {
-    id: 'visa-2-minggu',
-    title: 'Visa 2 Minggu',
-    subtitle: 'Mulai dari',
-    priceLabel: 'Rp 4.000.000 /orang',
-  },
-  {
-    id: 'visa-express',
-    title: 'Visa Express',
-    subtitle: 'Hubungi customer support kami',
-    priceLabel: '',
-  },
-]
-
-const landArrangementPrices = [
-  'Rp 200.000 /hari',
-  'Rp 300.000 /hari',
-  'Rp 400.000 /hari',
-  'Rp 500.000 /hari',
-  'Rp 600.000 /hari',
-  'Rp 700.000 /hari',
-]
-
 export function UmrahVisaServicesScreen({
+  packages,
+  landArrangementPrices,
+  additionalServices,
+  includedServices,
+  pairedCityLabel,
   cityLabel,
   formCompleted,
   selectedPackageId,
@@ -87,9 +62,9 @@ export function UmrahVisaServicesScreen({
         <section className="umrah-visa-included-card">
           <p>Yang sudah termasuk di pelayanan Maktub:</p>
           <ul>
-            <li>Penjemputan kedatangan di bandara</li>
-            <li>Membantu penanganan force majeure (sakit / meninggal)</li>
-            <li>Layanan online selama perjalanan</li>
+            {includedServices.map((service) => (
+              <li key={service}>{service}</li>
+            ))}
           </ul>
         </section>
 
@@ -101,7 +76,7 @@ export function UmrahVisaServicesScreen({
           <p className="umrah-visa-learn">Pelajari selengkapnya</p>
 
           <div className="umrah-visa-package-grid">
-            {visaPackages.map((item) => (
+            {packages.map((item) => (
               <button
                 key={item.id}
                 type="button"
@@ -129,7 +104,7 @@ export function UmrahVisaServicesScreen({
           <div className="umrah-visa-package-grid land">
             {landArrangementPrices.map((price, index) => (
               <article key={price} className="umrah-visa-package-card static">
-                <strong>{cityLabel} / Mekah</strong>
+                <strong>{cityLabel} / {pairedCityLabel}</strong>
                 <small>Max {2 + index} Orang</small>
                 <p>{price}</p>
               </article>
@@ -137,7 +112,7 @@ export function UmrahVisaServicesScreen({
           </div>
         </section>
 
-        {['Mutawif', 'Travel Insurance', 'Support Disabilitas', 'Rawdah', 'Paket Wisata'].map((service) => (
+        {additionalServices.map((service) => (
           <section key={service} className="umrah-visa-section collapsed">
             <header>
               <h2>{service}</h2>
@@ -149,7 +124,10 @@ export function UmrahVisaServicesScreen({
       </div>
 
       <footer className="umrah-visa-footer">
-        <button type="button" className="cta-button" onClick={onBuy}>
+        {!formCompleted && (
+          <p className="visa-field-error visa-services-form-error">Lengkapi formulir visa sebelum melanjutkan pembayaran</p>
+        )}
+        <button type="button" className="cta-button" disabled={!formCompleted} onClick={onBuy}>
           Beli ({travelerCount} orang)
         </button>
         <button type="button" className="umrah-visa-skip-btn" onClick={onSkip}>
