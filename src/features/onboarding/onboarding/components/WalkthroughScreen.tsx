@@ -39,13 +39,11 @@ export function WalkthroughScreen({ step, totalSteps, currentSlide, onNext }: Wa
         </div>
       </div>
 
-      {isLastStep && (
-        <div className="cta-wrap">
-          <button type="button" className="cta-button" onClick={onNext}>
-            Mulai Perjalanan
-          </button>
-        </div>
-      )}
+      <div className="cta-wrap">
+        <button type="button" className="cta-button" onClick={onNext}>
+          {isLastStep ? 'Mulai Perjalanan' : 'Lanjut'}
+        </button>
+      </div>
 
       <footer className="home-indicator" aria-hidden>
         <span />
