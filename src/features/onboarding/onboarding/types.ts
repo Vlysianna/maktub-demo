@@ -30,6 +30,8 @@ export type Screen =
   | 'umrah-visa-form-docs'
   | 'umrah-passenger-form'
   | 'umrah-passenger-camera'
+  | 'layanan-lain'
+  | 'rekomendasi-paket'
 
 export type WalkthroughSlide = {
   image: string
@@ -248,6 +250,8 @@ export type UmrahFlightAssets = {
   omanAirLogo: string
   saudiaLogo: string
   matchIcon: string
+  sortIcon: string
+  filterIcon: string
 }
 
 export type FlightRouteSegment = {
@@ -410,6 +414,34 @@ export type UmrahPaymentAssets = {
 export type UmrahCompletionAssets = {
   backIcon: string
   successBadge: string
+}
+
+export type LayananLainAssets = {
+  layananTambahanIcon: string
+  chatAssistantIcon: string
+  rekomendasiPaketIcon: string
+  navHomeIcon: string
+  navHomeInactiveIcon: string
+  navBookingIcon: string
+  navServicesActiveIcon: string
+  navInfoIcon: string
+  navAccountIcon: string
+}
+
+export type RekomendasiPaketItem = {
+  id: string
+  badgeLabel: string
+  name: string
+  durationLabel: string
+  dateLabel: string
+  startingPriceLabel: string
+}
+
+export type RekomendasiPaketAssets = {
+  clockIcon: string
+  calendarIcon: string
+  chevronRightIcon: string
+  backIcon: string
 }
 
 export type PaymentMethod = 'bni-va' | 'bri-va' | 'mandiri-va' | 'bca-va' | 'credit-card'

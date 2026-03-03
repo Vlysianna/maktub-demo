@@ -8,6 +8,8 @@ type HomeGuestScreenProps = {
   onOpenFlightSearch: () => void
   onOpenHotelSearch: () => void
   onOpenMyBooking: () => void
+  onOpenLayananLain?: () => void
+  onOpenVisa?: () => void
 }
 
 export function HomeGuestScreen({
@@ -18,11 +20,13 @@ export function HomeGuestScreen({
   onOpenFlightSearch,
   onOpenHotelSearch,
   onOpenMyBooking,
+  onOpenLayananLain,
+  onOpenVisa,
 }: HomeGuestScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeIcon, active: true },
     { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
-    { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false },
+    { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
     { label: 'Informasi', icon: assets.navInfoIcon, active: false },
     { label: 'Akun', icon: assets.navAccountIcon, active: false },
   ]
@@ -82,7 +86,15 @@ export function HomeGuestScreen({
                 key={item.label}
                 type="button"
                 className="service-item"
-                onClick={item.label === 'Pesawat' ? onOpenFlightSearch : item.label === 'Hotel' ? onOpenHotelSearch : undefined}
+                onClick={
+                item.label === 'Pesawat'
+                  ? onOpenFlightSearch
+                  : item.label === 'Hotel'
+                    ? onOpenHotelSearch
+                    : item.label === 'Visa & Lainnya'
+                      ? onOpenVisa
+                      : undefined
+              }
               >
                 <div className="service-icon-wrap">
                   <img src={item.icon} alt={item.label} className="service-icon" />

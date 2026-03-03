@@ -9,6 +9,7 @@ type UmrahPaymentMethodScreenProps = {
   visaLabel?: string
   travelerCount?: number
   flightOnly?: boolean
+  taxLabel?: string
   onBack: () => void
   onPay: (method: PaymentMethod) => void
 }
@@ -25,6 +26,7 @@ export function UmrahPaymentMethodScreen({
   visaLabel,
   travelerCount = 1,
   flightOnly = false,
+  taxLabel = 'Pajak 10%',
   onBack,
   onPay,
 }: UmrahPaymentMethodScreenProps) {
@@ -102,7 +104,7 @@ export function UmrahPaymentMethodScreen({
                 <span>{toRupiah(breakdown.serviceFee)}</span>
               </p>
               <p>
-                <span>Pajak 10%</span>
+                <span>{taxLabel}</span>
                 <span>{toRupiah(breakdown.taxAmount)}</span>
               </p>
               <p className="bold">

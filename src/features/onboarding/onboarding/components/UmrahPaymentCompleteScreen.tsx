@@ -2,11 +2,12 @@ import type { UmrahCompletionAssets } from '../types'
 
 type UmrahPaymentCompleteScreenProps = {
   assets: UmrahCompletionAssets
+  ctaLabel?: string
   onBack: () => void
   onNext: () => void
 }
 
-export function UmrahPaymentCompleteScreen({ assets, onBack, onNext }: UmrahPaymentCompleteScreenProps) {
+export function UmrahPaymentCompleteScreen({ assets, ctaLabel = 'Selesai', onBack, onNext }: UmrahPaymentCompleteScreenProps) {
   return (
     <section className="phone-shell umrah-payment-complete-shell" aria-label="Transaksi Umrah Berhasil">
       <button type="button" className="umrah-payment-complete-back" aria-label="Kembali" onClick={onBack}>
@@ -31,7 +32,7 @@ export function UmrahPaymentCompleteScreen({ assets, onBack, onNext }: UmrahPaym
 
       <footer className="umrah-payment-complete-footer">
         <button type="button" className="cta-button umrah-payment-complete-cta" onClick={onNext}>
-          Selesai
+          {ctaLabel}
         </button>
       </footer>
 

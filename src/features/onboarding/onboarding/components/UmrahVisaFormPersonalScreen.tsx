@@ -19,6 +19,7 @@ type UmrahVisaFormPersonalScreenProps = {
   value: VisaPersonalFormValue
   monthOptions: string[]
   yearSpan: number
+  hideStepper?: boolean
   onChange: (field: keyof VisaPersonalFormValue, nextValue: string) => void
   onBack: () => void
   onNext: () => void
@@ -50,7 +51,7 @@ function validate(value: VisaPersonalFormValue): FieldErrors {
   return errors
 }
 
-export function UmrahVisaFormPersonalScreen({ value, monthOptions, yearSpan, onChange, onBack, onNext }: UmrahVisaFormPersonalScreenProps) {
+export function UmrahVisaFormPersonalScreen({ value, monthOptions, yearSpan, hideStepper, onChange, onBack, onNext }: UmrahVisaFormPersonalScreenProps) {
   const yearOptions = Array.from({ length: yearSpan }, (_, index) => String(currentYear - index))
   const [hasAttempted, setHasAttempted] = useState(false)
   const errors = hasAttempted ? validate(value) : {}
@@ -66,10 +67,12 @@ export function UmrahVisaFormPersonalScreen({ value, monthOptions, yearSpan, onC
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      <div className="umrah-visa-form-stepper" aria-hidden>
-        <span className="active">1 Data Pribadi -----</span>
-        <span>2 Dokumen</span>
-      </div>
+      {!hideStepper && (
+        <div className="umrah-visa-form-stepper" aria-hidden>
+          <span className="active">1 Data Pribadi -----</span>
+          <span>2 Dokumen</span>
+        </div>
+      )}
 
       <div className="umrah-visa-form-scroll">
         <h2>Data Pribadi</h2>

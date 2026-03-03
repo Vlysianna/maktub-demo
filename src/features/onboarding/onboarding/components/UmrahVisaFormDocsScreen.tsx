@@ -6,6 +6,7 @@ type VisaDocumentsValue = Record<VisaDocumentField, File | null>
 
 type UmrahVisaFormDocsScreenProps = {
   value: VisaDocumentsValue
+  hideStepper?: boolean
   onUpload: (field: VisaDocumentField, file: File | null) => void
   onBack: () => void
   onSave: () => void
@@ -22,7 +23,7 @@ const docItems: Array<{ field: VisaDocumentField; label: string; hint?: string; 
   { field: 'photo', label: 'Pas Foto', required: true, hint: 'Pas foto terbaru dengan latar belakang putih, ukuran 4×6 cm.' },
 ]
 
-export function UmrahVisaFormDocsScreen({ value, onUpload, onBack, onSave }: UmrahVisaFormDocsScreenProps) {
+export function UmrahVisaFormDocsScreen({ value, hideStepper, onUpload, onBack, onSave }: UmrahVisaFormDocsScreenProps) {
   const [hasAttempted, setHasAttempted] = useState(false)
   const requiredComplete = useMemo(() => requiredFields.every((field) => value[field]), [value])
 
@@ -36,10 +37,12 @@ export function UmrahVisaFormDocsScreen({ value, onUpload, onBack, onSave }: Umr
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      <div className="umrah-visa-form-stepper" aria-hidden>
-        <span className="active">1 Data Pribadi -----</span>
-        <span className="active">2 Dokumen</span>
-      </div>
+      {!hideStepper && (
+        <div className="umrah-visa-form-stepper" aria-hidden>
+          <span className="active">1 Data Pribadi -----</span>
+          <span className="active">2 Dokumen</span>
+        </div>
+      )}
 
       <div className="umrah-visa-form-scroll">
         <h2>Dokumen</h2>

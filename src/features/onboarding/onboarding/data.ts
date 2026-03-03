@@ -8,11 +8,14 @@ import type {
   HotelDetail,
   HotelOffer,
   ItinerarySuggestionGroup,
+  LayananLainAssets,
   MyBookingDetailAssets,
   MyBookingAssets,
   UmrahCompletionAssets,
   UmrahPaymentAssets,
   HomeAssets,
+  RekomendasiPaketAssets,
+  RekomendasiPaketItem,
   ServiceItem,
   UmrahFlightAssets,
   UmrahFlightSearchAssets,
@@ -460,6 +463,8 @@ export const umrahFlightAssets: UmrahFlightAssets = {
   omanAirLogo: 'https://www.figma.com/api/mcp/asset/132c5a5b-2ea6-4a64-a196-1a1edade8dba',
   saudiaLogo: 'https://www.figma.com/api/mcp/asset/d67010ae-af44-458b-80de-86d77fa8c491',
   matchIcon: 'https://www.figma.com/api/mcp/asset/90601efb-89e0-4c31-a094-3ff6af4aa203',
+  sortIcon: 'https://www.figma.com/api/mcp/asset/b21e6d35-a177-447b-afb5-493cc51e015f',
+  filterIcon: 'https://www.figma.com/api/mcp/asset/53c67a8b-3aa7-434a-a503-0568774f8079',
 }
 
 export const umrahTicketAssets: UmrahTicketAssets = {
@@ -658,6 +663,60 @@ export const umrahCompletionAssets: UmrahCompletionAssets = {
   backIcon: 'https://www.figma.com/api/mcp/asset/cd2f5bf6-0efd-4acf-a72b-180c5eacd71e',
   successBadge: 'https://www.figma.com/api/mcp/asset/373a1061-a3fe-4b48-9f73-b9987f54e2cf',
 }
+
+export const layananLainAssets: LayananLainAssets = {
+  layananTambahanIcon: 'https://www.figma.com/api/mcp/asset/2abb5739-8fbe-44fb-9f80-026e337d31da',
+  chatAssistantIcon: 'https://www.figma.com/api/mcp/asset/b2ad6b21-dcf5-47d3-a123-f3f270bb102a',
+  rekomendasiPaketIcon: 'https://www.figma.com/api/mcp/asset/0d1b3448-e462-4ae7-87be-5ca09df0b7a0',
+  navHomeIcon: 'https://www.figma.com/api/mcp/asset/82788309-5691-477f-a42e-dbfc484c5e85',
+  navHomeInactiveIcon: 'https://www.figma.com/api/mcp/asset/a028ad61-b776-4906-b67f-15da8514b0d5',
+  navBookingIcon: 'https://www.figma.com/api/mcp/asset/10455ef3-9f71-4b4f-996c-83dcc948ca95',
+  navServicesActiveIcon: 'https://www.figma.com/api/mcp/asset/ab00a0c2-4867-4a3c-b01b-9de4559bb152',
+  navInfoIcon: 'https://www.figma.com/api/mcp/asset/1df397f5-9f40-4fcb-82e3-f0c76edf8842',
+  navAccountIcon: 'https://www.figma.com/api/mcp/asset/e56f81eb-4a8b-4503-89ca-b1ac651315bc',
+}
+
+export const rekomendasiPaketAssets: RekomendasiPaketAssets = {
+  clockIcon: 'https://www.figma.com/api/mcp/asset/093f8337-e3d1-48da-a390-41a310a39dd6',
+  calendarIcon: 'https://www.figma.com/api/mcp/asset/8b74dcc2-6608-4daa-ab5d-26ae26d33c08',
+  chevronRightIcon: 'https://www.figma.com/api/mcp/asset/2d22b946-b776-4967-af4f-68c7ca370fee',
+  backIcon: 'https://www.figma.com/api/mcp/asset/6323d8fa-aded-40bb-a1fd-a9e836d5aa2d',
+}
+
+export const rekomendasiPaketItems: RekomendasiPaketItem[] = [
+  {
+    id: 'paket-3-hari',
+    badgeLabel: '👍 Rekomendasi Banyak Orang',
+    name: 'Paket Umrah 3 Hari',
+    durationLabel: '3 hari',
+    dateLabel: '18 Februari 2025',
+    startingPriceLabel: 'Rp 24.000.000',
+  },
+  {
+    id: 'paket-4-hari-nov',
+    badgeLabel: '👍 Rekomendasi Banyak Orang',
+    name: 'Paket Umrah 4 Hari',
+    durationLabel: '4 hari',
+    dateLabel: '25 November 2025',
+    startingPriceLabel: 'Rp 25.500.000',
+  },
+  {
+    id: 'paket-4-hari-feb-a',
+    badgeLabel: '👍 Rekomendasi Banyak Orang',
+    name: 'Paket Umrah 4 Hari',
+    durationLabel: '4 hari',
+    dateLabel: '21 Februari 2025',
+    startingPriceLabel: 'Rp 27.000.000',
+  },
+  {
+    id: 'paket-4-hari-feb-b',
+    badgeLabel: '👍 Rekomendasi Banyak Orang',
+    name: 'Paket Umrah 4 Hari',
+    durationLabel: '4 hari',
+    dateLabel: '21 Februari 2025',
+    startingPriceLabel: 'Rp 27.000.000',
+  },
+]
 
 export const onboardingConfig: OnboardingConfig = {
   defaultContact: {

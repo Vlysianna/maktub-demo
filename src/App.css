@@ -62,20 +62,25 @@
 .walkthrough-shell {
   display: flex;
   flex-direction: column;
-  padding: 56px 24px 12px;
+  height: 100%;
+  padding: 12px 24px 12px;
 }
 
 .walkthrough-content {
   position: relative;
   width: 100%;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding-bottom: 74px;
 }
 
 .progress {
   display: flex;
   gap: 4px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 .progress-item {
@@ -125,6 +130,7 @@
   border-radius: 16px;
   overflow: hidden;
   margin: 0 auto;
+  max-height: min(500px, 56svh);
 }
 
 .hero-image {
@@ -146,7 +152,7 @@
   right: 0;
   text-align: center;
   color: #fff;
-  font-size: 15px;
+  font-size: 20px;
   line-height: 1;
   font-weight: 500;
   margin: 0;
@@ -156,9 +162,9 @@
   margin-top: 16px;
   color: #0a0c0e;
   text-align: center;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.35;
   min-height: 0;
 }
 
@@ -170,7 +176,9 @@
   position: relative;
   width: 100%;
   max-width: 327px;
-  margin: 12px auto 0;
+  margin: 8px auto 0;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  flex-shrink: 0;
 }
 
 .cta-button {
@@ -201,7 +209,34 @@
   position: relative;
   left: auto;
   bottom: auto;
-  margin: 8px auto 0;
+  margin: 0 auto;
+  justify-content: flex-start;
+}
+
+@media (max-height: 700px) {
+  .walkthrough-shell {
+    padding-top: 8px;
+  }
+
+  .walkthrough-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding-bottom: 70px;
+  }
+
+  .hero-card {
+    max-height: 40svh;
+  }
+
+  .description {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
+  .cta-wrap {
+    margin-top: 4px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
 }
 
 /* .splash-home-indicator {
@@ -2825,6 +2860,278 @@
   overflow: hidden;
 }
 
+/* ─── Search Flight flow (flightOnly) ─── */
+
+.umrah-flight-shell--search {
+  background: #f5f7f9;
+}
+
+.sf-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 50px 16px 9px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.sf-back {
+  border: 0;
+  background: transparent;
+  width: 24px;
+  height: 24px;
+  font-size: 22px;
+  color: #0a0c0e;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.sf-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sf-route {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #000;
+  line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sf-arrow {
+  font-weight: 400;
+  color: #000;
+}
+
+.sf-subtitle {
+  margin: 2px 0 0;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 0.8);
+  line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sf-toolbar {
+  position: absolute;
+  top: 91px;
+  left: 0;
+  right: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.sf-toolbar-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 10px 12px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 400;
+  color: #181818;
+}
+
+.sf-toolbar-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.sf-toolbar-icon--sort {
+  transform: rotate(-90deg);
+}
+
+.sf-toolbar-divider {
+  width: 1px;
+  height: 16px;
+  background: #d0d0d0;
+  flex-shrink: 0;
+}
+
+.sf-list {
+  position: absolute;
+  top: 135px;
+  left: 16px;
+  right: 16px;
+  bottom: 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;
+  padding-bottom: 8px;
+}
+
+.sf-card {
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.sf-card:focus-visible {
+  outline: 2px solid #40a3cd;
+  outline-offset: 2px;
+}
+
+.sf-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sf-card-row-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.sf-card-row-top--multi {
+  display: block;
+}
+
+.sf-multi-legs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sf-leg-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.sf-segments {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sf-seg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.sf-seg-time {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  line-height: normal;
+}
+
+.sf-seg-code {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 0.4);
+  background: #f3f9fb;
+  padding: 2px 14px;
+  border-radius: 8px;
+  line-height: normal;
+}
+
+.sf-seg-duration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 0.6);
+  line-height: 1.4;
+}
+
+.sf-price {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #03694b;
+  text-align: right;
+  white-space: nowrap;
+  line-height: normal;
+}
+
+.sf-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sf-airline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 0.6);
+}
+
+.sf-airline img {
+  width: 17px;
+  height: 15px;
+  object-fit: cover;
+}
+
+.sf-passengers {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 0.6);
+}
+
+.sf-passengers img {
+  width: 12px;
+  height: 12px;
+}
+
+.sf-card-divider {
+  border: none;
+  border-top: 1px solid #ececec;
+  margin: 10px 0 0;
+}
+
+.sf-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+.sf-detail-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: #03694b;
+  line-height: 1.4;
+}
+
+.sf-detail-chevron {
+  width: 16px;
+  height: 16px;
+}
+
 .umrah-flight-header {
   position: absolute;
   top: 54px;
@@ -5298,6 +5605,10 @@ button.umrah-visa-package-card {
   padding: 14px 16px 40px;
 }
 
+.umrah-ticket-scroll--no-footer {
+  bottom: 18px;
+}
+
 .umrah-ticket-scroll-info {
   top: 118px;
 }
@@ -5773,6 +6084,32 @@ button.umrah-visa-package-card {
   line-height: normal;
 }
 
+/* Validation error styles */
+.umrah-passenger-field--error > p {
+  color: #ec3434;
+}
+
+.umrah-passenger-error-msg {
+  display: block;
+  color: #ec3434;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.umrah-passenger-field input.input-error,
+.umrah-passenger-select-wrap.has-error select {
+  border-color: #ec3434;
+  background: #fff5f5;
+}
+
+.umrah-passenger-field input.input-error:focus,
+.umrah-passenger-select-wrap.has-error select:focus {
+  border-color: #ec3434;
+  outline: none;
+}
+
 .umrah-passenger-date-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -5869,6 +6206,20 @@ button.umrah-visa-package-card {
   transform: rotate(90deg) scale(1.82);
 }
 
+.umrah-camera-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  text-align: center;
+  padding: 24px;
+}
+
 .umrah-camera-guide {
   position: absolute;
   left: 37px;
@@ -5920,6 +6271,11 @@ button.umrah-visa-package-card {
   cursor: pointer;
 }
 
+.umrah-camera-shutter:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .umrah-camera-shutter .outer {
   position: absolute;
   inset: 0;
@@ -5945,6 +6301,24 @@ button.umrah-visa-package-card {
   opacity: 0.25;
   background: #fff;
   z-index: 4;
+}
+
+.umrah-camera-input,
+.umrah-camera-canvas {
+  display: none;
+}
+
+.umrah-camera-warning {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 110px;
+  z-index: 4;
+  margin: 0;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .visa-popup-backdrop {
@@ -6042,3 +6416,276 @@ button.umrah-visa-package-card {
     transform: scale(var(--phone-scale));
   }
 }
+
+/* ============================================================
+   Layanan Lain Screen (41-6887)
+   ============================================================ */
+
+.layanan-lain-shell {
+  background: linear-gradient(180deg, #003928 0%, #c8ebd5 19.712%, #f5f7f9 100%);
+  overflow: hidden;
+}
+
+.layanan-lain-header {
+  position: absolute;
+  top: 57px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 2;
+}
+
+.layanan-lain-header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.layanan-lain-scroll {
+  position: absolute;
+  top: 98px;
+  left: 16px;
+  right: 16px;
+  bottom: 79px;
+  overflow-y: auto;
+}
+
+.layanan-lain-hero {
+  margin: 0 0 24px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+  text-align: center;
+}
+
+.layanan-lain-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.layanan-lain-tile {
+  background: #fff;
+  border: 1px solid rgba(170, 170, 170, 0.25);
+  border-radius: 8px;
+  height: 168px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  cursor: pointer;
+  padding: 16px 8px;
+}
+
+.layanan-lain-tile:hover {
+  background: #f8faf8;
+}
+
+.layanan-lain-tile-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 36px;
+  background: linear-gradient(180deg, #fff 0%, #c8ebd5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.layanan-lain-tile-icon img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.layanan-lain-tile span {
+  font-size: 13px;
+  color: #0a0c0e;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   Rekomendasi Paket Screen (41-7024)
+   ============================================================ */
+
+.rekomendasi-paket-shell {
+  background: #f5f7f9;
+  overflow: hidden;
+}
+
+.rekomendasi-paket-header-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 91px;
+  background: #1a5844;
+  z-index: 1;
+}
+
+.rekomendasi-paket-header {
+  position: absolute;
+  top: 54px;
+  left: 0;
+  right: 0;
+  height: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  padding: 0 16px;
+}
+
+.rekomendasi-paket-header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  flex: 1;
+  text-align: center;
+}
+
+.rekomendasi-paket-header button {
+  position: relative;
+  left: 0;
+  top: 0;
+  flex-shrink: 0;
+}
+
+.rekomendasi-paket-scroll {
+  position: absolute;
+  top: 107px;
+  left: 16px;
+  right: 16px;
+  bottom: 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 16px;
+}
+
+.rekomendasi-paket-card {
+  background: #fff;
+  border: 1px solid #dfdfdf;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.rekomendasi-paket-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rekomendasi-paket-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  background: linear-gradient(90deg, #03694b 0%, #06cf94 100%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 7px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.rekomendasi-paket-name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+}
+
+.rekomendasi-paket-meta {
+  display: flex;
+  gap: 16px;
+}
+
+.rekomendasi-paket-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #333;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.rekomendasi-paket-meta-item img {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.rekomendasi-paket-price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rekomendasi-paket-price-from {
+  margin: 0;
+  font-size: 11px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.rekomendasi-paket-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.rekomendasi-paket-price-amount {
+  font-size: 15px;
+  font-weight: 600;
+  color: #03694b;
+  line-height: 1.4;
+}
+
+.rekomendasi-paket-price-unit {
+  font-size: 11px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.rekomendasi-paket-divider {
+  height: 1px;
+  background: #dfdfdf;
+  margin: 0 16px;
+}
+
+.rekomendasi-paket-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  cursor: pointer;
+  font-size: 12px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.rekomendasi-paket-detail-row img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+

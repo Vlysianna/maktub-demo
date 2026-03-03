@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import { HomeGuestScreen } from './features/onboarding/onboarding/components/HomeGuestScreen'
+import { LayananLainScreen } from './features/onboarding/onboarding/components/LayananLainScreen'
+import { RekomendasiPaketScreen } from './features/onboarding/onboarding/components/RekomendasiPaketScreen'
 import { UmrahArrivalReturnScreen } from './features/onboarding/onboarding/components/UmrahArrivalReturnScreen'
 import { UmrahBudgetScreen } from './features/onboarding/onboarding/components/UmrahBudgetScreen'
 import { UmrahDepartureScreen } from './features/onboarding/onboarding/components/UmrahDepartureScreen'
@@ -41,6 +43,9 @@ import {
   hotelDetailTemplate,
   hotelOfferTemplate,
   homeAssets,
+  layananLainAssets,
+  rekomendasiPaketAssets,
+  rekomendasiPaketItems,
   services,
   splashLogo,
   umrahArrivalReturnAssets,
@@ -86,15 +91,15 @@ const budgetProfiles: Record<
     hotelMultiplier: 0.52,
   },
   '25.000.000 sampai 40.000.000': {
-    ticketPerPersonMin: 10_500_000,
-    ticketPerPersonMax: 14_000_000,
+    ticketPerPersonMin: 5_400_000,
+    ticketPerPersonMax: 8_500_000,
     returnTicketDelta: 320_000,
     hotelMultiplier: 1,
   },
   'Lebih dari 40.000.000': {
-    ticketPerPersonMin: 14_000_000,
-    ticketPerPersonMax: 20_000_000,
-    returnTicketDelta: 450_000,
+    ticketPerPersonMin: 5_500_000,
+    ticketPerPersonMax: 8_500_000,
+    returnTicketDelta: 45_000,
     hotelMultiplier: 1.22,
   },
 }
@@ -237,6 +242,7 @@ function App() {
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
   const [hasVisa, setHasVisa] = useState(false)
+  const [visaFromHome, setVisaFromHome] = useState(false)
   const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId>(
     onboardingConfig.visaPackages[0].id,
   )
@@ -1224,6 +1230,11 @@ function App() {
             setScreen('umrah-hotel-search')
           }}
           onOpenMyBooking={() => setScreen('my-booking')}
+          onOpenLayananLain={() => setScreen('layanan-lain')}
+          onOpenVisa={() => {
+            setVisaFromHome(true)
+            setScreen('umrah-visa-services')
+          }}
         />
       )}
 
@@ -1753,6 +1764,7 @@ function App() {
       {screen === 'umrah-payment-pending' && (
         <UmrahPaymentPendingScreen
           assets={umrahPaymentAssets}
+          flightOnly={flightSearchEntry === 'home'}
           virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
           virtualAccountName={selectedPaymentLabel}
           totalPayment={activePaymentBreakdown.grandTotal}
@@ -1785,6 +1797,7 @@ function App() {
       {screen === 'umrah-payment-success' && (
         <UmrahPaymentSuccessScreen
           assets={umrahPaymentAssets}
+          flightOnly={flightSearchEntry === 'home'}
           virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
           virtualAccountName={selectedPaymentLabel}
           totalPayment={activePaymentBreakdown.grandTotal}
@@ -1796,6 +1809,7 @@ function App() {
       {screen === 'umrah-payment-complete' && (
         <UmrahPaymentCompleteScreen
           assets={umrahCompletionAssets}
+          ctaLabel="Lihat Paket Umrah Saya"
           onBack={() => setScreen('umrah-payment-success')}
           onNext={() => setScreen('home')}
         />
@@ -1812,7 +1826,15 @@ function App() {
           formCompleted={isVisaFormCompleted}
           selectedPackageId={selectedVisaPackage}
           travelerCount={travelerCount}
-          onBack={() => setScreen('umrah-payment-success')}
+          hideStepper={visaFromHome}
+          onBack={() => {
+            if (visaFromHome) {
+              setVisaFromHome(false)
+              setScreen('home')
+            } else {
+              setScreen('umrah-payment-success')
+            }
+          }}
           onSelectPackage={setSelectedVisaPackage}
           onOpenForm={() => setScreen('umrah-visa-form-personal')}
           onBuy={() => {
@@ -1820,7 +1842,10 @@ function App() {
             setHasVisa(true)
             setScreen('umrah-payment-method')
           }}
-          onSkip={() => setScreen('home')}
+          onSkip={() => {
+            setVisaFromHome(false)
+            setScreen('home')
+          }}
         />
       )}
 
@@ -1829,6 +1854,7 @@ function App() {
           value={visaPersonalForm}
           monthOptions={onboardingConfig.monthOptions}
           yearSpan={onboardingConfig.passportYearSpan}
+          hideStepper={visaFromHome}
           onChange={(field, value) => {
             setVisaPersonalForm((prev) => ({ ...prev, [field]: value }))
           }}
@@ -1840,6 +1866,7 @@ function App() {
       {screen === 'umrah-visa-form-docs' && (
         <UmrahVisaFormDocsScreen
           value={visaDocsForm}
+          hideStepper={visaFromHome}
           onUpload={(field, file) => {
             setVisaDocsForm((prev) => ({ ...prev, [field]: file }))
           }}
@@ -1886,15 +1913,50 @@ function App() {
         <UmrahPassengerCameraScreen
           assets={umrahTicketAssets}
           onBack={() => setScreen('umrah-passenger-form')}
-          onCapture={() => {
+          onCapture={(photoDataUrl) => {
             setPassengerForms((prev) => {
               const next = [...prev]
               const current = next[activePassengerIndex] ?? createInitialPassengerForm()
-              next[activePassengerIndex] = { ...current, passportPhoto: umrahTicketAssets.cameraSamplePassport }
+              next[activePassengerIndex] = { ...current, passportPhoto: photoDataUrl }
               return next
             })
             setScreen('umrah-passenger-form')
           }}
+        />
+      )}
+
+      {screen === 'layanan-lain' && (
+        <LayananLainScreen
+          assets={layananLainAssets}
+          services={[
+            {
+              id: 'layanan-tambahan',
+              label: 'Layanan Tambahan',
+              icon: layananLainAssets.layananTambahanIcon,
+            },
+            {
+              id: 'chat-assistant',
+              label: 'Chat Assistant',
+              icon: layananLainAssets.chatAssistantIcon,
+            },
+            {
+              id: 'rekomendasi-paket',
+              label: 'Rekomendasi Paket',
+              icon: layananLainAssets.rekomendasiPaketIcon,
+              onClick: () => setScreen('rekomendasi-paket'),
+            },
+          ]}
+          onOpenHome={() => setScreen('home')}
+          onOpenMyBooking={() => setScreen('my-booking')}
+        />
+      )}
+
+      {screen === 'rekomendasi-paket' && (
+        <RekomendasiPaketScreen
+          assets={rekomendasiPaketAssets}
+          packages={rekomendasiPaketItems}
+          onBack={() => setScreen('layanan-lain')}
+          onSelectPackage={() => {}}
         />
       )}
     </main>

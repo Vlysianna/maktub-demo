@@ -207,18 +207,7 @@ export function UmrahTicketInfoScreen({
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      {flightOnly ? (
-        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-          <span className="umrah-flight-step active">
-            <i>1</i>
-            <b>Pilih Tiket ---</b>
-          </span>
-          <span className="umrah-flight-step">
-            <i>2</i>
-            <b>Pembayaran</b>
-          </span>
-        </div>
-      ) : (
+      {!flightOnly && (
         <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
           <span className="umrah-flight-step active">
             <i>1</i>

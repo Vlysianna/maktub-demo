@@ -2,6 +2,7 @@ import type { UmrahPaymentAssets } from '../types'
 
 type UmrahPaymentSuccessScreenProps = {
   assets: UmrahPaymentAssets
+  flightOnly?: boolean
   virtualAccountNumber: string
   virtualAccountName: string
   totalPayment: number
@@ -15,6 +16,7 @@ function toRupiah(amount: number) {
 
 export function UmrahPaymentSuccessScreen({
   assets,
+  flightOnly = false,
   virtualAccountNumber,
   virtualAccountName,
   totalPayment,
@@ -31,20 +33,22 @@ export function UmrahPaymentSuccessScreen({
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-        <span className="umrah-flight-step active">
-          <i>2</i>
-          <b>Hotel ---</b>
-        </span>
-        <span className="umrah-flight-step active">
-          <i>3</i>
-          <b>Pembayaran ---</b>
-        </span>
-        <span className="umrah-flight-step">
-          <i>4</i>
-          <b>Visa &amp; Lainnya</b>
-        </span>
-      </div>
+      {!flightOnly && (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>2</i>
+            <b>Hotel ---</b>
+          </span>
+          <span className="umrah-flight-step active">
+            <i>3</i>
+            <b>Pembayaran ---</b>
+          </span>
+          <span className="umrah-flight-step">
+            <i>4</i>
+            <b>Visa &amp; Lainnya</b>
+          </span>
+        </div>
+      )}
 
       <div className="umrah-payment-scroll">
         <section className="umrah-payment-status success">

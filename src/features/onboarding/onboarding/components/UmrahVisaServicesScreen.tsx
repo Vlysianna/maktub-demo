@@ -10,6 +10,7 @@ type UmrahVisaServicesScreenProps = {
   formCompleted: boolean
   selectedPackageId: VisaPackage['id']
   travelerCount: number
+  hideStepper?: boolean
   onBack: () => void
   onSelectPackage: (id: VisaPackage['id']) => void
   onOpenForm: () => void
@@ -27,6 +28,7 @@ export function UmrahVisaServicesScreen({
   formCompleted,
   selectedPackageId,
   travelerCount,
+  hideStepper,
   onBack,
   onSelectPackage,
   onOpenForm,
@@ -43,20 +45,22 @@ export function UmrahVisaServicesScreen({
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-        <span className="umrah-flight-step active">
-          <i>2</i>
-          <b>Hotel ---</b>
-        </span>
-        <span className="umrah-flight-step active">
-          <i>3</i>
-          <b>Pembayaran ---</b>
-        </span>
-        <span className="umrah-flight-step active">
-          <i>4</i>
-          <b>Visa &amp; Lainnya</b>
-        </span>
-      </div>
+      {!hideStepper && (
+        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
+          <span className="umrah-flight-step active">
+            <i>2</i>
+            <b>Hotel ---</b>
+          </span>
+          <span className="umrah-flight-step active">
+            <i>3</i>
+            <b>Pembayaran ---</b>
+          </span>
+          <span className="umrah-flight-step active">
+            <i>4</i>
+            <b>Visa &amp; Lainnya</b>
+          </span>
+        </div>
+      )}
 
       <div className="umrah-visa-scroll">
         <section className="umrah-visa-included-card">

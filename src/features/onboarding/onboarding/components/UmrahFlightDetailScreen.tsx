@@ -23,7 +23,7 @@ function toRupiah(amount: number) {
 export function UmrahFlightDetailScreen({
   assets,
   flightOnly = false,
-  journeyLabel,
+  journeyLabel: _journeyLabel,
   fareOptions,
   travelerCount,
   selectedFareId,
@@ -39,23 +39,16 @@ export function UmrahFlightDetailScreen({
           <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>Detail Pesawat</h1>
-        <button type="button" className="umrah-ticket-close" aria-label="Tutup" onClick={onClose}>
-          ×
-        </button>
+        {flightOnly ? (
+          <span className="umrah-ticket-head-spacer" aria-hidden />
+        ) : (
+          <button type="button" className="umrah-ticket-close" aria-label="Tutup" onClick={onClose}>
+            ×
+          </button>
+        )}
       </header>
 
-      {flightOnly ? (
-        <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
-          <span className="umrah-flight-step active">
-            <i>1</i>
-            <b>Pilih Tiket ---</b>
-          </span>
-          <span className="umrah-flight-step">
-            <i>2</i>
-            <b>Pembayaran</b>
-          </span>
-        </div>
-      ) : (
+      {!flightOnly && (
         <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
           <span className="umrah-flight-step active">
             <i>1</i>
@@ -76,8 +69,8 @@ export function UmrahFlightDetailScreen({
         </div>
       )}
 
-      <div className="umrah-ticket-scroll">
-        <h2 className="umrah-ticket-title">Tiket {journeyLabel}</h2>
+      <div className="umrah-ticket-scroll umrah-ticket-scroll--no-footer">
+        <h2 className="umrah-ticket-title">Tiket</h2>
 
         <div className="umrah-ticket-card-list">
           {fareOptions.map((fare) => (
@@ -97,7 +90,10 @@ export function UmrahFlightDetailScreen({
                 <button
                   type="button"
                   className={`umrah-ticket-select-btn ${selectedFareId === fare.id ? 'active' : ''}`}
-                  onClick={() => onSelectFare(fare.id)}
+                  onClick={() => {
+                    onSelectFare(fare.id)
+                    onNext()
+                  }}
                 >
                   Pilih
                 </button>
@@ -144,12 +140,6 @@ export function UmrahFlightDetailScreen({
           <p>{policyBody}</p>
         </article>
       </div>
-
-      <footer className="umrah-ticket-footer">
-        <button type="button" className="cta-button" onClick={onNext}>
-          Lanjut
-        </button>
-      </footer>
 
       <footer className="home-indicator" aria-hidden>
         <span />

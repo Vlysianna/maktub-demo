@@ -29,6 +29,7 @@ type UmrahPaymentOverviewScreenProps = {
   primaryHotelCityLabel: string
   secondaryHotelCityLabel: string
   isHotelOnly?: boolean
+  isFlightOnly?: boolean
   onBack: () => void
   onNext: () => void
 }
@@ -51,13 +52,14 @@ export function UmrahPaymentOverviewScreen({
   primaryHotelCityLabel,
   secondaryHotelCityLabel,
   isHotelOnly = false,
+  isFlightOnly = false,
   onBack,
   onNext,
 }: UmrahPaymentOverviewScreenProps) {
   const primaryHotel = hotels[0]
 
   return (
-    <section className={`phone-shell umrah-payment-shell${isHotelOnly ? ' hotel-only' : ''}`} aria-label="Pembayaran">
+    <section className={`phone-shell umrah-payment-shell${isHotelOnly ? ' hotel-only' : ''}${isFlightOnly ? ' flight-only' : ''}`} aria-label="Pembayaran">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
           ←
@@ -66,7 +68,7 @@ export function UmrahPaymentOverviewScreen({
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      {!isHotelOnly && (
+      {!isHotelOnly && !isFlightOnly && (
         <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
           <span className="umrah-flight-step active">
             <i>2</i>
@@ -84,7 +86,67 @@ export function UmrahPaymentOverviewScreen({
       )}
 
       <div className="umrah-payment-scroll">
-        {isHotelOnly ? (
+        {isFlightOnly ? (
+          <>
+            <section className="umrah-payment-block">
+              <h2>Flight</h2>
+              <div className="umrah-payment-flight-list">
+                {flights.map((flight) => (
+                  <article key={flight.id} className="umrah-payment-flight-card">
+                    <div className="umrah-payment-flight-row">
+                      <div>
+                        <strong>{flight.fromTime}</strong>
+                        <small>{flight.fromCode}</small>
+                      </div>
+                      <p>
+                        <span>{flight.duration}</span>
+                        <span>{flight.mode}</span>
+                      </p>
+                      <div>
+                        <strong>{flight.toTime}</strong>
+                        <small>{flight.toCode}</small>
+                      </div>
+                      <h3>{toRupiah(flight.price)}</h3>
+                    </div>
+                    <div className="umrah-payment-flight-meta">
+                      <span>
+                        <img src={assets.planeLogo} alt="" aria-hidden /> {flight.airline}
+                      </span>
+                      <span>
+                        <img src={assets.userIcon} alt="" aria-hidden /> {travelerCount} orang
+                      </span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="umrah-payment-block umrah-payment-detail">
+              <h2>Detail Harga</h2>
+
+              <div className="umrah-payment-line">
+                <div>
+                  <p>Flight (Keberangkatan)</p>
+                  <small>x{travelerCount} orang</small>
+                </div>
+                <p>{toRupiah(breakdown.flightDeparture)}</p>
+              </div>
+
+              <div className="umrah-payment-line">
+                <div>
+                  <p>Flight (Kepulangan)</p>
+                  <small>x{travelerCount} orang</small>
+                </div>
+                <p>{toRupiah(breakdown.flightReturn)}</p>
+              </div>
+
+              <div className="umrah-payment-total">
+                <p>Total Pembayaran</p>
+                <strong>{toRupiah(breakdown.flightDeparture + breakdown.flightReturn)}</strong>
+              </div>
+            </section>
+          </>
+        ) : isHotelOnly ? (
           <>
             <section className="umrah-payment-block hotel-only-summary">
               <h2>Hotel</h2>
