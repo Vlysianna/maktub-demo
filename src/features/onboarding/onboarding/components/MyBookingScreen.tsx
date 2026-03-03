@@ -8,6 +8,7 @@ type MyBookingScreenProps = {
   onBackHome: () => void
   onOpenDetail: (bookingId: string) => void
   onOpenLayananLain: () => void
+  onOpenInformasi?: () => void
 }
 
 const bookingTabs: Array<{ id: BookingStatus; label: string }> = [
@@ -24,7 +25,7 @@ const statusBadgeLabel: Record<BookingStatus, string> = {
   history: 'History',
 }
 
-export function MyBookingScreen({ assets, bookingAssets, bookings, onBackHome, onOpenDetail, onOpenLayananLain }: MyBookingScreenProps) {
+export function MyBookingScreen({ assets, bookingAssets, bookings, onBackHome, onOpenDetail, onOpenLayananLain, onOpenInformasi }: MyBookingScreenProps) {
   const [activeStatus, setActiveStatus] = useState<BookingStatus>('berlangsung')
 
   const filteredBookings = useMemo(
@@ -36,7 +37,7 @@ export function MyBookingScreen({ assets, bookingAssets, bookings, onBackHome, o
     { label: 'Home', icon: assets.navHomeInactiveIcon, active: false, onClick: onBackHome },
     { label: 'My Booking', icon: assets.navBookingActiveIcon, active: true },
     { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
-    { label: 'Informasi', icon: assets.navInfoIcon, active: false },
+    { label: 'Informasi', icon: assets.navInfoIcon, active: false, onClick: onOpenInformasi },
     { label: 'Akun', icon: assets.navAccountIcon, active: false },
   ]
 

@@ -8,6 +8,9 @@ import type {
   HotelDetail,
   HotelOffer,
   ItinerarySuggestionGroup,
+  InformasiContent,
+  InformasiDetailContent,
+  KiblatScheduleContent,
   LayananLainAssets,
   MyBookingDetailAssets,
   MyBookingAssets,
@@ -26,6 +29,7 @@ import type {
   UmrahStepAssets,
   UmrahTicketAssets,
   UmrahTravelerAssets,
+  GuideListContent,
   VisaPackage,
   WalkthroughSlide,
   OnboardingConfig,
@@ -378,6 +382,194 @@ export const articles: ArticleItem[] = [
     image: 'https://www.figma.com/api/mcp/asset/7ad3ba8b-3445-4bf3-bd48-e8d4ae966245',
   },
 ]
+
+export const informasiContent: InformasiContent = {
+  title: 'Informasi',
+  prayerTitle: 'Waktu Sholat',
+  locationLabel: 'Saudi Arabia',
+  locationIcon: 'https://www.figma.com/api/mcp/asset/a5887a37-1e3f-4356-aabc-ed4c35518187',
+  prayerTimes: [
+    {
+      name: 'Fajr',
+      time: '04:30',
+      icon: 'https://www.figma.com/api/mcp/asset/7002ecb7-36c0-4a73-8711-9d5cc41b4d6b',
+      iconOverlay: 'https://www.figma.com/api/mcp/asset/53830857-575e-4048-8ed6-2d2d688e86fe',
+      iconVariant: 'fajr',
+      active: false,
+    },
+    {
+      name: 'Dzuhr',
+      time: '12:11',
+      icon: 'https://www.figma.com/api/mcp/asset/7093dae8-a1c3-40b6-a510-0984398afc54',
+      active: true,
+    },
+    {
+      name: 'Asr',
+      time: '15:26',
+      icon: 'https://www.figma.com/api/mcp/asset/10e3a11a-9e5b-4fdb-b135-a5da4abd30a9',
+      active: false,
+    },
+    {
+      name: 'Maghrib',
+      time: '18:04',
+      icon: 'https://www.figma.com/api/mcp/asset/775cbab1-c763-4a5f-b505-80a555b5f55d',
+      active: false,
+    },
+    {
+      name: 'Isha',
+      time: '19:22',
+      icon: 'https://www.figma.com/api/mcp/asset/28e43a46-9735-47aa-809a-ea9a38d9bcb9',
+      active: false,
+    },
+  ],
+  guideTitle: 'Panduan Do’a / Umrah',
+  guideItems: [
+    { id: 'arah-kiblat', label: 'Arah Kiblat', icon: 'https://www.figma.com/api/mcp/asset/4bcf2db1-195d-43cb-a50e-2becd2cda101' },
+    { id: 'panduan-umrah', label: 'Panduan Umrah', icon: 'https://www.figma.com/api/mcp/asset/ad1d70f3-04cb-41c6-9b6a-c3da13bbedeb' },
+    { id: 'doa-umrah', label: 'Do’a Umrah', icon: 'https://www.figma.com/api/mcp/asset/97a97aa9-6fe1-4997-8f9a-65683402b6aa' },
+    { id: 'dzikir-harian', label: 'Dzikir Harian', icon: 'https://www.figma.com/api/mcp/asset/175cbb94-37b3-4030-999c-3ed24789775b' },
+    { id: 'doa-harian', label: 'Do’a Harian', icon: 'https://www.figma.com/api/mcp/asset/a0385a57-798b-46e1-a087-f23d14ce5235' },
+    { id: 'tata-cara-sholat', label: 'Tata Cara Sholat', icon: 'https://www.figma.com/api/mcp/asset/5fc0f599-441d-4706-8874-a347f69cbc1d' },
+  ],
+  hero: {
+    image: 'https://www.figma.com/api/mcp/asset/a45d38ea-e47f-4c58-9f89-ac882b1b8fcc',
+    alt: 'Lantas apa saja syarat perlengkapan Umrah?',
+    headingLogo: 'https://www.figma.com/api/mcp/asset/f63f62ee-ab16-480f-a9c4-de8cd94bb317',
+    brand: 'Maktub • Umrah',
+    title: 'Lantas apa saja syarat perlengkapan Umrah?',
+    dotsCount: 4,
+    activeDotIndex: 0,
+  },
+  tabs: ['Umrah', 'Wisata', 'Syarat & Ketentuan', 'Ibadah'],
+  articles: [
+    {
+      id: 'perbedaan-umrah-haji',
+      title: 'Perbedaan Umrah dan Haji: Penjelasan Lengkap untuk Pe..',
+      image: 'https://www.figma.com/api/mcp/asset/e7e8d721-4c26-468b-b892-9c503c9e1699',
+      brand: 'Maktub • Umrah',
+    },
+    {
+      id: 'waktu-terbaik-umrah',
+      title: 'Waktu Terbaik untuk Menunaikan Umrah: Tips dan..',
+      image: 'https://www.figma.com/api/mcp/asset/1c8c0380-b1cc-47d3-9f70-6bc47cba55d3',
+      brand: 'Maktub • Umrah',
+    },
+    {
+      id: 'barang-bawaan-umrah',
+      title: 'Barang Bawaan Wajib Saat Umrah: Apa Saja yang Harus..',
+      image: 'https://www.figma.com/api/mcp/asset/7165945e-2f28-4061-803c-fb1fc890ce83',
+      brand: 'Maktub • Umrah',
+    },
+  ],
+}
+
+export const informasiDetailContent: InformasiDetailContent = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/5887d6d8-57df-410e-86c2-70524d2d3b15',
+  title: 'Perbedaan Umrah dan Haji: Penjelasan Lengkap untuk Perbedaan Umrah dan Haji',
+  brand: 'Maktub • Umrah',
+  image: 'https://www.figma.com/api/mcp/asset/90cea2a6-e6fb-49e4-a562-00825043da02',
+  sections: [
+    {
+      title: 'Perbedaan Umrah dan Haji dalam Islam',
+      description:
+        'Umrah dan haji merupakan dua ibadah yang dilaksanakan oleh umat Islam di Tanah Suci, Makkah. Keduanya memiliki kesamaan dalam beberapa rangkaian ibadah, seperti tawaf dan sa’i. Namun, umrah dan haji juga memiliki perbedaan mendasar yang perlu dipahami agar umat Islam dapat menjalankannya dengan benar sesuai syariat.',
+    },
+    {
+      title: 'Pengertian Umrah dan Haji',
+      description:
+        'Haji adalah ibadah wajib bagi umat Islam yang mampu secara fisik, finansial, dan mental, serta hanya diwajibkan sekali seumur hidup. Ibadah haji memiliki waktu pelaksanaan dan rukun tertentu yang harus dipenuhi. Sementara itu, umrah adalah ibadah sunnah yang juga dilakukan di Tanah Suci. Umrah sering disebut sebagai “haji kecil” karena rangkaiannya lebih singkat dan tidak memiliki beberapa rukun utama seperti pada haji.',
+    },
+  ],
+  ctaPrefix: 'Mulai Cari',
+  ctaHighlight: 'Paket perjalanan',
+  ctaIcon: 'https://www.figma.com/api/mcp/asset/2bc6b3ee-2423-46ed-a430-fad33a2b35d7',
+  ctaPattern: 'https://www.figma.com/api/mcp/asset/27c23389-e737-4b23-a4d3-a6ca5fdcea01',
+}
+
+export const kiblatScheduleContent: KiblatScheduleContent = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/cf3ee609-552a-4456-8ccc-97111ddce1b9',
+  locationIcon: 'https://www.figma.com/api/mcp/asset/f6c46d99-fbbd-4d98-8782-78326bc1e859',
+  locationLabel: 'Saudi Arabia',
+  compassRing: 'https://www.figma.com/api/mcp/asset/30e9cf22-ba1f-43da-83b6-7ffac691900b',
+  compassWedge: 'https://www.figma.com/api/mcp/asset/25d72114-236e-4014-8cda-8cf56a711516',
+  compassNeedle: 'https://www.figma.com/api/mcp/asset/76a44b1a-a929-4532-9e54-91e0b16851c1',
+  kaabaIcon: 'https://www.figma.com/api/mcp/asset/22285655-6cc8-4fd7-a5d8-917d05616365',
+  dateLabel: '16 Februari 2026',
+  hijriDateLabel: "28 Sya'ban 1447",
+  turnHint: 'Belok ke arah kanan',
+  items: [
+    {
+      id: 'subuh',
+      label: 'Subuh',
+      time: '04:30',
+      icon: 'https://www.figma.com/api/mcp/asset/280a120c-34b1-42b5-afc7-db38d8b29365',
+      iconOverlay: 'https://www.figma.com/api/mcp/asset/7e11431d-4144-4f8e-b1bb-8858b3611544',
+      iconVariant: 'fajr',
+      audioIcon: 'https://www.figma.com/api/mcp/asset/fb517f4d-8c56-48ff-ab87-55b8242ffb89',
+    },
+    {
+      id: 'dzuhur',
+      label: 'Dzuhur',
+      time: '12:11',
+      icon: 'https://www.figma.com/api/mcp/asset/d23b775d-8905-48d3-abd0-7e25c39eacb6',
+      audioIcon: 'https://www.figma.com/api/mcp/asset/f59485f7-db8f-427c-ba9b-33a9c1ff773b',
+      active: true,
+    },
+    {
+      id: 'asar',
+      label: 'Asar',
+      time: '15:26',
+      icon: 'https://www.figma.com/api/mcp/asset/9f1a9ed2-2384-4e98-9ae7-0d5a927266a3',
+      audioIcon: 'https://www.figma.com/api/mcp/asset/5de64c3a-82e9-4563-9efb-f0aec423a9ba',
+    },
+    {
+      id: 'maghrib',
+      label: 'Maghrib',
+      time: '18:04',
+      icon: 'https://www.figma.com/api/mcp/asset/b718b097-4b57-4a9e-973f-b257b36b8fd7',
+      audioIcon: 'https://www.figma.com/api/mcp/asset/475c7f14-f158-4548-b9aa-9e6cf935f7b8',
+    },
+    {
+      id: 'isya',
+      label: 'Isya',
+      time: '19:22',
+      icon: 'https://www.figma.com/api/mcp/asset/b048d925-e65e-440a-85df-796d7e4dd813',
+      audioIcon: 'https://www.figma.com/api/mcp/asset/5de64c3a-82e9-4563-9efb-f0aec423a9ba',
+    },
+  ],
+}
+
+export const panduanUmrahContent: GuideListContent = {
+  title: 'Panduan Umrah',
+  backIcon: 'https://www.figma.com/api/mcp/asset/8cd9bba4-f7fa-4a30-9895-d3a1248541a6',
+  icon: 'https://www.figma.com/api/mcp/asset/d3374e8f-c5a2-4034-84e6-61d082843732',
+  chevronIcon: 'https://www.figma.com/api/mcp/asset/445e9415-20b4-4f26-8c03-096eddd984f2',
+  searchIcon: 'https://www.figma.com/api/mcp/asset/2bc7ef4a-edfb-4f72-824f-2e36da6f8f3a',
+  items: [
+    { id: 'ihram', title: 'Ihram', subtitle: 'Niat Umrah' },
+    { id: 'tawaf', title: 'Tawaf', subtitle: "Mengelilingi Ka'bah 7 kali" },
+    { id: 'sai', title: 'Sa’i', subtitle: 'Berjalan antara Safa dan Marwah 7 kali' },
+    { id: 'tahallul', title: 'Tahallul', subtitle: 'Memotong Rambut' },
+  ],
+}
+
+export const doaUmrahContent: GuideListContent = {
+  title: 'Do’a Umrah',
+  backIcon: 'https://www.figma.com/api/mcp/asset/a07a3c5c-2071-4ba1-86a1-3a6411511829',
+  icon: 'https://www.figma.com/api/mcp/asset/aaa149ee-9ede-40f3-bcbf-92f1da98933a',
+  chevronIcon: 'https://www.figma.com/api/mcp/asset/1910ebe7-8a56-49b4-9b29-b18ef11000ae',
+  searchIcon: 'https://www.figma.com/api/mcp/asset/9cd0bfa3-1625-481e-abe6-13a36a7704cc',
+  items: [
+    { id: 'sebelum-ihram', title: 'Sebelum Ihram', subtitle: 'Mandi Sunnah Ihram' },
+    { id: 'niat-miqat', title: 'Niat Umrah di Miqat', subtitle: 'Dilakukan setelah memakai pakaian ihram.' },
+    { id: 'talbiyah', title: 'Talbiyah', subtitle: 'Dibaca terus sampai mulai tawaf' },
+    { id: 'masuk-masjid', title: 'Doa Masuk Masjidil Haram', subtitle: 'Masuk dengan kaki kanan' },
+    { id: 'melihat-kaabah', title: "Doa Saat Melihat Ka'bah", subtitle: 'Dibaca terus sampai mulai tawaf' },
+    { id: 'memulai-tawaf', title: 'Doa Memulai Tawaf', subtitle: 'Di Hajar Aswad' },
+    { id: 'selama-tawaf', title: 'Doa Selama Tawaf', subtitle: 'Di Hajar Aswad' },
+    { id: 'setelah-tawaf', title: 'Doa Setelah Tawaf', subtitle: 'Di Hajar Aswad' },
+  ],
+}
 
 export const umrahQuestionAssets: UmrahQuestionAssets = {
   blur: 'https://www.figma.com/api/mcp/asset/57cd73b2-73b0-45af-9e07-23a80ca00208',

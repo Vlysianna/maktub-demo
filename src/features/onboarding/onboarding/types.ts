@@ -31,6 +31,11 @@ export type Screen =
   | 'umrah-passenger-form'
   | 'umrah-passenger-camera'
   | 'layanan-lain'
+  | 'informasi'
+  | 'informasi-detail'
+  | 'arah-kiblat-jadwal'
+  | 'panduan-umrah'
+  | 'doa-umrah'
   | 'rekomendasi-paket'
 
 export type WalkthroughSlide = {
@@ -175,6 +180,108 @@ export type ServiceItem = {
 export type ArticleItem = {
   title: string
   image: string
+}
+
+export type InformasiPrayerTime = {
+  name: string
+  time: string
+  icon: string
+  iconOverlay?: string
+  iconVariant?: 'default' | 'fajr'
+  active?: boolean
+}
+
+export type InformasiGuideItem = {
+  id: string
+  label: string
+  icon: string
+}
+
+export type InformasiHero = {
+  image: string
+  alt: string
+  headingLogo: string
+  brand: string
+  title: string
+  dotsCount: number
+  activeDotIndex: number
+}
+
+export type InformasiArticleItem = {
+  id: string
+  title: string
+  image: string
+  brand: string
+}
+
+export type InformasiContent = {
+  title: string
+  prayerTitle: string
+  locationLabel: string
+  locationIcon: string
+  prayerTimes: InformasiPrayerTime[]
+  guideTitle: string
+  guideItems: InformasiGuideItem[]
+  hero: InformasiHero
+  tabs: string[]
+  articles: InformasiArticleItem[]
+}
+
+export type InformasiDetailSection = {
+  title: string
+  description: string
+}
+
+export type InformasiDetailContent = {
+  backIcon: string
+  title: string
+  brand: string
+  image: string
+  sections: InformasiDetailSection[]
+  ctaPrefix: string
+  ctaHighlight: string
+  ctaIcon: string
+  ctaPattern: string
+}
+
+export type KiblatScheduleItem = {
+  id: string
+  label: string
+  time: string
+  icon: string
+  iconOverlay?: string
+  iconVariant?: 'default' | 'fajr'
+  audioIcon: string
+  active?: boolean
+}
+
+export type KiblatScheduleContent = {
+  backIcon: string
+  locationIcon: string
+  locationLabel: string
+  compassRing: string
+  compassWedge: string
+  compassNeedle: string
+  kaabaIcon: string
+  dateLabel: string
+  hijriDateLabel: string
+  turnHint: string
+  items: KiblatScheduleItem[]
+}
+
+export type GuideListItem = {
+  id: string
+  title: string
+  subtitle: string
+}
+
+export type GuideListContent = {
+  title: string
+  backIcon: string
+  icon: string
+  chevronIcon: string
+  searchIcon: string
+  items: GuideListItem[]
 }
 
 export type HomeAssets = {

@@ -33,6 +33,11 @@ import { MyBookingScreen } from './features/onboarding/onboarding/components/MyB
 import { MyBookingDetailScreen } from './features/onboarding/onboarding/components/MyBookingDetailScreen'
 import { MyBookingItineraryScreen } from './features/onboarding/onboarding/components/MyBookingItineraryScreen'
 import { MyBookingItineraryEditScreen } from './features/onboarding/onboarding/components/MyBookingItineraryEditScreen'
+import { InformasiScreen } from './features/onboarding/onboarding/components/InformasiScreen'
+import { InformasiDetailScreen } from './features/onboarding/onboarding/components/InformasiDetailScreen'
+import { ArahKiblatJadwalScreen } from './features/onboarding/onboarding/components/ArahKiblatJadwalScreen'
+import { PanduanUmrahScreen } from './features/onboarding/onboarding/components/PanduanUmrahScreen'
+import { DoaUmrahScreen } from './features/onboarding/onboarding/components/DoaUmrahScreen'
 import {
   articles,
   budgetOptions,
@@ -66,6 +71,11 @@ import {
   myBookingAssets,
   myBookingDetailAssets,
   itinerarySuggestionGroups,
+  informasiContent,
+  informasiDetailContent,
+  kiblatScheduleContent,
+  panduanUmrahContent,
+  doaUmrahContent,
 } from './features/onboarding/onboarding/data'
 import type {
   BookingDetail,
@@ -1231,6 +1241,7 @@ function App() {
           }}
           onOpenMyBooking={() => setScreen('my-booking')}
           onOpenLayananLain={() => setScreen('layanan-lain')}
+          onOpenInformasi={() => setScreen('informasi')}
           onOpenVisa={() => {
             setVisaFromHome(true)
             setScreen('umrah-visa-services')
@@ -1245,6 +1256,7 @@ function App() {
           bookings={bookingItems}
           onBackHome={() => setScreen('home')}
           onOpenLayananLain={() => setScreen('layanan-lain')}
+          onOpenInformasi={() => setScreen('informasi')}
           onOpenDetail={(bookingId) => {
             setSelectedMyBookingId(bookingId)
             setScreen('my-booking-detail')
@@ -1949,7 +1961,38 @@ function App() {
           ]}
           onOpenHome={() => setScreen('home')}
           onOpenMyBooking={() => setScreen('my-booking')}
+          onOpenInformasi={() => setScreen('informasi')}
         />
+      )}
+
+      {screen === 'informasi' && (
+        <InformasiScreen
+          assets={homeAssets}
+          content={informasiContent}
+          onOpenHome={() => setScreen('home')}
+          onOpenMyBooking={() => setScreen('my-booking')}
+          onOpenLayananLain={() => setScreen('layanan-lain')}
+          onOpenArahKiblat={() => setScreen('arah-kiblat-jadwal')}
+          onOpenPanduanUmrah={() => setScreen('panduan-umrah')}
+          onOpenDoaUmrah={() => setScreen('doa-umrah')}
+          onOpenInformasiDetail={() => setScreen('informasi-detail')}
+        />
+      )}
+
+      {screen === 'informasi-detail' && (
+        <InformasiDetailScreen content={informasiDetailContent} onBack={() => setScreen('informasi')} />
+      )}
+
+      {screen === 'arah-kiblat-jadwal' && (
+        <ArahKiblatJadwalScreen content={kiblatScheduleContent} onBack={() => setScreen('informasi')} />
+      )}
+
+      {screen === 'panduan-umrah' && (
+        <PanduanUmrahScreen content={panduanUmrahContent} onBack={() => setScreen('informasi')} />
+      )}
+
+      {screen === 'doa-umrah' && (
+        <DoaUmrahScreen content={doaUmrahContent} onBack={() => setScreen('informasi')} />
       )}
 
       {screen === 'rekomendasi-paket' && (
