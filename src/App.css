@@ -12,7 +12,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: #f5f7f9;
+  background: #000;
   padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
   overflow: hidden;
 }
@@ -638,9 +638,9 @@
 
 .my-booking-shell {
   background: #f5f7f9;
-  padding: 57px 16px 100px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  padding: 57px 16px 61px;
+  display: flex;
+  flex-direction: column;
 }
 
 .my-booking-header {
@@ -691,10 +691,14 @@
 }
 
 .my-booking-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin-top: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding-bottom: 12px;
 }
 
 .my-booking-card {
@@ -6514,7 +6518,7 @@ button.umrah-visa-package-card {
    ============================================================ */
 
 .rekomendasi-paket-shell {
-  background: #f5f7f9;
+  background: linear-gradient(to bottom, #00422f 0%, #c8ebd5 80%, #ffffff 100%);
   overflow: hidden;
 }
 
@@ -6536,7 +6540,6 @@ button.umrah-visa-package-card {
   height: 37px;
   display: flex;
   align-items: center;
-  justify-content: center;
   z-index: 2;
   padding: 0 16px;
 }
@@ -6552,10 +6555,28 @@ button.umrah-visa-package-card {
 }
 
 .rekomendasi-paket-header button {
-  position: relative;
-  left: 0;
-  top: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rekomendasi-paket-header button img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+}
+
+.rekomendasi-paket-header > span {
+  flex-shrink: 0;
+  width: 24px;
 }
 
 .rekomendasi-paket-scroll {
@@ -6567,7 +6588,7 @@ button.umrah-visa-package-card {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   padding-bottom: 16px;
 }
 
@@ -6681,11 +6702,13 @@ button.umrah-visa-package-card {
   font-size: 12px;
   color: #333;
   line-height: 1.4;
+  text-align: left;
 }
 
 .rekomendasi-paket-detail-row img {
   width: 24px;
   height: 24px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 

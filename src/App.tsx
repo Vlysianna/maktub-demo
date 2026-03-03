@@ -1244,6 +1244,7 @@ function App() {
           bookingAssets={myBookingAssets}
           bookings={bookingItems}
           onBackHome={() => setScreen('home')}
+          onOpenLayananLain={() => setScreen('layanan-lain')}
           onOpenDetail={(bookingId) => {
             setSelectedMyBookingId(bookingId)
             setScreen('my-booking-detail')
