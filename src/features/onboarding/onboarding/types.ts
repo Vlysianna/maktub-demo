@@ -42,6 +42,7 @@ export type Screen =
   | 'login-otp'
   | 'login-name'
   | 'profile'
+  | 'profile-settings'
 
 export type WalkthroughSlide = {
   image: string
@@ -633,6 +634,13 @@ export type ProfileData = {
   avatar: string
   name: string
   email: string
+  phone: string
+  gender: string
+  birthDate: {
+    day: string
+    month: string
+    year: string
+  }
   pointsLabel: string
   points: number
   badgeLabel: string

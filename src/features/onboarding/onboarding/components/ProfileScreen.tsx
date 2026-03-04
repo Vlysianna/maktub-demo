@@ -3,6 +3,7 @@ import type { HomeAssets, ProfileData } from '../types'
 type ProfileScreenProps = {
   assets: HomeAssets
   profile: ProfileData
+  onOpenProfileSettings: () => void
   onOpenHome: () => void
   onOpenMyBooking: () => void
   onOpenLayananLain: () => void
@@ -14,6 +15,7 @@ type ProfileScreenProps = {
 export function ProfileScreen({
   assets,
   profile,
+  onOpenProfileSettings,
   onOpenHome,
   onOpenMyBooking,
   onOpenLayananLain,
@@ -40,7 +42,7 @@ export function ProfileScreen({
             <h1>{profile.name}</h1>
             <p>{profile.email}</p>
           </div>
-          <button type="button" className="profile-edit" aria-label="Edit profil">
+          <button type="button" className="profile-edit" aria-label="Edit profil" onClick={onOpenProfileSettings}>
             ✎
           </button>
         </header>

@@ -55,6 +55,7 @@ type UmrahTicketInfoScreenProps = {
   contactEmail: string
   contactPhone: string
   totalPrice: number
+  validationMessage?: string
   flightOnly?: boolean
   onBack: () => void
   onAddPassenger: () => void
@@ -191,6 +192,7 @@ export function UmrahTicketInfoScreen({
   contactEmail,
   contactPhone,
   totalPrice,
+  validationMessage,
   flightOnly = false,
   onBack,
   onAddPassenger,
@@ -289,6 +291,7 @@ export function UmrahTicketInfoScreen({
             </button>
           ))}
         </article>
+        {validationMessage && <p className="umrah-ticket-validation">{validationMessage}</p>}
 
         <h2 className="umrah-ticket-title">Kontak</h2>
         <p className="umrah-info-caption">E-ticket akan dikirim kepada orang dibawah ini.</p>

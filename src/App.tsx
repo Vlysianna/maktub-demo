@@ -40,9 +40,9 @@ import { PanduanUmrahScreen } from './features/onboarding/onboarding/components/
 import { DoaUmrahScreen } from './features/onboarding/onboarding/components/DoaUmrahScreen'
 import { NotifikasiScreen } from './features/onboarding/onboarding/components/NotifikasiScreen'
 import { LoginGuestScreen } from './features/onboarding/onboarding/components/LoginGuestScreen'
-import { LoginOtpScreen } from './features/onboarding/onboarding/components/LoginOtpScreen'
 import { LoginNameScreen } from './features/onboarding/onboarding/components/LoginNameScreen'
 import { ProfileScreen } from './features/onboarding/onboarding/components/ProfileScreen'
+import { ProfileSettingsScreen } from './features/onboarding/onboarding/components/ProfileSettingsScreen'
 import {
   articles,
   budgetOptions,
@@ -85,8 +85,6 @@ import {
   loginGuestContent,
   loginNameAssets,
   loginNameContent,
-  loginOtpAssets,
-  loginOtpContent,
   notifikasiAssets,
   notificationItems,
   profileData,
@@ -202,6 +200,22 @@ function createInitialPassengerForm(): PassengerFormData {
   }
 }
 
+function isPassengerFormComplete(form: PassengerFormData) {
+  return Boolean(
+    form.firstMiddleName.trim() &&
+      form.lastFamilyName.trim() &&
+      form.birthDay &&
+      form.birthMonth &&
+      form.birthYear &&
+      form.nationality &&
+      form.passportNumber.trim() &&
+      form.issuingCountry &&
+      form.passportExpiryDay &&
+      form.passportExpiryMonth &&
+      form.passportExpiryYear,
+  )
+}
+
 const fallbackTravelDate = new Date(
   onboardingConfig.defaultTravelDate.year,
   onboardingConfig.defaultTravelDate.month,
@@ -237,7 +251,6 @@ function App() {
   const [loginGuestBackScreen, setLoginGuestBackScreen] = useState<Screen>('home')
   const [notifikasiBackScreen, setNotifikasiBackScreen] = useState<Screen>('home')
   const [loginPhoneNumber, setLoginPhoneNumber] = useState('')
-  const [loginCountryCode, setLoginCountryCode] = useState('+62')
   const [flightSearchEntry, setFlightSearchEntry] = useState<'home' | 'maktub-ai'>('home')
   const [isHotelOnlyFlow, setIsHotelOnlyFlow] = useState(false)
   const [selectedMyBookingId, setSelectedMyBookingId] = useState<string | null>(null)
@@ -269,6 +282,7 @@ function App() {
   const [selectedReturnHotelId, setSelectedReturnHotelId] = useState<string | null>(null)
   const [selectedReturnHotelRoomId, setSelectedReturnHotelRoomId] = useState<string | null>(null)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('bni-va')
+  const [ticketInfoValidationMessage, setTicketInfoValidationMessage] = useState('')
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
   const [hasVisa, setHasVisa] = useState(false)
@@ -1220,6 +1234,16 @@ function App() {
     [],
   )
 
+  const ensureLoggedInForService = (fallbackScreen: Screen, onAllowed: () => void) => {
+    if (!isLoggedIn) {
+      setLoginGuestBackScreen(fallbackScreen)
+      setScreen('login-guest')
+      return
+    }
+
+    onAllowed()
+  }
+
   const openAkunMenu = (currentScreen: Screen) => {
     if (isLoggedIn) {
       setScreen('profile')
@@ -1248,26 +1272,33 @@ function App() {
           assets={homeAssets}
           services={services}
           articles={articles}
+          userDisplayName={isLoggedIn ? userProfile.name : undefined}
           onStartJourney={() => {
-            resetMaktubAiFlowState()
-            setFlightSearchEntry('maktub-ai')
-            setScreen('umrah-question')
+            ensureLoggedInForService('home', () => {
+              resetMaktubAiFlowState()
+              setFlightSearchEntry('maktub-ai')
+              setScreen('umrah-question')
+            })
           }}
           onOpenFlightSearch={() => {
-            setIsHotelOnlyFlow(false)
-            setFlightSelectionLeg('departure')
-            setFlightSearchEntry('home')
-            setScreen('umrah-flight-search')
+            ensureLoggedInForService('home', () => {
+              setIsHotelOnlyFlow(false)
+              setFlightSelectionLeg('departure')
+              setFlightSearchEntry('home')
+              setScreen('umrah-flight-search')
+            })
           }}
           onOpenHotelSearch={() => {
-            setIsHotelOnlyFlow(true)
-            setHotelSelectionLeg('departure')
-            setSelectedHotelId(null)
-            setSelectedHotelRoomId(null)
-            setSelectedReturnHotelId(null)
-            setSelectedReturnHotelRoomId(null)
-            setPaymentFlow('package')
-            setScreen('umrah-hotel-search')
+            ensureLoggedInForService('home', () => {
+              setIsHotelOnlyFlow(true)
+              setHotelSelectionLeg('departure')
+              setSelectedHotelId(null)
+              setSelectedHotelRoomId(null)
+              setSelectedReturnHotelId(null)
+              setSelectedReturnHotelRoomId(null)
+              setPaymentFlow('package')
+              setScreen('umrah-hotel-search')
+            })
           }}
           onOpenMyBooking={() => setScreen('my-booking')}
           onOpenLayananLain={() => setScreen('layanan-lain')}
@@ -1278,8 +1309,10 @@ function App() {
             setScreen('notifikasi')
           }}
           onOpenVisa={() => {
-            setVisaFromHome(true)
-            setScreen('umrah-visa-services')
+            ensureLoggedInForService('home', () => {
+              setVisaFromHome(true)
+              setScreen('umrah-visa-services')
+            })
           }}
         />
       )}
@@ -1594,15 +1627,29 @@ function App() {
           flightOnly={flightSearchEntry === 'home'}
           onBack={() => setScreen('umrah-flight-detail')}
           onAddPassenger={() => {
+            setTicketInfoValidationMessage('')
             const nextIndex = passengerForms.findIndex((form) => !form.firstMiddleName.trim())
             setActivePassengerIndex(nextIndex >= 0 ? nextIndex : 0)
             setScreen('umrah-passenger-form')
           }}
           onEditPassenger={(index) => {
+            setTicketInfoValidationMessage('')
             setActivePassengerIndex(index)
             setScreen('umrah-passenger-form')
           }}
+          validationMessage={ticketInfoValidationMessage}
           onNext={() => {
+            const incompleteTravelerIndex = passengerForms.slice(0, travelerCount).findIndex((form) => !isPassengerFormComplete(form))
+
+            if (incompleteTravelerIndex !== -1) {
+              setTicketInfoValidationMessage(
+                `Data jamaah ${incompleteTravelerIndex + 1} belum lengkap. Mohon lengkapi data jamaah terlebih dahulu.`,
+              )
+              return
+            }
+
+            setTicketInfoValidationMessage('')
+
             if (flightSearchEntry === 'home') {
               setPaymentFlow('package')
               setScreen('umrah-payment-method')
@@ -1953,6 +2000,7 @@ function App() {
               return next
             })
 
+            setTicketInfoValidationMessage('')
             setScreen('umrah-ticket-info')
           }}
         />
@@ -1982,17 +2030,19 @@ function App() {
               id: 'layanan-tambahan',
               label: 'Layanan Tambahan',
               icon: layananLainAssets.layananTambahanIcon,
+              onClick: () => ensureLoggedInForService('layanan-lain', () => {}),
             },
             {
               id: 'chat-assistant',
               label: 'Chat Assistant',
               icon: layananLainAssets.chatAssistantIcon,
+              onClick: () => ensureLoggedInForService('layanan-lain', () => {}),
             },
             {
               id: 'rekomendasi-paket',
               label: 'Rekomendasi Paket',
               icon: layananLainAssets.rekomendasiPaketIcon,
-              onClick: () => setScreen('rekomendasi-paket'),
+              onClick: () => ensureLoggedInForService('layanan-lain', () => setScreen('rekomendasi-paket')),
             },
           ]}
           onOpenHome={() => setScreen('home')}
@@ -2056,7 +2106,7 @@ function App() {
           content={loginGuestContent}
           onClose={() => setScreen(loginGuestBackScreen)}
           onContinueWithGoogle={() => {}}
-          onContinueWithPhone={(phoneNumber, countryCode) => {
+          onContinueWithPhone={(phoneNumber) => {
             const normalizedPhone = phoneNumber.replace(/\D/g, '')
 
             if (!normalizedPhone) {
@@ -2064,21 +2114,8 @@ function App() {
             }
 
             setLoginPhoneNumber(normalizedPhone)
-            setLoginCountryCode(countryCode)
-            setScreen('login-otp')
+            setScreen('login-name')
           }}
-        />
-      )}
-
-      {screen === 'login-otp' && (
-        <LoginOtpScreen
-          assets={loginOtpAssets}
-          content={loginOtpContent}
-          phoneNumber={loginPhoneNumber || '812314324'}
-          countryCode={loginCountryCode}
-          onBack={() => setScreen('login-guest')}
-          onResend={() => {}}
-          onOtpComplete={() => setScreen('login-name')}
         />
       )}
 
@@ -2087,23 +2124,17 @@ function App() {
           assets={loginNameAssets}
           content={loginNameContent}
           initialName={userProfile.name}
-          onBack={() => setScreen('login-otp')}
+          onBack={() => setScreen('login-guest')}
           onContinue={(name) => {
             if (!name) {
               return
             }
 
-            const nameSlug = name
-              .toLowerCase()
-              .trim()
-              .replace(/[^a-z0-9\s]/g, '')
-              .replace(/\s+/g, '.')
-            const fallbackEmail = nameSlug ? `${nameSlug}@maktub.app` : loginPhoneNumber ? `${loginPhoneNumber}@maktub.app` : userProfile.email
-
             setUserProfile((previous) => ({
               ...previous,
               name,
-              email: fallbackEmail,
+              email: previous.email,
+              phone: loginPhoneNumber || previous.phone,
             }))
             setIsLoggedIn(true)
             setScreen('profile')
@@ -2115,6 +2146,7 @@ function App() {
         <ProfileScreen
           assets={homeAssets}
           profile={userProfile}
+          onOpenProfileSettings={() => setScreen('profile-settings')}
           onOpenHome={() => setScreen('home')}
           onOpenMyBooking={() => setScreen('my-booking')}
           onOpenLayananLain={() => setScreen('layanan-lain')}
@@ -2126,6 +2158,21 @@ function App() {
           onLogout={() => {
             setIsLoggedIn(false)
             setLoginPhoneNumber('')
+            setUserProfile(profileData)
+            setScreen('home')
+          }}
+        />
+      )}
+
+      {screen === 'profile-settings' && (
+        <ProfileSettingsScreen
+          profile={userProfile}
+          onBack={() => setScreen('profile')}
+          onSaveProfile={(nextProfile) => setUserProfile(nextProfile)}
+          onDeleteAccount={() => {
+            setIsLoggedIn(false)
+            setLoginPhoneNumber('')
+            setUserProfile(profileData)
             setScreen('home')
           }}
         />

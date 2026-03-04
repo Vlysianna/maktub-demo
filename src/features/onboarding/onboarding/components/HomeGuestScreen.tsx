@@ -4,6 +4,7 @@ type HomeGuestScreenProps = {
   assets: HomeAssets
   services: ServiceItem[]
   articles: ArticleItem[]
+  userDisplayName?: string
   onStartJourney: () => void
   onOpenFlightSearch: () => void
   onOpenHotelSearch: () => void
@@ -19,6 +20,7 @@ export function HomeGuestScreen({
   assets,
   services,
   articles,
+  userDisplayName,
   onStartJourney,
   onOpenFlightSearch,
   onOpenHotelSearch,
@@ -48,7 +50,7 @@ export function HomeGuestScreen({
             <img src={assets.avatar} alt="Profile" className="home-avatar" />
             <div>
               <p className="home-welcome">Selamat datang,</p>
-              <p className="home-name">Teman Maktub</p>
+              <p className="home-name">{userDisplayName || 'Teman Maktub'}</p>
             </div>
           </div>
 
