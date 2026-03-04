@@ -38,6 +38,7 @@ import { InformasiDetailScreen } from './features/onboarding/onboarding/componen
 import { ArahKiblatJadwalScreen } from './features/onboarding/onboarding/components/ArahKiblatJadwalScreen'
 import { PanduanUmrahScreen } from './features/onboarding/onboarding/components/PanduanUmrahScreen'
 import { DoaUmrahScreen } from './features/onboarding/onboarding/components/DoaUmrahScreen'
+import { NotifikasiScreen } from './features/onboarding/onboarding/components/NotifikasiScreen'
 import {
   articles,
   budgetOptions,
@@ -76,6 +77,8 @@ import {
   kiblatScheduleContent,
   panduanUmrahContent,
   doaUmrahContent,
+  notifikasiAssets,
+  notificationItems,
 } from './features/onboarding/onboarding/data'
 import type {
   BookingDetail,
@@ -1242,6 +1245,7 @@ function App() {
           onOpenMyBooking={() => setScreen('my-booking')}
           onOpenLayananLain={() => setScreen('layanan-lain')}
           onOpenInformasi={() => setScreen('informasi')}
+          onOpenNotifikasi={() => setScreen('notifikasi')}
           onOpenVisa={() => {
             setVisaFromHome(true)
             setScreen('umrah-visa-services')
@@ -2001,6 +2005,14 @@ function App() {
           packages={rekomendasiPaketItems}
           onBack={() => setScreen('layanan-lain')}
           onSelectPackage={() => {}}
+        />
+      )}
+
+      {screen === 'notifikasi' && (
+        <NotifikasiScreen
+          assets={notifikasiAssets}
+          notifications={notificationItems}
+          onBack={() => setScreen('home')}
         />
       )}
     </main>

@@ -37,6 +37,7 @@ export type Screen =
   | 'panduan-umrah'
   | 'doa-umrah'
   | 'rekomendasi-paket'
+  | 'notifikasi'
 
 export type WalkthroughSlide = {
   image: string
@@ -552,6 +553,21 @@ export type RekomendasiPaketAssets = {
   calendarIcon: string
   chevronRightIcon: string
   backIcon: string
+}
+
+export type NotificationItem = {
+  id: string
+  title: string
+  description: string
+  time: string
+  read: boolean
+  icon: string
+}
+
+export type NotifikasiAssets = {
+  backIcon: string
+  infoIcon: string
+  unreadDot: string
 }
 
 export type PaymentMethod = 'bni-va' | 'bri-va' | 'mandiri-va' | 'bca-va' | 'credit-card'

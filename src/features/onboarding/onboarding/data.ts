@@ -14,6 +14,8 @@ import type {
   LayananLainAssets,
   MyBookingDetailAssets,
   MyBookingAssets,
+  NotificationItem,
+  NotifikasiAssets,
   UmrahCompletionAssets,
   UmrahPaymentAssets,
   HomeAssets,
@@ -1019,3 +1021,76 @@ export const onboardingConfig: OnboardingConfig = {
     },
   ] satisfies FlightFareTemplate[],
 }
+
+export const notifikasiAssets: NotifikasiAssets = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/239daa61-a580-4383-8bcb-13c877547e56',
+  infoIcon: 'https://www.figma.com/api/mcp/asset/faa1ac38-3ac9-4a6a-ba91-25d3e208b3c7',
+  unreadDot: 'https://www.figma.com/api/mcp/asset/938d293c-9ea8-4b8a-93ae-4522796ba6a6',
+}
+
+export const notificationItems: NotificationItem[] = [
+  {
+    id: 'notif-1',
+    title: 'Pembayaran anda berhasil!',
+    description: 'Pembayaran anda berhasil consectetur. In mi ultricies faucibus odio. Ac ametas...',
+    time: '08:25',
+    read: false,
+    icon: '',
+  },
+  {
+    id: 'notif-2',
+    title: 'Pembayaran anda berhasil!',
+    description: 'Pembayaran anda berhasil consectetur. In mi ultricies faucibus odio. Ac ametas...',
+    time: '08:25',
+    read: false,
+    icon: '',
+  },
+  {
+    id: 'notif-3',
+    title: 'Pembayaran anda berhasil!',
+    description: 'Pembayaran anda berhasil consectetur. In mi ultricies faucibus odio. Ac ametas...',
+    time: '08:25',
+    read: true,
+    icon: '',
+  },
+  {
+    id: 'notif-4',
+    title: 'Pembayaran anda berhasil!',
+    description: 'Pembayaran anda berhasil consectetur. In mi ultricies faucibus odio. Ac ametas...',
+    time: '08:25',
+    read: true,
+    icon: '',
+  },
+  {
+    id: 'notif-5',
+    title: 'Pembayaran anda berhasil!',
+    description: 'Pembayaran anda berhasil consectetur. In mi ultricies faucibus odio. Ac ametas...',
+    time: '08:25',
+    read: true,
+    icon: '',
+  },
+  {
+    id: 'notif-6',
+    title: 'Pembayaran anda berhasil!',
+    description: 'Pembayaran anda berhasil consectetur. In mi ultricies faucibus odio. Ac ametas...',
+    time: '08:25',
+    read: true,
+    icon: '',
+  },
+  {
+    id: 'notif-7',
+    title: 'Pembayaran anda berhasil!',
+    description: 'Pembayaran anda berhasil consectetur. In mi ultricies faucibus odio. Ac ametas...',
+    time: '08:25',
+    read: true,
+    icon: '',
+  },
+  {
+    id: 'notif-8',
+    title: 'Pembayaran anda berhasil!',
+    description: 'Pembayaran anda berhasil consectetur. In mi ultricies faucibus odio. Ac ametas...',
+    time: '08:25',
+    read: true,
+    icon: '',
+  },
+]

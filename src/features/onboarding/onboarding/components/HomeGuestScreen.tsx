@@ -11,6 +11,7 @@ type HomeGuestScreenProps = {
   onOpenLayananLain?: () => void
   onOpenInformasi?: () => void
   onOpenVisa?: () => void
+  onOpenNotifikasi?: () => void
 }
 
 export function HomeGuestScreen({
@@ -24,6 +25,7 @@ export function HomeGuestScreen({
   onOpenLayananLain,
   onOpenInformasi,
   onOpenVisa,
+  onOpenNotifikasi,
 }: HomeGuestScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeIcon, active: true },
@@ -48,7 +50,7 @@ export function HomeGuestScreen({
             </div>
           </div>
 
-          <button className="home-bell" type="button" aria-label="Notifikasi">
+          <button className="home-bell" type="button" aria-label="Notifikasi" onClick={onOpenNotifikasi}>
             <img src={assets.bell} alt="Notifikasi" />
             <span className="home-badge">2</span>
           </button>
