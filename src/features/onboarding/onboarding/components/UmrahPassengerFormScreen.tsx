@@ -8,7 +8,8 @@ type UmrahPassengerFormScreenProps = {
   nationalityOptions: string[]
   dayOptions: string[]
   monthOptions: string[]
-  yearOptions: string[]
+  birthYearOptions: string[]
+  passportExpiryYearOptions: string[]
   onBack: () => void
   onSave: () => void
   onOpenCamera: () => void
@@ -129,7 +130,8 @@ export function UmrahPassengerFormScreen({
   nationalityOptions,
   dayOptions,
   monthOptions,
-  yearOptions,
+  birthYearOptions,
+  passportExpiryYearOptions,
   onBack,
   onSave,
   onOpenCamera,
@@ -218,7 +220,7 @@ export function UmrahPassengerFormScreen({
             <SelectInput
               value={form.birthYear}
               placeholder="Tahun"
-              options={yearOptions}
+              options={birthYearOptions}
               hasError={!!errors.birthDay}
               onChange={(value) => handleChange('birthYear', value)}
             />
@@ -239,7 +241,10 @@ export function UmrahPassengerFormScreen({
           <h3>
             <img src={assets.infoSolidIcon} alt="" aria-hidden /> Informasi Paspor
           </h3>
-          <p>Untuk melakukan perjalanan internasional, pastikan paspor Anda masih berlaku minimal 6 bulan setelah tanggal keberangkatan.</p>
+          <p>
+            Masa berlaku paspor WNI dewasa umumnya 10 tahun (anak 5 tahun), dan untuk perjalanan internasional paspor wajib
+            masih berlaku minimal 6 bulan setelah tanggal keberangkatan.
+          </p>
           <button type="button">Selengkapnya</button>
         </article>
 
@@ -282,7 +287,7 @@ export function UmrahPassengerFormScreen({
             <SelectInput
               value={form.passportExpiryYear}
               placeholder="Tahun"
-              options={yearOptions}
+              options={passportExpiryYearOptions}
               hasError={!!errors.passportExpiryDay}
               onChange={(value) => handleChange('passportExpiryYear', value)}
             />

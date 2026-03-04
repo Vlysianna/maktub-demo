@@ -184,6 +184,8 @@ function createTicketFareOptions(basePrice: number, travelerCount: number): Tick
 }
 
 function createInitialPassengerForm(): PassengerFormData {
+  const defaultPassportExpiryYear = String(new Date().getFullYear() + 10)
+
   return {
     firstMiddleName: '',
     lastFamilyName: '',
@@ -195,7 +197,7 @@ function createInitialPassengerForm(): PassengerFormData {
     issuingCountry: '',
     passportExpiryDay: '',
     passportExpiryMonth: '',
-    passportExpiryYear: '',
+    passportExpiryYear: defaultPassportExpiryYear,
     passportPhoto: null,
   }
 }
@@ -964,7 +966,11 @@ function App() {
   const nationalityOptions = onboardingConfig.nationalityOptions
   const dayOptions = Array.from({ length: 31 }, (_, index) => String(index + 1).padStart(2, '0'))
   const monthOptions = onboardingConfig.monthOptions
-  const yearOptions = Array.from({ length: onboardingConfig.passportYearSpan }, (_, index) => String(new Date().getFullYear() - index))
+  const birthYearOptions = Array.from(
+    { length: onboardingConfig.passportYearSpan },
+    (_, index) => String(new Date().getFullYear() - index),
+  )
+  const passportExpiryYearOptions = Array.from({ length: 11 }, (_, index) => String(new Date().getFullYear() + index))
   const selectedPaymentLabel = onboardingConfig.paymentMethodLabels[selectedPaymentMethod]
 
   const isVisaPersonalCompleted = useMemo(() => Object.values(visaPersonalForm).every((value) => value.trim().length > 0), [visaPersonalForm])
@@ -1244,6 +1250,23 @@ function App() {
     onAllowed()
   }
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      return
+    }
+
+    const isMyBookingScreen =
+      screen === 'my-booking' ||
+      screen === 'my-booking-detail' ||
+      screen === 'my-booking-itinerary' ||
+      screen === 'my-booking-itinerary-edit'
+
+    if (isMyBookingScreen) {
+      setLoginGuestBackScreen('home')
+      setScreen('login-guest')
+    }
+  }, [isLoggedIn, screen])
+
   const openAkunMenu = (currentScreen: Screen) => {
     if (isLoggedIn) {
       setScreen('profile')
@@ -1300,7 +1323,7 @@ function App() {
               setScreen('umrah-hotel-search')
             })
           }}
-          onOpenMyBooking={() => setScreen('my-booking')}
+          onOpenMyBooking={() => ensureLoggedInForService('home', () => setScreen('my-booking'))}
           onOpenLayananLain={() => setScreen('layanan-lain')}
           onOpenInformasi={() => setScreen('informasi')}
           onOpenAkun={() => openAkunMenu('home')}
@@ -1620,9 +1643,9 @@ function App() {
           returnSeatLayoutLabel="3-3"
           returnSeatPitchLabel="29 inches (Standar)"
           travelerNames={travelerNames}
-          contactName={travelerNames[0]}
-          contactEmail={onboardingConfig.defaultContact.email}
-          contactPhone={onboardingConfig.defaultContact.phone}
+          contactName={userProfile.name || travelerNames[0]}
+          contactEmail={userProfile.email || onboardingConfig.defaultContact.email}
+          contactPhone={userProfile.phone || onboardingConfig.defaultContact.phone}
           totalPrice={selectedDepartureFare.totalPrice + selectedReturnFare.totalPrice}
           flightOnly={flightSearchEntry === 'home'}
           onBack={() => setScreen('umrah-flight-detail')}
@@ -1752,9 +1775,9 @@ function App() {
           travelerText={`${travelerParticipants.dewasa} Dewasa / Kamar`}
           checkInLabel={`${hotelCheckInLabel} (16:00)`}
           checkOutLabel={`${hotelCheckOutLabel} (12:00)`}
-          contactName={travelerNames[0]}
-          contactEmail={onboardingConfig.defaultContact.email}
-          contactPhone={onboardingConfig.defaultContact.phone}
+          contactName={userProfile.name || travelerNames[0]}
+          contactEmail={userProfile.email || onboardingConfig.defaultContact.email}
+          contactPhone={userProfile.phone || onboardingConfig.defaultContact.phone}
           totalPrice={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalPrice : selectedReturnHotelRoom!.totalPrice}
           totalLabel={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalLabel : selectedReturnHotelRoom!.totalLabel}
           onBack={() => setScreen('umrah-hotel-detail')}
@@ -1979,7 +2002,8 @@ function App() {
           nationalityOptions={nationalityOptions}
           dayOptions={dayOptions}
           monthOptions={monthOptions}
-          yearOptions={yearOptions}
+          birthYearOptions={birthYearOptions}
+          passportExpiryYearOptions={passportExpiryYearOptions}
           onBack={() => setScreen('umrah-ticket-info')}
           onOpenCamera={() => setScreen('umrah-passenger-camera')}
           onChange={(field, value) => {
@@ -2046,7 +2070,7 @@ function App() {
             },
           ]}
           onOpenHome={() => setScreen('home')}
-          onOpenMyBooking={() => setScreen('my-booking')}
+          onOpenMyBooking={() => ensureLoggedInForService('layanan-lain', () => setScreen('my-booking'))}
           onOpenInformasi={() => setScreen('informasi')}
           onOpenAkun={() => openAkunMenu('layanan-lain')}
         />
@@ -2057,7 +2081,7 @@ function App() {
           assets={homeAssets}
           content={informasiContent}
           onOpenHome={() => setScreen('home')}
-          onOpenMyBooking={() => setScreen('my-booking')}
+          onOpenMyBooking={() => ensureLoggedInForService('informasi', () => setScreen('my-booking'))}
           onOpenLayananLain={() => setScreen('layanan-lain')}
           onOpenArahKiblat={() => setScreen('arah-kiblat-jadwal')}
           onOpenPanduanUmrah={() => setScreen('panduan-umrah')}
