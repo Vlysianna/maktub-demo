@@ -8131,3 +8131,407 @@ button.umrah-visa-package-card {
   text-underline-offset: 1px;
 }
 
+/* ─── Login OTP Screen ─── */
+
+.login-otp-shell {
+  position: relative;
+  background: #f5f7f9;
+  overflow: hidden;
+}
+
+.login-otp-header {
+  padding: 54px 16px 0;
+}
+
+.login-otp-back {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.login-otp-back img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.login-otp-instruction {
+  width: 327px;
+  margin: 28px auto 0;
+  color: #707070;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.login-otp-inputs {
+  margin: 28px auto 0;
+  width: 327px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+
+.login-otp-input {
+  height: 49px;
+  border-radius: 8px;
+  border: 1px solid #d1d5da;
+  background: #f5f7f9;
+  text-align: center;
+  color: #0e1315;
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  line-height: 21px;
+  outline: none;
+}
+
+.login-otp-input::placeholder {
+  color: #979899;
+  font-size: 13px;
+}
+
+.login-otp-input:focus {
+  border-color: #03694b;
+}
+
+.login-otp-timer {
+  margin-top: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #0e1315;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.login-otp-timer img {
+  width: 11px;
+  height: 11px;
+}
+
+.login-otp-resend-row {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+}
+
+.login-otp-resend-row span {
+  color: #676767;
+}
+
+.login-otp-resend-row button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #03694b;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-otp-keypad {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─── Login Name Screen ─── */
+
+.login-name-shell {
+  display: flex;
+  flex-direction: column;
+  background: #f5f7f9;
+}
+
+.login-name-header {
+  padding: 54px 16px 0;
+}
+
+.login-name-back {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.login-name-back img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.login-name-content {
+  padding: 28px 24px 0;
+}
+
+.login-name-label {
+  display: block;
+  color: #323333;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.login-name-input {
+  width: 100%;
+  height: 49px;
+  border-radius: 8px;
+  border: 1px solid #d1d5da;
+  background: #f5f7f9;
+  padding: 0 14px;
+  color: #323333;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+  outline: none;
+}
+
+.login-name-input::placeholder {
+  color: #979899;
+}
+
+.login-name-input:focus {
+  border-color: #03694b;
+}
+
+.login-name-continue {
+  margin: auto 24px 60px;
+  height: 49px;
+  border: none;
+  border-radius: 8px;
+  background: #2c3248;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  cursor: pointer;
+}
+
+.login-name-continue:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ─── Profile Screen ─── */
+
+.profile-shell {
+  background: #f9fafb;
+}
+
+.profile-header-gradient {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 246px;
+  background: linear-gradient(180deg, #ffffff 0%, #c8ebd5 19.712%, #003928 100%);
+  transform: scaleY(-1);
+}
+
+.profile-scroll {
+  position: relative;
+  z-index: 1;
+  height: calc(100% - 79px);
+  overflow-y: auto;
+  padding: 76px 24px 24px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-identity {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-identity h1 {
+  margin: 0;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.33px;
+}
+
+.profile-identity p {
+  margin: 2px 0 0;
+  color: #fff;
+  opacity: 0.85;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.profile-edit {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.profile-points-card {
+  margin-top: 23px;
+  border-radius: 12px;
+  background: #141b34;
+  overflow: hidden;
+}
+
+.profile-points-top {
+  border-bottom: 1px solid #3b4156;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.profile-points-top p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
+}
+
+.profile-points-top strong {
+  display: block;
+  margin-top: 4px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.profile-points-top span {
+  border-radius: 24px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #fff;
+  background: linear-gradient(120deg, #a47e00 5%, #e9d9a4 36%, #a47e00 70%);
+}
+
+.profile-referral-row {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.profile-referral-row p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.profile-referral-row strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.profile-referral-row button {
+  margin-left: auto;
+  border: none;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  padding: 3px 6px;
+}
+
+.profile-prep-card {
+  margin-top: 16px;
+  border-radius: 8px;
+  border: 1px solid #b1cfc6;
+  background: #e6f0ed;
+  padding: 20px;
+}
+
+.profile-prep-card h2 {
+  margin: 0;
+  color: #0a0c0e;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.profile-prep-card p {
+  margin: 8px 0 0;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.profile-prep-card button {
+  margin-top: 12px;
+  border: none;
+  border-radius: 4px;
+  background: #03694b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 8px;
+}
+
+.profile-menu-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-menu-item {
+  width: 100%;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #f5f7f9;
+  padding: 16px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  color: #191927;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.profile-menu-item img {
+  width: 16px;
+  height: 16px;
+}
+
+.profile-logout {
+  margin-top: 32px;
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: #fff5f5;
+  color: #ec3434;
+  font-size: 13px;
+  font-weight: 600;
+}
+

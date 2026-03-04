@@ -39,6 +39,9 @@ export type Screen =
   | 'rekomendasi-paket'
   | 'notifikasi'
   | 'login-guest'
+  | 'login-otp'
+  | 'login-name'
+  | 'profile'
 
 export type WalkthroughSlide = {
   image: string
@@ -590,6 +593,57 @@ export type LoginGuestContent = {
   legalMiddle: string
   legalPrivacy: string
   legalSuffix: string
+}
+
+export type LoginOtpAssets = {
+  backIcon: string
+  timerIcon: string
+  keypadImage: string
+}
+
+export type LoginOtpContent = {
+  instructionPrefix: string
+  instructionSuffix: string
+  notReceiveLabel: string
+  resendLabel: string
+}
+
+export type LoginNameAssets = {
+  backIcon: string
+}
+
+export type LoginNameContent = {
+  title: string
+  placeholder: string
+  continueLabel: string
+}
+
+export type ProfileTopAction = {
+  id: string
+  label: string
+}
+
+export type ProfileMenuItem = {
+  id: string
+  label: string
+  icon: string
+}
+
+export type ProfileData = {
+  avatar: string
+  name: string
+  email: string
+  pointsLabel: string
+  points: number
+  badgeLabel: string
+  referralLabel: string
+  referralCode: string
+  referralActionLabel: string
+  prepTitle: string
+  prepDescription: string
+  prepActionLabel: string
+  menuItems: ProfileMenuItem[]
+  logoutLabel: string
 }
 
 export type PaymentMethod = 'bni-va' | 'bri-va' | 'mandiri-va' | 'bca-va' | 'credit-card'

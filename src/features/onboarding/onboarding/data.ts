@@ -16,6 +16,10 @@ import type {
   MyBookingAssets,
   LoginGuestAssets,
   LoginGuestContent,
+  LoginNameAssets,
+  LoginNameContent,
+  LoginOtpAssets,
+  LoginOtpContent,
   NotificationItem,
   NotifikasiAssets,
   UmrahCompletionAssets,
@@ -37,6 +41,7 @@ import type {
   VisaPackage,
   WalkthroughSlide,
   OnboardingConfig,
+  ProfileData,
 } from './types'
 
 export const splashLogo = 'https://www.figma.com/api/mcp/asset/c4989d5f-ee63-47a9-a373-06f00977a94c'
@@ -1116,4 +1121,70 @@ export const loginGuestContent: LoginGuestContent = {
   legalMiddle: ' serta ',
   legalPrivacy: 'Kebijakan Privasi',
   legalSuffix: ' kami.',
+}
+
+export const loginOtpAssets: LoginOtpAssets = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/4bca9d28-b08e-4047-8378-22937be549eb',
+  timerIcon: 'https://www.figma.com/api/mcp/asset/e4b1fb4e-b0f4-4039-a57e-c5da0ba3c2f3',
+  keypadImage: 'https://www.figma.com/api/mcp/asset/519e17d2-912a-4dec-8b91-927cdacedc5f',
+}
+
+export const loginOtpContent: LoginOtpContent = {
+  instructionPrefix: 'Masukan 6-digit angka yang kami kirimkan ke nomor',
+  instructionSuffix: 'melalui WhatsApp.',
+  notReceiveLabel: 'Tidak menerima kode?',
+  resendLabel: 'Kirim Ulang',
+}
+
+export const loginNameAssets: LoginNameAssets = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/2eec210f-aa42-47e8-9801-b9a4e11b5575',
+}
+
+export const loginNameContent: LoginNameContent = {
+  title: 'Nama Anda',
+  placeholder: 'Masukan nama Anda',
+  continueLabel: 'Selanjutnya',
+}
+
+export const profileData: ProfileData = {
+  avatar: 'https://www.figma.com/api/mcp/asset/5791793b-087a-46e8-be34-37715e874d94',
+  name: 'Noermansyah',
+  email: 'noermansyah@gmail.com',
+  pointsLabel: 'Maktub poin',
+  points: 125,
+  badgeLabel: "Mu'tamir",
+  referralLabel: 'Kode Referral:',
+  referralCode: 'M1230012',
+  referralActionLabel: 'Salin kode',
+  prepTitle: 'Persiapan Umrah',
+  prepDescription: 'Lihat apa saja yang perlu Anda persiapkan sebelum berangkat Umrah.',
+  prepActionLabel: 'Lengkapi sekarang',
+  menuItems: [
+    {
+      id: 'itinerary',
+      label: 'Itinerary Saya',
+      icon: 'https://www.figma.com/api/mcp/asset/592fb706-834f-4846-92f1-69c3c394b78d',
+    },
+    {
+      id: 'notifikasi',
+      label: 'Notifikasi',
+      icon: 'https://www.figma.com/api/mcp/asset/4a52f52e-feb2-40df-9fa3-10900f6d714f',
+    },
+    {
+      id: 'kebijakan-privasi',
+      label: 'Kebijakan Privasi',
+      icon: 'https://www.figma.com/api/mcp/asset/a670f205-7d05-4cc3-9890-f9524360b8ea',
+    },
+    {
+      id: 'syarat-ketentuan',
+      label: 'Syarat dan Ketentuan',
+      icon: 'https://www.figma.com/api/mcp/asset/46f7b171-315c-438a-9c75-d93862da9c6b',
+    },
+    {
+      id: 'pusat-bantuan',
+      label: 'Pusat Bantuan',
+      icon: 'https://www.figma.com/api/mcp/asset/c831b8b9-ffd8-46be-b88e-91c45cdf0a80',
+    },
+  ],
+  logoutLabel: 'Keluar',
 }

@@ -40,6 +40,9 @@ import { PanduanUmrahScreen } from './features/onboarding/onboarding/components/
 import { DoaUmrahScreen } from './features/onboarding/onboarding/components/DoaUmrahScreen'
 import { NotifikasiScreen } from './features/onboarding/onboarding/components/NotifikasiScreen'
 import { LoginGuestScreen } from './features/onboarding/onboarding/components/LoginGuestScreen'
+import { LoginOtpScreen } from './features/onboarding/onboarding/components/LoginOtpScreen'
+import { LoginNameScreen } from './features/onboarding/onboarding/components/LoginNameScreen'
+import { ProfileScreen } from './features/onboarding/onboarding/components/ProfileScreen'
 import {
   articles,
   budgetOptions,
@@ -80,8 +83,13 @@ import {
   doaUmrahContent,
   loginGuestAssets,
   loginGuestContent,
+  loginNameAssets,
+  loginNameContent,
+  loginOtpAssets,
+  loginOtpContent,
   notifikasiAssets,
   notificationItems,
+  profileData,
 } from './features/onboarding/onboarding/data'
 import type {
   BookingDetail,
@@ -224,8 +232,12 @@ type FlightCabinSelection = string
 
 function App() {
   const [screen, setScreen] = useState<Screen>('splash')
-  const [isLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userProfile, setUserProfile] = useState(profileData)
   const [loginGuestBackScreen, setLoginGuestBackScreen] = useState<Screen>('home')
+  const [notifikasiBackScreen, setNotifikasiBackScreen] = useState<Screen>('home')
+  const [loginPhoneNumber, setLoginPhoneNumber] = useState('')
+  const [loginCountryCode, setLoginCountryCode] = useState('+62')
   const [flightSearchEntry, setFlightSearchEntry] = useState<'home' | 'maktub-ai'>('home')
   const [isHotelOnlyFlow, setIsHotelOnlyFlow] = useState(false)
   const [selectedMyBookingId, setSelectedMyBookingId] = useState<string | null>(null)
@@ -1210,6 +1222,7 @@ function App() {
 
   const openAkunMenu = (currentScreen: Screen) => {
     if (isLoggedIn) {
+      setScreen('profile')
       return
     }
 
@@ -1260,7 +1273,10 @@ function App() {
           onOpenLayananLain={() => setScreen('layanan-lain')}
           onOpenInformasi={() => setScreen('informasi')}
           onOpenAkun={() => openAkunMenu('home')}
-          onOpenNotifikasi={() => setScreen('notifikasi')}
+          onOpenNotifikasi={() => {
+            setNotifikasiBackScreen('home')
+            setScreen('notifikasi')
+          }}
           onOpenVisa={() => {
             setVisaFromHome(true)
             setScreen('umrah-visa-services')
@@ -2030,7 +2046,7 @@ function App() {
         <NotifikasiScreen
           assets={notifikasiAssets}
           notifications={notificationItems}
-          onBack={() => setScreen('home')}
+          onBack={() => setScreen(notifikasiBackScreen)}
         />
       )}
 
@@ -2040,7 +2056,78 @@ function App() {
           content={loginGuestContent}
           onClose={() => setScreen(loginGuestBackScreen)}
           onContinueWithGoogle={() => {}}
-          onContinueWithPhone={() => {}}
+          onContinueWithPhone={(phoneNumber, countryCode) => {
+            const normalizedPhone = phoneNumber.replace(/\D/g, '')
+
+            if (!normalizedPhone) {
+              return
+            }
+
+            setLoginPhoneNumber(normalizedPhone)
+            setLoginCountryCode(countryCode)
+            setScreen('login-otp')
+          }}
+        />
+      )}
+
+      {screen === 'login-otp' && (
+        <LoginOtpScreen
+          assets={loginOtpAssets}
+          content={loginOtpContent}
+          phoneNumber={loginPhoneNumber || '812314324'}
+          countryCode={loginCountryCode}
+          onBack={() => setScreen('login-guest')}
+          onResend={() => {}}
+          onOtpComplete={() => setScreen('login-name')}
+        />
+      )}
+
+      {screen === 'login-name' && (
+        <LoginNameScreen
+          assets={loginNameAssets}
+          content={loginNameContent}
+          initialName={userProfile.name}
+          onBack={() => setScreen('login-otp')}
+          onContinue={(name) => {
+            if (!name) {
+              return
+            }
+
+            const nameSlug = name
+              .toLowerCase()
+              .trim()
+              .replace(/[^a-z0-9\s]/g, '')
+              .replace(/\s+/g, '.')
+            const fallbackEmail = nameSlug ? `${nameSlug}@maktub.app` : loginPhoneNumber ? `${loginPhoneNumber}@maktub.app` : userProfile.email
+
+            setUserProfile((previous) => ({
+              ...previous,
+              name,
+              email: fallbackEmail,
+            }))
+            setIsLoggedIn(true)
+            setScreen('profile')
+          }}
+        />
+      )}
+
+      {screen === 'profile' && (
+        <ProfileScreen
+          assets={homeAssets}
+          profile={userProfile}
+          onOpenHome={() => setScreen('home')}
+          onOpenMyBooking={() => setScreen('my-booking')}
+          onOpenLayananLain={() => setScreen('layanan-lain')}
+          onOpenInformasi={() => setScreen('informasi')}
+          onOpenNotifikasi={() => {
+            setNotifikasiBackScreen('profile')
+            setScreen('notifikasi')
+          }}
+          onLogout={() => {
+            setIsLoggedIn(false)
+            setLoginPhoneNumber('')
+            setScreen('home')
+          }}
         />
       )}
     </main>
