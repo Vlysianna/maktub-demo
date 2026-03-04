@@ -637,6 +637,7 @@ export const umrahFlightSearchAssets: UmrahFlightSearchAssets = {
 }
 
 export const umrahHotelSearchAssets: UmrahHotelSearchAssets = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/98bcbc58-672c-47f1-8a7e-e75af7171b82',
   iconLocation: 'https://www.figma.com/api/mcp/asset/03b3e842-1914-4706-9ea1-70cbd1d6aaf6',
   iconCalendar: 'https://www.figma.com/api/mcp/asset/ad87ffeb-a104-4976-aef5-bc76abad9a8f',
   iconGuest: 'https://www.figma.com/api/mcp/asset/87379399-e322-44d0-8ea1-afa952a33903',
@@ -647,6 +648,7 @@ export const umrahHotelSearchAssets: UmrahHotelSearchAssets = {
 }
 
 export const umrahFlightAssets: UmrahFlightAssets = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/98bcbc58-672c-47f1-8a7e-e75af7171b82',
   chevronRight: 'https://www.figma.com/api/mcp/asset/2909023e-2b4e-45be-90c0-4046f05ddf6f',
   planeArrow: 'https://www.figma.com/api/mcp/asset/688642d2-4cbb-4446-8c03-fca5f6f79fb5',
   calendarIcon: 'https://www.figma.com/api/mcp/asset/1a763ef6-9068-46bc-80c6-26bd7dd39624',
@@ -724,6 +726,7 @@ export const flightOfferTemplate: FlightOffer[] = [
 ]
 
 export const umrahHotelAssets: UmrahHotelAssets = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/98bcbc58-672c-47f1-8a7e-e75af7171b82',
   chevronRight: 'https://www.figma.com/api/mcp/asset/2ccd8fb3-cbbc-4b67-bb88-9725a7b8c843',
   sortIcon: 'https://www.figma.com/api/mcp/asset/cf251695-41f5-4018-bed5-f89aa9d08dcc',
   filterIcon: 'https://www.figma.com/api/mcp/asset/50f5038a-530c-4a22-ace9-1129547bed19',

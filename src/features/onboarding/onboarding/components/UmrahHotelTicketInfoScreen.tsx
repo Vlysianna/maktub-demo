@@ -43,7 +43,7 @@ export function UmrahHotelTicketInfoScreen({
     <section className="phone-shell umrah-hotel-shell" aria-label="Info Tiket Hotel">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>Info Tiket</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />

@@ -44,7 +44,7 @@ export function UmrahHotelDetailScreen({
     <section className={`phone-shell umrah-hotel-shell${isSearchHotelOnly ? ' search-only' : ''}`} aria-label="Detail Hotel">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>Detail Hotel</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />

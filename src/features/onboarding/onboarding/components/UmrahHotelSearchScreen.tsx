@@ -163,7 +163,7 @@ export function UmrahHotelSearchScreen({
   return (
     <section className="phone-shell umrah-hotel-search-shell" aria-label="Cari tiket hotel">
       <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-        ←
+        <img src={assets.backIcon} alt="" aria-hidden />
       </button>
       <h1>Cari Tiket Hotel</h1>
 

@@ -37,7 +37,7 @@ export function UmrahFlightScreen({
   offers,
   onSelectOffer,
   onBack,
-  onClose,
+  onClose: _onClose,
 }: UmrahFlightScreenProps) {
   if (flightOnly) {
     return (
@@ -45,7 +45,7 @@ export function UmrahFlightScreen({
         {/* Compact header with route info */}
         <header className="sf-header">
           <button type="button" className="sf-back" aria-label="Kembali" onClick={onBack}>
-            ←
+            <img src={assets.backIcon} alt="" aria-hidden />
           </button>
           <div className="sf-header-info">
             <h1 className="sf-route">
@@ -184,12 +184,10 @@ export function UmrahFlightScreen({
     <section className="phone-shell umrah-flight-shell" aria-label="Hasil Rekomendasi Penerbangan">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>Pesawat</h1>
-        <button type="button" className="umrah-flight-close" aria-label="Tutup" onClick={onClose}>
-          ×
-        </button>
+        <span className="umrah-flight-head-spacer" aria-hidden />
       </header>
 
       <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>

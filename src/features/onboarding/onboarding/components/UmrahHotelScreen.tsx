@@ -275,7 +275,7 @@ export function UmrahHotelScreen({
         <>
           <header className="umrah-hotel-search-head">
             <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-              ←
+              <img src={assets.backIcon} alt="" aria-hidden />
             </button>
             <div>
               <h1>{`Di sekitar saya (${cityLabel})`}</h1>
@@ -311,7 +311,7 @@ export function UmrahHotelScreen({
         <>
           <header className="umrah-flight-header">
             <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-              ←
+              <img src={assets.backIcon} alt="" aria-hidden />
             </button>
             <h1>Hotel</h1>
             <span className="umrah-ticket-head-spacer" aria-hidden />

@@ -18,6 +18,7 @@
 }
 
 .phone-shell {
+  --maktub-header-top: 16px;
   position: relative;
   width: 100%;
   max-width: 430px;
@@ -2344,12 +2345,12 @@
 
 .umrah-flight-search-shell {
   background: #f5f7f9;
-  padding: 57px 24px 24px;
+  padding: calc(var(--maktub-header-top) + 3px) 24px 24px;
 }
 
 .umrah-hotel-search-shell {
   background: #f5f7f9;
-  padding: 57px 24px 24px;
+  padding: calc(var(--maktub-header-top) + 3px) 24px 24px;
 }
 
 .umrah-hotel-search-shell > h1 {
@@ -2363,7 +2364,7 @@
 
 .umrah-hotel-search-shell .umrah-flight-back {
   position: absolute;
-  top: 54px;
+  top: var(--maktub-header-top);
   left: 16px;
 }
 
@@ -2378,13 +2379,13 @@
 
 .umrah-flight-search-shell .umrah-flight-back {
   position: absolute;
-  top: 54px;
+  top: var(--maktub-header-top);
   left: 16px;
 }
 
 .umrah-flight-close-search {
   position: absolute;
-  top: 54px;
+  top: var(--maktub-header-top);
   right: 16px;
   width: 24px;
   height: 24px;
@@ -2960,7 +2961,7 @@
   left: auto;
   right: auto;
   background: #fff;
-  padding: 50px 16px 9px 16px;
+  padding: var(--maktub-header-top) 16px 9px 16px;
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -2973,13 +2974,15 @@
   background: transparent;
   width: 24px;
   height: 24px;
-  font-size: 22px;
-  color: #0a0c0e;
-  line-height: 1;
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
   margin-top: 2px;
+}
+
+.sf-back img {
+  width: 24px;
+  height: 24px;
 }
 
 .sf-header-info {
@@ -3230,10 +3233,11 @@
   top: auto;
   left: auto;
   right: auto;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 54px 16px 8px;
+  padding: var(--maktub-header-top) 16px 9px;
   flex-shrink: 0;
 }
 
@@ -3245,15 +3249,28 @@
 }
 
 .umrah-flight-back,
-.umrah-flight-close {
+.umrah-flight-close,
+.umrah-flight-head-spacer {
   border: 0;
   background: transparent;
   width: 24px;
   height: 24px;
+  padding: 0;
+}
+
+.umrah-flight-back {
+  cursor: pointer;
+}
+
+.umrah-flight-back img {
+  width: 24px;
+  height: 24px;
+}
+
+.umrah-flight-close {
   font-size: 28px;
   color: #0a0c0e;
   line-height: 1;
-  cursor: pointer;
 }
 
 .umrah-flight-stepper {
@@ -3266,6 +3283,7 @@
   font-size: 13px;
   font-weight: 600;
   padding: 0 16px;
+  margin-bottom: 8px;
   flex-shrink: 0;
 }
 
@@ -3569,9 +3587,9 @@
   left: auto;
   top: auto;
   width: 100%;
-  min-height: 91px;
+  min-height: 57px;
   background: #fff;
-  padding: 50px 16px 9px 48px;
+  padding: var(--maktub-header-top) 16px 9px 48px;
   flex-shrink: 0;
   z-index: 2;
 }
@@ -3579,7 +3597,7 @@
 .umrah-hotel-search-head .umrah-flight-back {
   position: absolute;
   left: 16px;
-  top: 54px;
+  top: var(--maktub-header-top);
 }
 
 .umrah-hotel-search-head h1,
@@ -5132,7 +5150,7 @@
 
 .umrah-payment-complete-back {
   position: absolute;
-  top: 54px;
+  top: var(--maktub-header-top);
   left: 16px;
   width: 24px;
   height: 24px;
@@ -5696,7 +5714,7 @@ button.umrah-visa-package-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 54px 16px 8px;
+  padding: var(--maktub-header-top) 16px 8px;
   flex-shrink: 0;
 }
 
@@ -6329,7 +6347,7 @@ button.umrah-visa-package-card {
 
 .umrah-camera-header {
   position: absolute;
-  top: 54px;
+  top: var(--maktub-header-top);
   left: 16px;
   z-index: 4;
 }
@@ -6689,7 +6707,7 @@ button.umrah-visa-package-card {
   display: flex;
   align-items: center;
   z-index: 2;
-  padding: 54px 16px 8px;
+  padding: var(--maktub-header-top) 16px 8px;
   flex-shrink: 0;
 }
 

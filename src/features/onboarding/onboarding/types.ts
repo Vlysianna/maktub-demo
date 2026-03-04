@@ -349,6 +349,7 @@ export type UmrahProcessingAssets = {
 }
 
 export type UmrahFlightAssets = {
+  backIcon: string
   chevronRight: string
   planeArrow: string
   calendarIcon: string
@@ -434,6 +435,7 @@ export type PassengerFormData = {
 }
 
 export type UmrahHotelAssets = {
+  backIcon: string
   chevronRight: string
   sortIcon: string
   filterIcon: string
@@ -453,6 +455,7 @@ export type UmrahHotelAssets = {
 }
 
 export type UmrahHotelSearchAssets = {
+  backIcon: string
   iconLocation: string
   iconCalendar: string
   iconGuest: string
