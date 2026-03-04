@@ -1387,9 +1387,9 @@
   font-weight: 500;
 }
 
-.my-booking-detail-shell .home-indicator {
+/* .my-booking-detail-shell .home-indicator {
   bottom: 8px;
-}
+} */
 
 .itinerary-shell {
   background: #f5f7f9;
@@ -1692,9 +1692,9 @@
   margin-top: 16px;
 }
 
-.itinerary-shell .home-indicator {
+/* .itinerary-shell .home-indicator {
   bottom: 8px;
-}
+} */
 
 .umrah-question-shell {
   --umrah-gutter: clamp(14px, 6.4vw, 24px);
@@ -7260,6 +7260,14 @@ button.umrah-visa-package-card {
   cursor: pointer;
 }
 
+.informasi-article-copy {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .informasi-article-card > img {
   width: 112px;
   height: 73px;
@@ -7271,16 +7279,29 @@ button.umrah-visa-package-card {
 .informasi-article-card h4 {
   margin: 0;
   font-size: 15px;
-  line-height: 1.15;
+  line-height: normal;
   color: #0a0c0e;
   font-weight: 600;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .informasi-article-card p {
-  margin: 6px 0 0;
+  margin: 0;
   font-size: 12px;
   line-height: 1.2;
   color: #878787;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.informasi-article-dot {
+  font-size: 10px;
+  line-height: 1;
 }
 
 .informasi-detail-shell {

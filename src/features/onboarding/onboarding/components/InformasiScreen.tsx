@@ -127,20 +127,29 @@ export function InformasiScreen({
         </div>
 
         <div className="informasi-article-list">
-          {content.articles.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className="informasi-article-card"
-              onClick={item.id === 'perbedaan-umrah-haji' ? onOpenInformasiDetail : undefined}
-            >
-              <img src={item.image} alt={item.title} />
-              <div>
-                <h4>{item.title}</h4>
-                <p>{item.brand}</p>
-              </div>
-            </button>
-          ))}
+          {content.articles.map((item) => {
+            const [brandLabel, categoryLabel] = item.brand.split('•').map((value) => value.trim())
+
+            return (
+              <button key={item.id} type="button" className="informasi-article-card" onClick={item.id === 'perbedaan-umrah-haji' ? onOpenInformasiDetail : undefined}>
+                <img src={item.image} alt={item.title} />
+                <div className="informasi-article-copy">
+                  <h4>{item.title}</h4>
+                  <p>
+                    <span>{brandLabel}</span>
+                    {categoryLabel ? (
+                      <>
+                        <span className="informasi-article-dot" aria-hidden>
+                          •
+                        </span>
+                        <span>{categoryLabel}</span>
+                      </>
+                    ) : null}
+                  </p>
+                </div>
+              </button>
+            )
+          })}
         </div>
       </div>
 

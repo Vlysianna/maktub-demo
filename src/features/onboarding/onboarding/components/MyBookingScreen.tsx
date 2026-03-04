@@ -25,12 +25,93 @@ const statusBadgeLabel: Record<BookingStatus, string> = {
   history: 'History',
 }
 
+const monthMap: Record<string, number> = {
+  jan: 0,
+  january: 0,
+  januari: 0,
+  feb: 1,
+  february: 1,
+  februari: 1,
+  mar: 2,
+  march: 2,
+  maret: 2,
+  apr: 3,
+  april: 3,
+  may: 4,
+  mei: 4,
+  jun: 5,
+  june: 5,
+  juni: 5,
+  jul: 6,
+  july: 6,
+  juli: 6,
+  aug: 7,
+  august: 7,
+  agu: 7,
+  agustus: 7,
+  sep: 8,
+  sept: 8,
+  september: 8,
+  oct: 9,
+  october: 9,
+  okt: 9,
+  oktober: 9,
+  nov: 10,
+  november: 10,
+  dec: 11,
+  december: 11,
+  des: 11,
+  desember: 11,
+}
+
+function parseDepartureDate(value: string): Date | null {
+  const parts = value.trim().split(/\s+/)
+  if (parts.length < 3) {
+    return null
+  }
+
+  const day = Number.parseInt(parts[0], 10)
+  const month = monthMap[parts[1].toLowerCase()]
+  const year = Number.parseInt(parts[2], 10)
+
+  if (Number.isNaN(day) || Number.isNaN(year) || month === undefined) {
+    return null
+  }
+
+  return new Date(year, month, day)
+}
+
+function getEffectiveStatus(booking: BookingItem): BookingStatus {
+  if (booking.status !== 'akan-datang') {
+    return booking.status
+  }
+
+  const departureDate = parseDepartureDate(booking.departureDateLabel)
+  if (!departureDate) {
+    return booking.status
+  }
+
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+  if (departureDate <= today) {
+    return 'berlangsung'
+  }
+
+  return 'akan-datang'
+}
+
 export function MyBookingScreen({ assets, bookingAssets, bookings, onBackHome, onOpenDetail, onOpenLayananLain, onOpenInformasi }: MyBookingScreenProps) {
   const [activeStatus, setActiveStatus] = useState<BookingStatus>('berlangsung')
 
+  const normalizedBookings = useMemo(
+    () => bookings.map((booking) => ({ ...booking, effectiveStatus: getEffectiveStatus(booking) })),
+    [bookings],
+  )
+
   const filteredBookings = useMemo(
-    () => bookings.filter((booking) => booking.status === activeStatus),
-    [activeStatus, bookings],
+    () => normalizedBookings.filter((booking) => booking.effectiveStatus === activeStatus),
+    [activeStatus, normalizedBookings],
   )
 
   const navItems = [
@@ -70,7 +151,7 @@ export function MyBookingScreen({ assets, bookingAssets, bookings, onBackHome, o
             <div className="my-booking-card-main">
               <div className="my-booking-card-top">
                 <p>{booking.packageName}</p>
-                <span className="my-booking-badge">{statusBadgeLabel[booking.status]}</span>
+                <span className="my-booking-badge">{statusBadgeLabel[booking.effectiveStatus]}</span>
               </div>
 
               <div className="my-booking-meta-row">

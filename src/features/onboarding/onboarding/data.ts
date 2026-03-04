@@ -445,7 +445,7 @@ export const informasiContent: InformasiContent = {
     {
       id: 'perbedaan-umrah-haji',
       title: 'Perbedaan Umrah dan Haji: Penjelasan Lengkap untuk Pe..',
-      image: 'https://www.figma.com/api/mcp/asset/e7e8d721-4c26-468b-b892-9c503c9e1699',
+      image: 'https://www.figma.com/api/mcp/asset/c4f01da2-91a0-4abf-b2e3-547275ba6863',
       brand: 'Maktub • Umrah',
     },
     {
