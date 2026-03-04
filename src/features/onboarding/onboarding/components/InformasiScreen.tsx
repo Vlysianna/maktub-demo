@@ -10,6 +10,7 @@ type InformasiScreenProps = {
   onOpenPanduanUmrah: () => void
   onOpenDoaUmrah: () => void
   onOpenInformasiDetail: () => void
+  onOpenAkun?: () => void
 }
 
 export function InformasiScreen({
@@ -22,13 +23,14 @@ export function InformasiScreen({
   onOpenPanduanUmrah,
   onOpenDoaUmrah,
   onOpenInformasiDetail,
+  onOpenAkun,
 }: InformasiScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeInactiveIcon, active: false, onClick: onOpenHome },
     { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
     { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
     { label: 'Informasi', icon: assets.navInfoIcon, active: true },
-    { label: 'Akun', icon: assets.navAccountIcon, active: false },
+    { label: 'Akun', icon: assets.navAccountIcon, active: false, onClick: onOpenAkun },
   ]
 
   return (

@@ -9,6 +9,7 @@ type MyBookingScreenProps = {
   onOpenDetail: (bookingId: string) => void
   onOpenLayananLain: () => void
   onOpenInformasi?: () => void
+  onOpenAkun?: () => void
 }
 
 const bookingTabs: Array<{ id: BookingStatus; label: string }> = [
@@ -101,7 +102,7 @@ function getEffectiveStatus(booking: BookingItem): BookingStatus {
   return 'akan-datang'
 }
 
-export function MyBookingScreen({ assets, bookingAssets, bookings, onBackHome, onOpenDetail, onOpenLayananLain, onOpenInformasi }: MyBookingScreenProps) {
+export function MyBookingScreen({ assets, bookingAssets, bookings, onBackHome, onOpenDetail, onOpenLayananLain, onOpenInformasi, onOpenAkun }: MyBookingScreenProps) {
   const [activeStatus, setActiveStatus] = useState<BookingStatus>('berlangsung')
 
   const normalizedBookings = useMemo(
@@ -119,7 +120,7 @@ export function MyBookingScreen({ assets, bookingAssets, bookings, onBackHome, o
     { label: 'My Booking', icon: assets.navBookingActiveIcon, active: true },
     { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
     { label: 'Informasi', icon: assets.navInfoIcon, active: false, onClick: onOpenInformasi },
-    { label: 'Akun', icon: assets.navAccountIcon, active: false },
+    { label: 'Akun', icon: assets.navAccountIcon, active: false, onClick: onOpenAkun },
   ]
 
   return (

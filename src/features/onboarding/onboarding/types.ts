@@ -38,6 +38,7 @@ export type Screen =
   | 'doa-umrah'
   | 'rekomendasi-paket'
   | 'notifikasi'
+  | 'login-guest'
 
 export type WalkthroughSlide = {
   image: string
@@ -568,6 +569,27 @@ export type NotifikasiAssets = {
   backIcon: string
   infoIcon: string
   unreadDot: string
+}
+
+export type LoginGuestAssets = {
+  closeIcon: string
+  backgroundGlow: string
+  googleIcon: string
+  phoneArrowIcon: string
+}
+
+export type LoginGuestContent = {
+  arabicLogo: string
+  subtitle: string
+  googleButtonLabel: string
+  orLabel: string
+  phonePlaceholder: string
+  continueLabel: string
+  legalPrefix: string
+  legalTerms: string
+  legalMiddle: string
+  legalPrivacy: string
+  legalSuffix: string
 }
 
 export type PaymentMethod = 'bni-va' | 'bri-va' | 'mandiri-va' | 'bca-va' | 'credit-card'

@@ -7893,6 +7893,7 @@ button.umrah-visa-package-card {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
@@ -7928,5 +7929,205 @@ button.umrah-visa-package-card {
   width: 100%;
   height: 100%;
   display: block;
+}
+
+/* ─── Login Guest Screen ─── */
+
+.login-guest-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: #f5f7f9;
+  overflow: hidden;
+}
+
+.login-guest-close {
+  position: absolute;
+  top: 52px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid #c6cbce;
+  background: #f5f7f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.login-guest-close img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.login-guest-brand {
+  position: absolute;
+  left: 50%;
+  top: 188px;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 2;
+}
+
+.login-guest-brand p {
+  margin: 0;
+  font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+  font-weight: 700;
+  font-size: 58px;
+  line-height: 1;
+  color: #000;
+}
+
+.login-guest-brand span {
+  display: block;
+  margin-top: 7px;
+  font-family: 'Inter', sans-serif;
+  font-size: 31px;
+  line-height: 1;
+  color: #0e1315;
+}
+
+.login-guest-bg-glow {
+  position: absolute;
+  left: -140px;
+  bottom: -12px;
+  width: 399px;
+  height: 303px;
+  transform: rotate(180deg) scaleY(-1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-guest-form-wrap {
+  position: relative;
+  z-index: 2;
+  padding: 0 24px 66px;
+}
+
+.login-guest-google-btn {
+  width: 100%;
+  height: 49px;
+  border: 1px solid #cdcdcd;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  color: #0a0c0e;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.login-guest-google-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.login-guest-or-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 11px 0;
+}
+
+.login-guest-or-row span {
+  flex: 1;
+  height: 1px;
+  background: #d1d5da;
+}
+
+.login-guest-or-row p {
+  margin: 0;
+  color: #0e1315;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+}
+
+.login-guest-phone-input-wrap {
+  width: 100%;
+  height: 49px;
+  border: 1px solid #d1d5da;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 8px;
+  cursor: text;
+}
+
+.login-guest-code {
+  color: #323333;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+}
+
+.login-guest-arrow {
+  width: 8.5px;
+  height: 4.5px;
+  transform: rotate(-90deg);
+}
+
+.login-guest-separator {
+  color: #d1d5da;
+  font-size: 13px;
+  line-height: 21px;
+}
+
+.login-guest-phone-input-wrap input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  color: #323333;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+}
+
+.login-guest-phone-input-wrap input::placeholder {
+  color: #979899;
+}
+
+.login-guest-continue-btn {
+  margin-top: 16px;
+  width: 100%;
+  height: 49px;
+  border: none;
+  border-radius: 8px;
+  background: #2c3248;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  cursor: pointer;
+}
+
+.login-guest-legal-text {
+  margin: 24px auto 0;
+  width: 307px;
+  text-align: center;
+  color: #0e1315;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.login-guest-legal-text strong {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 1px;
 }
 

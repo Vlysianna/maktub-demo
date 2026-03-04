@@ -39,6 +39,7 @@ import { ArahKiblatJadwalScreen } from './features/onboarding/onboarding/compone
 import { PanduanUmrahScreen } from './features/onboarding/onboarding/components/PanduanUmrahScreen'
 import { DoaUmrahScreen } from './features/onboarding/onboarding/components/DoaUmrahScreen'
 import { NotifikasiScreen } from './features/onboarding/onboarding/components/NotifikasiScreen'
+import { LoginGuestScreen } from './features/onboarding/onboarding/components/LoginGuestScreen'
 import {
   articles,
   budgetOptions,
@@ -77,6 +78,8 @@ import {
   kiblatScheduleContent,
   panduanUmrahContent,
   doaUmrahContent,
+  loginGuestAssets,
+  loginGuestContent,
   notifikasiAssets,
   notificationItems,
 } from './features/onboarding/onboarding/data'
@@ -221,6 +224,8 @@ type FlightCabinSelection = string
 
 function App() {
   const [screen, setScreen] = useState<Screen>('splash')
+  const [isLoggedIn] = useState(false)
+  const [loginGuestBackScreen, setLoginGuestBackScreen] = useState<Screen>('home')
   const [flightSearchEntry, setFlightSearchEntry] = useState<'home' | 'maktub-ai'>('home')
   const [isHotelOnlyFlow, setIsHotelOnlyFlow] = useState(false)
   const [selectedMyBookingId, setSelectedMyBookingId] = useState<string | null>(null)
@@ -1203,6 +1208,15 @@ function App() {
     [],
   )
 
+  const openAkunMenu = (currentScreen: Screen) => {
+    if (isLoggedIn) {
+      return
+    }
+
+    setLoginGuestBackScreen(currentScreen)
+    setScreen('login-guest')
+  }
+
   return (
     <main className="walkthrough-page">
       {screen === 'splash' && <SplashScreen logoUrl={splashLogo} />}
@@ -1245,6 +1259,7 @@ function App() {
           onOpenMyBooking={() => setScreen('my-booking')}
           onOpenLayananLain={() => setScreen('layanan-lain')}
           onOpenInformasi={() => setScreen('informasi')}
+          onOpenAkun={() => openAkunMenu('home')}
           onOpenNotifikasi={() => setScreen('notifikasi')}
           onOpenVisa={() => {
             setVisaFromHome(true)
@@ -1261,6 +1276,7 @@ function App() {
           onBackHome={() => setScreen('home')}
           onOpenLayananLain={() => setScreen('layanan-lain')}
           onOpenInformasi={() => setScreen('informasi')}
+          onOpenAkun={() => openAkunMenu('my-booking')}
           onOpenDetail={(bookingId) => {
             setSelectedMyBookingId(bookingId)
             setScreen('my-booking-detail')
@@ -1966,6 +1982,7 @@ function App() {
           onOpenHome={() => setScreen('home')}
           onOpenMyBooking={() => setScreen('my-booking')}
           onOpenInformasi={() => setScreen('informasi')}
+          onOpenAkun={() => openAkunMenu('layanan-lain')}
         />
       )}
 
@@ -1980,6 +1997,7 @@ function App() {
           onOpenPanduanUmrah={() => setScreen('panduan-umrah')}
           onOpenDoaUmrah={() => setScreen('doa-umrah')}
           onOpenInformasiDetail={() => setScreen('informasi-detail')}
+          onOpenAkun={() => openAkunMenu('informasi')}
         />
       )}
 
@@ -2013,6 +2031,16 @@ function App() {
           assets={notifikasiAssets}
           notifications={notificationItems}
           onBack={() => setScreen('home')}
+        />
+      )}
+
+      {screen === 'login-guest' && (
+        <LoginGuestScreen
+          assets={loginGuestAssets}
+          content={loginGuestContent}
+          onClose={() => setScreen(loginGuestBackScreen)}
+          onContinueWithGoogle={() => {}}
+          onContinueWithPhone={() => {}}
         />
       )}
     </main>

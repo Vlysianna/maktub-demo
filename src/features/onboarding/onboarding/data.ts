@@ -14,6 +14,8 @@ import type {
   LayananLainAssets,
   MyBookingDetailAssets,
   MyBookingAssets,
+  LoginGuestAssets,
+  LoginGuestContent,
   NotificationItem,
   NotifikasiAssets,
   UmrahCompletionAssets,
@@ -1094,3 +1096,24 @@ export const notificationItems: NotificationItem[] = [
     icon: '',
   },
 ]
+
+export const loginGuestAssets: LoginGuestAssets = {
+  closeIcon: 'https://www.figma.com/api/mcp/asset/0fd00dbc-a596-40cb-b132-f2b0f4333baf',
+  backgroundGlow: 'https://www.figma.com/api/mcp/asset/d58cfbce-1f10-4b90-9398-67a970b4ed65',
+  googleIcon: 'https://www.figma.com/api/mcp/asset/8afc1fe7-6ebe-452e-9089-f968b5d89f12',
+  phoneArrowIcon: 'https://www.figma.com/api/mcp/asset/be3aacc3-78ba-4c45-a739-a75dd8d60012',
+}
+
+export const loginGuestContent: LoginGuestContent = {
+  arabicLogo: 'مكتوب',
+  subtitle: 'It’s written',
+  googleButtonLabel: 'Lanjutkan dengan akun google',
+  orLabel: 'atau',
+  phonePlaceholder: 'Masukan nomor telepon',
+  continueLabel: 'Lanjutkan',
+  legalPrefix: 'Dengan mengklik "Lanjutkan", Anda menerima ',
+  legalTerms: 'Syarat dan Ketentuan',
+  legalMiddle: ' serta ',
+  legalPrivacy: 'Kebijakan Privasi',
+  legalSuffix: ' kami.',
+}
