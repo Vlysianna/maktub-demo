@@ -14,6 +14,7 @@ type HomeGuestScreenProps = {
   onOpenAkun?: () => void
   onOpenVisa?: () => void
   onOpenNotifikasi?: () => void
+  onOpenChatAssistant?: () => void
 }
 
 export function HomeGuestScreen({
@@ -30,6 +31,7 @@ export function HomeGuestScreen({
   onOpenAkun,
   onOpenVisa,
   onOpenNotifikasi,
+  onOpenChatAssistant,
 }: HomeGuestScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeIcon, active: true },
@@ -125,7 +127,7 @@ export function HomeGuestScreen({
         </section>
       </div>
 
-      <button className="chatbot-fab" type="button" aria-label="Chat bot">
+      <button className="chatbot-fab" type="button" aria-label="Chat bot" onClick={onOpenChatAssistant}>
         <img src={assets.chatbot} alt="Chat bot" />
       </button>
 

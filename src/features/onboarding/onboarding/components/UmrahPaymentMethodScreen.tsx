@@ -4,6 +4,9 @@ import type { PaymentBreakdown, PaymentMethod, UmrahPaymentAssets } from '../typ
 type UmrahPaymentMethodScreenProps = {
   assets: UmrahPaymentAssets
   breakdown: PaymentBreakdown
+  title?: string
+  payLabel?: string
+  hideStepper?: boolean
   paymentFor?: 'package' | 'visa'
   packageSummaryLabel?: string
   visaLabel?: string
@@ -21,6 +24,9 @@ function toRupiah(amount: number) {
 export function UmrahPaymentMethodScreen({
   assets,
   breakdown,
+  title = 'Pembayaran',
+  payLabel = 'Bayar',
+  hideStepper = false,
   paymentFor = 'package',
   packageSummaryLabel,
   visaLabel,
@@ -42,11 +48,11 @@ export function UmrahPaymentMethodScreen({
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
           ←
         </button>
-        <h1>Pembayaran</h1>
+        <h1>{title}</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      {flightOnly ? (
+      {hideStepper ? null : flightOnly ? (
         <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
           <span className="umrah-flight-step">
             <i>1</i>
@@ -200,7 +206,7 @@ export function UmrahPaymentMethodScreen({
 
       <footer className="umrah-ticket-footer">
         <button type="button" className="cta-button" onClick={() => onPay(selectedMethod)}>
-          Bayar
+          {payLabel}
         </button>
       </footer>
 

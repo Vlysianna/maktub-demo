@@ -43,6 +43,7 @@ import { LoginGuestScreen } from './features/onboarding/onboarding/components/Lo
 import { LoginNameScreen } from './features/onboarding/onboarding/components/LoginNameScreen'
 import { ProfileScreen } from './features/onboarding/onboarding/components/ProfileScreen'
 import { ProfileSettingsScreen } from './features/onboarding/onboarding/components/ProfileSettingsScreen'
+import { ChatAssistantScreen } from './features/onboarding/onboarding/components/ChatAssistantScreen'
 import {
   articles,
   budgetOptions,
@@ -168,6 +169,12 @@ function formatCurrency(amount: number) {
   return `Rp ${amount.toLocaleString('id-ID')}`
 }
 
+function parseRupiahLabelToNumber(label: string) {
+  const numeric = label.replace(/[^\d]/g, '')
+  const parsed = Number.parseInt(numeric, 10)
+  return Number.isNaN(parsed) ? 0 : parsed
+}
+
 function createTicketFareOptions(basePrice: number, travelerCount: number): TicketFareOption[] {
   return onboardingConfig.flightFareTemplates.map((template) => {
     const topUp =
@@ -252,6 +259,8 @@ function App() {
   const [userProfile, setUserProfile] = useState(profileData)
   const [loginGuestBackScreen, setLoginGuestBackScreen] = useState<Screen>('home')
   const [notifikasiBackScreen, setNotifikasiBackScreen] = useState<Screen>('home')
+  const [chatAssistantBackScreen, setChatAssistantBackScreen] = useState<Screen>('home')
+  const [showProfileCompletionPopup, setShowProfileCompletionPopup] = useState(false)
   const [loginPhoneNumber, setLoginPhoneNumber] = useState('')
   const [flightSearchEntry, setFlightSearchEntry] = useState<'home' | 'maktub-ai'>('home')
   const [isHotelOnlyFlow, setIsHotelOnlyFlow] = useState(false)
@@ -284,6 +293,7 @@ function App() {
   const [selectedReturnHotelId, setSelectedReturnHotelId] = useState<string | null>(null)
   const [selectedReturnHotelRoomId, setSelectedReturnHotelRoomId] = useState<string | null>(null)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('bni-va')
+  const [selectedRekomendasiPaketId, setSelectedRekomendasiPaketId] = useState<string | null>(null)
   const [ticketInfoValidationMessage, setTicketInfoValidationMessage] = useState('')
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
@@ -972,6 +982,27 @@ function App() {
   )
   const passportExpiryYearOptions = Array.from({ length: 11 }, (_, index) => String(new Date().getFullYear() + index))
   const selectedPaymentLabel = onboardingConfig.paymentMethodLabels[selectedPaymentMethod]
+  const selectedRekomendasiPaket = useMemo(
+    () => rekomendasiPaketItems.find((item) => item.id === selectedRekomendasiPaketId) ?? null,
+    [selectedRekomendasiPaketId],
+  )
+  const rekomendasiPaketBreakdown = useMemo<PaymentBreakdown>(() => {
+    const subtotal = selectedRekomendasiPaket ? parseRupiahLabelToNumber(selectedRekomendasiPaket.startingPriceLabel) : 3_000_000
+    const serviceFee = 2_000
+    const taxAmount = Math.round(subtotal * 0.11)
+    const grandTotal = subtotal + serviceFee + taxAmount
+
+    return {
+      flightDeparture: 0,
+      flightReturn: 0,
+      hotelMakkah: 0,
+      hotelMadinah: 0,
+      subtotal,
+      serviceFee,
+      taxAmount,
+      grandTotal,
+    }
+  }, [selectedRekomendasiPaket])
 
   const isVisaPersonalCompleted = useMemo(() => Object.values(visaPersonalForm).every((value) => value.trim().length > 0), [visaPersonalForm])
   const isVisaDocsCompleted = useMemo(
@@ -1250,6 +1281,19 @@ function App() {
     onAllowed()
   }
 
+  const openChatAssistant = (backScreen: Screen) => {
+    ensureLoggedInForService(backScreen, () => {
+      setChatAssistantBackScreen(backScreen)
+      setScreen('chat-assistant')
+    })
+  }
+
+  const isProfileIncomplete =
+    !userProfile.name.trim() ||
+    userProfile.name.trim().toLowerCase() === 'nama anda' ||
+    !userProfile.email.trim() ||
+    !userProfile.gender.trim()
+
   useEffect(() => {
     if (isLoggedIn) {
       return
@@ -1331,6 +1375,7 @@ function App() {
             setNotifikasiBackScreen('home')
             setScreen('notifikasi')
           }}
+          onOpenChatAssistant={() => openChatAssistant('home')}
           onOpenVisa={() => {
             ensureLoggedInForService('home', () => {
               setVisaFromHome(true)
@@ -2060,7 +2105,7 @@ function App() {
               id: 'chat-assistant',
               label: 'Chat Assistant',
               icon: layananLainAssets.chatAssistantIcon,
-              onClick: () => ensureLoggedInForService('layanan-lain', () => {}),
+              onClick: () => openChatAssistant('layanan-lain'),
             },
             {
               id: 'rekomendasi-paket',
@@ -2112,7 +2157,112 @@ function App() {
           assets={rekomendasiPaketAssets}
           packages={rekomendasiPaketItems}
           onBack={() => setScreen('layanan-lain')}
-          onSelectPackage={() => {}}
+          onSelectPackage={(id) => {
+            setSelectedRekomendasiPaketId(id)
+            setScreen('rekomendasi-paket-payment')
+          }}
+        />
+      )}
+
+      {screen === 'rekomendasi-paket-payment' && (
+        <UmrahPaymentMethodScreen
+          assets={umrahPaymentAssets}
+          title="Pembayaran"
+          payLabel="Bayar"
+          hideStepper
+          breakdown={rekomendasiPaketBreakdown}
+          paymentFor="package"
+          packageSummaryLabel="Harga Mutawif, Kendaraan, Asuransi perjalanan"
+          taxLabel="Pajak 11%"
+          onBack={() => setScreen('rekomendasi-paket')}
+          onPay={(method) => {
+            setSelectedPaymentMethod(method)
+            setScreen('rekomendasi-paket-payment-pending')
+          }}
+        />
+      )}
+
+      {screen === 'rekomendasi-paket-payment-pending' && (
+        <UmrahPaymentPendingScreen
+          assets={umrahPaymentAssets}
+          title={selectedPaymentLabel}
+          ctaLabel="Selesai"
+          ctaDisabled={false}
+          hideStepper
+          virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
+          virtualAccountName={selectedPaymentLabel}
+          totalPayment={rekomendasiPaketBreakdown.grandTotal}
+          onBack={() => setScreen('rekomendasi-paket-payment')}
+          onNext={() => {
+            const paidAt = new Date()
+            setPaymentCompletedAt(paidAt)
+
+            const bookingTemplate = dynamicBookingItems[0]
+            const detailTemplate = dynamicMyBookingDetailsById[primaryBookingId]
+
+            if (bookingTemplate && detailTemplate) {
+              const bookingId = createBookingId()
+              const settledStatus = resolveSettledBookingStatus(travelDate, hotelNights)
+
+              setSavedBookingItems((prev) => [
+                {
+                  ...bookingTemplate,
+                  id: bookingId,
+                  packageName: selectedRekomendasiPaket?.name ?? bookingTemplate.packageName,
+                  durationLabel: selectedRekomendasiPaket?.durationLabel ?? bookingTemplate.durationLabel,
+                  bookingDateLabel: selectedRekomendasiPaket?.dateLabel ?? bookingTemplate.bookingDateLabel,
+                  status: settledStatus,
+                  totalPriceLabel: formatCurrency(rekomendasiPaketBreakdown.grandTotal),
+                },
+                ...prev,
+              ])
+              setSavedBookingDetailsById((prev) => ({
+                ...prev,
+                [bookingId]: {
+                  ...detailTemplate,
+                  bookingId,
+                  title: selectedRekomendasiPaket?.name ?? detailTemplate.title,
+                  status: settledStatus,
+                  payment: {
+                    ...detailTemplate.payment,
+                    totalLabel: formatCurrency(rekomendasiPaketBreakdown.grandTotal),
+                    breakdown: [
+                      {
+                        label: 'Harga Mutawif, Kendaraan, Asuransi perjalanan',
+                        amountLabel: formatCurrency(rekomendasiPaketBreakdown.subtotal),
+                      },
+                      { label: 'Biaya layanan', amountLabel: formatCurrency(rekomendasiPaketBreakdown.serviceFee) },
+                      { label: 'Pajak 11%', amountLabel: formatCurrency(rekomendasiPaketBreakdown.taxAmount) },
+                      {
+                        label: 'Total harga',
+                        amountLabel: formatCurrency(rekomendasiPaketBreakdown.grandTotal),
+                        emphasized: true,
+                      },
+                    ],
+                    methodLabel: selectedPaymentLabel,
+                  },
+                },
+              }))
+            }
+
+            setScreen('rekomendasi-paket-payment-complete')
+          }}
+        />
+      )}
+
+      {screen === 'rekomendasi-paket-payment-complete' && (
+        <UmrahPaymentCompleteScreen
+          assets={umrahCompletionAssets}
+          ctaLabel="Lihat Paket Umrah Saya"
+          onBack={() => setScreen('rekomendasi-paket-payment-pending')}
+          onNext={() => setScreen('my-booking')}
+        />
+      )}
+
+      {screen === 'chat-assistant' && (
+        <ChatAssistantScreen
+          displayName={userProfile.name || 'Teman Maktub'}
+          onBack={() => setScreen(chatAssistantBackScreen)}
         />
       )}
 
@@ -2147,7 +2297,7 @@ function App() {
         <LoginNameScreen
           assets={loginNameAssets}
           content={loginNameContent}
-          initialName={userProfile.name}
+          initialName={userProfile.name.trim().toLowerCase() === 'nama anda' ? '' : userProfile.name}
           onBack={() => setScreen('login-guest')}
           onContinue={(name) => {
             if (!name) {
@@ -2161,7 +2311,8 @@ function App() {
               phone: loginPhoneNumber || previous.phone,
             }))
             setIsLoggedIn(true)
-            setScreen('profile')
+            setScreen('home')
+            setShowProfileCompletionPopup(true)
           }}
         />
       )}
@@ -2192,14 +2343,44 @@ function App() {
         <ProfileSettingsScreen
           profile={userProfile}
           onBack={() => setScreen('profile')}
-          onSaveProfile={(nextProfile) => setUserProfile(nextProfile)}
+          onSaveProfile={(nextProfile) => {
+            setUserProfile(nextProfile)
+            if (nextProfile.email.trim() && nextProfile.gender.trim()) {
+              setShowProfileCompletionPopup(false)
+            }
+          }}
           onDeleteAccount={() => {
             setIsLoggedIn(false)
             setLoginPhoneNumber('')
             setUserProfile(profileData)
+            setShowProfileCompletionPopup(false)
             setScreen('home')
           }}
         />
+      )}
+
+      {showProfileCompletionPopup && isLoggedIn && isProfileIncomplete && (
+        <div className="profile-completion-overlay" role="dialog" aria-modal>
+          <div className="profile-completion-popup">
+            <h3>Lengkapi Profil Anda</h3>
+            <p>Agar pengalaman lebih optimal, mohon lengkapi informasi profil terlebih dahulu.</p>
+            <div>
+              <button type="button" className="secondary" onClick={() => setShowProfileCompletionPopup(false)}>
+                Nanti
+              </button>
+              <button
+                type="button"
+                className="primary"
+                onClick={() => {
+                  setShowProfileCompletionPopup(false)
+                  setScreen('profile-settings')
+                }}
+              >
+                Lengkapi
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </main>
   )

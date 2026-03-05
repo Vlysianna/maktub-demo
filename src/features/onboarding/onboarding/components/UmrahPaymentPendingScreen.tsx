@@ -3,6 +3,10 @@ import type { UmrahPaymentAssets } from '../types'
 
 type UmrahPaymentPendingScreenProps = {
   assets: UmrahPaymentAssets
+  title?: string
+  ctaLabel?: string
+  ctaDisabled?: boolean
+  hideStepper?: boolean
   flightOnly?: boolean
   virtualAccountNumber: string
   virtualAccountName: string
@@ -23,6 +27,10 @@ function formatTimer(totalSeconds: number) {
 
 export function UmrahPaymentPendingScreen({
   assets,
+  title = 'Pembayaran',
+  ctaLabel = 'Lanjut',
+  ctaDisabled = true,
+  hideStepper = false,
   flightOnly = false,
   virtualAccountNumber,
   virtualAccountName,
@@ -48,11 +56,11 @@ export function UmrahPaymentPendingScreen({
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
           ←
         </button>
-        <h1>Pembayaran</h1>
+        <h1>{title}</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      {!flightOnly && (
+      {!hideStepper && !flightOnly && (
         <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
           <span className="umrah-flight-step active">
             <i>2</i>
@@ -129,8 +137,8 @@ export function UmrahPaymentPendingScreen({
       </div>
 
       <footer className="umrah-ticket-footer">
-        <button type="button" className="cta-button disabled" onClick={onNext}>
-          Lanjut
+        <button type="button" className={`cta-button${ctaDisabled ? ' disabled' : ''}`} onClick={onNext}>
+          {ctaLabel}
         </button>
       </footer>
 

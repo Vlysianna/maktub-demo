@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ProfileData } from '../types'
 
-type EditableField = 'name' | 'email' | 'phone' | 'gender'
+type EditableField = 'name' | 'email' | 'phone'
 
 type ProfileSettingsScreenProps = {
   profile: ProfileData
@@ -14,16 +14,75 @@ const fieldLabels: Record<EditableField, string> = {
   name: 'Nama',
   email: 'Email',
   phone: 'Nomor HP',
-  gender: 'Jenis Kelamin',
+}
+
+const monthMap: Record<string, string> = {
+  januari: '01',
+  februari: '02',
+  febuari: '02',
+  maret: '03',
+  april: '04',
+  mei: '05',
+  juni: '06',
+  juli: '07',
+  agustus: '08',
+  september: '09',
+  oktober: '10',
+  november: '11',
+  desember: '12',
+}
+
+const monthLabel: Record<string, string> = {
+  '01': 'Januari',
+  '02': 'Februari',
+  '03': 'Maret',
+  '04': 'April',
+  '05': 'Mei',
+  '06': 'Juni',
+  '07': 'Juli',
+  '08': 'Agustus',
+  '09': 'September',
+  '10': 'Oktober',
+  '11': 'November',
+  '12': 'Desember',
+}
+
+const parseBirthDateToInputValue = (birthDate: ProfileData['birthDate']) => {
+  const dayNumber = Number.parseInt(birthDate.day, 10)
+  const yearNumber = Number.parseInt(birthDate.year, 10)
+  const mappedMonth = monthMap[birthDate.month.trim().toLowerCase()]
+
+  if (!dayNumber || !yearNumber || !mappedMonth) {
+    return ''
+  }
+
+  return `${String(yearNumber).padStart(4, '0')}-${mappedMonth}-${String(dayNumber).padStart(2, '0')}`
+}
+
+const formatBirthDate = (inputValue: string): ProfileData['birthDate'] | null => {
+  if (!inputValue) {
+    return null
+  }
+
+  const [year, month, day] = inputValue.split('-')
+  if (!year || !month || !day) {
+    return null
+  }
+
+  return {
+    day,
+    month: monthLabel[month] ?? month,
+    year,
+  }
 }
 
 export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDeleteAccount }: ProfileSettingsScreenProps) {
   const [editingField, setEditingField] = useState<EditableField | null>(null)
   const [editingValue, setEditingValue] = useState('')
+  const [isGenderModalOpen, setIsGenderModalOpen] = useState(false)
+  const [selectedGender, setSelectedGender] = useState(profile.gender)
   const [isBirthDateModalOpen, setIsBirthDateModalOpen] = useState(false)
-  const [day, setDay] = useState(profile.birthDate.day)
-  const [month, setMonth] = useState(profile.birthDate.month)
-  const [year, setYear] = useState(profile.birthDate.year)
+  const [birthDateInputValue, setBirthDateInputValue] = useState(parseBirthDateToInputValue(profile.birthDate))
 
   const openTextEditor = (field: EditableField, value: string) => {
     setEditingField(field)
@@ -44,15 +103,28 @@ export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDelete
   }
 
   const saveBirthDate = () => {
+    const formattedBirthDate = formatBirthDate(birthDateInputValue)
+    if (!formattedBirthDate) {
+      return
+    }
+
     onSaveProfile({
       ...profile,
-      birthDate: {
-        day,
-        month,
-        year,
-      },
+      birthDate: formattedBirthDate,
     })
     setIsBirthDateModalOpen(false)
+  }
+
+  const saveGender = () => {
+    if (!selectedGender.trim()) {
+      return
+    }
+
+    onSaveProfile({
+      ...profile,
+      gender: selectedGender,
+    })
+    setIsGenderModalOpen(false)
   }
 
   const birthDateLabel = `${profile.birthDate.day} ${profile.birthDate.month} ${profile.birthDate.year}`
@@ -102,9 +174,17 @@ export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDelete
           <div className="profile-settings-item">
             <div>
               <p>Jenis Kelamin</p>
-              <strong>{profile.gender}</strong>
+              <strong>{profile.gender || '-'}</strong>
             </div>
-            <button type="button" onClick={() => openTextEditor('gender', profile.gender)}>Ubah</button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedGender(profile.gender)
+                setIsGenderModalOpen(true)
+              }}
+            >
+              Ubah
+            </button>
           </div>
 
           <div className="profile-settings-item">
@@ -112,7 +192,15 @@ export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDelete
               <p>Tanggal Lahir</p>
               <strong>{birthDateLabel}</strong>
             </div>
-            <button type="button" onClick={() => setIsBirthDateModalOpen(true)}>Ubah</button>
+            <button
+              type="button"
+              onClick={() => {
+                setBirthDateInputValue(parseBirthDateToInputValue(profile.birthDate))
+                setIsBirthDateModalOpen(true)
+              }}
+            >
+              Ubah
+            </button>
           </div>
         </section>
 
@@ -140,6 +228,28 @@ export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDelete
         </div>
       )}
 
+      {isGenderModalOpen && (
+        <div className="profile-sheet-overlay" role="dialog" aria-modal>
+          <div className="profile-sheet">
+            <span className="profile-sheet-handle" />
+            <button type="button" className="profile-sheet-close" onClick={() => setIsGenderModalOpen(false)} aria-label="Tutup">
+              ✕
+            </button>
+            <p className="profile-sheet-title">Jenis Kelamin</p>
+            <select
+              className="profile-sheet-input"
+              value={selectedGender}
+              onChange={(event) => setSelectedGender(event.target.value)}
+            >
+              <option value="">Pilih jenis kelamin</option>
+              <option value="Pria">Pria</option>
+              <option value="Wanita">Wanita</option>
+            </select>
+            <button type="button" className="profile-sheet-save" onClick={saveGender}>Simpan</button>
+          </div>
+        </div>
+      )}
+
       {isBirthDateModalOpen && (
         <div className="profile-sheet-overlay" role="dialog" aria-modal>
           <div className="profile-sheet">
@@ -148,11 +258,12 @@ export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDelete
               ✕
             </button>
             <p className="profile-sheet-title">Tanggal Lahir</p>
-            <div className="profile-sheet-date-row">
-              <input value={day} onChange={(event) => setDay(event.target.value)} />
-              <input value={month} onChange={(event) => setMonth(event.target.value)} />
-              <input value={year} onChange={(event) => setYear(event.target.value)} />
-            </div>
+            <input
+              type="date"
+              className="profile-sheet-input profile-sheet-date-input"
+              value={birthDateInputValue}
+              onChange={(event) => setBirthDateInputValue(event.target.value)}
+            />
             <button type="button" className="profile-sheet-save" onClick={saveBirthDate}>Simpan</button>
           </div>
         </div>

@@ -1148,7 +1148,7 @@ export const loginNameContent: LoginNameContent = {
 
 export const profileData: ProfileData = {
   avatar: 'https://www.figma.com/api/mcp/asset/5791793b-087a-46e8-be34-37715e874d94',
-  name: 'Noermansyah',
+  name: 'Nama Anda',
   email: '',
   phone: '081312341234',
   gender: '',
