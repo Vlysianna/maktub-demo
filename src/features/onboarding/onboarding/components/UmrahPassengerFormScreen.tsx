@@ -50,7 +50,6 @@ function validatePassengerForm(form: PassengerFormData): FormErrors {
   if (!form.passportExpiryDay || !form.passportExpiryMonth || !form.passportExpiryYear) {
     errors.passportExpiryDay = 'Tanggal habis berlaku wajib diisi lengkap'
   } else {
-    // Validate expiry is at least 6 months from today
     const monthNames: Record<string, number> = {
       Januari: 0, Februari: 1, Maret: 2, April: 3, Mei: 4, Juni: 5,
       Juli: 6, Agustus: 7, September: 8, Oktober: 9, November: 10, Desember: 11,
