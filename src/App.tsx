@@ -1340,6 +1340,7 @@ function App() {
           services={services}
           articles={articles}
           userDisplayName={isLoggedIn ? userProfile.name : undefined}
+          userPhotoUrl={isLoggedIn ? userProfile.avatar : undefined}
           onStartJourney={() => {
             ensureLoggedInForService('home', () => {
               resetMaktubAiFlowState()

@@ -28,7 +28,7 @@ export function ProfileScreen({
     { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
     { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
     { label: 'Informasi', icon: assets.navInfoIcon, active: false, onClick: onOpenInformasi },
-    { label: 'Akun', icon: assets.navAccountIcon, active: true },
+    { label: 'Akun', icon: assets.navAccountActiveIcon, active: true },
   ]
 
   return (

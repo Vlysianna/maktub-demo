@@ -304,7 +304,7 @@
 .home-header-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .home-user-box {
@@ -316,6 +316,10 @@
 .home-avatar {
   width: 40px;
   height: 40px;
+  border-radius: 9999px;
+  object-fit: cover;
+  display: block;
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .home-welcome {
@@ -338,9 +342,24 @@
   width: 24px;
   height: 24px;
   position: relative;
-  margin-top: 10px;
+  margin-top: 0;
   cursor: pointer;
   padding: 0;
+}
+
+.home-avatar--placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.home-avatar--placeholder svg {
+  width: 20px;
+  height: 20px;
 }
 
 .home-bell img {
@@ -628,8 +647,11 @@
   bottom: 0;
   height: var(--home-nav-total-height);
   padding-bottom: var(--home-safe-bottom);
-  background: #fff;
-  border-top: 1px solid #d1d5da;
+  background-color: #fff;
+  background-image: url('/assets/figma/nav-bottom-bg.svg');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% 61px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   z-index: 4;

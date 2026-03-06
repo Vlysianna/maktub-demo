@@ -311,7 +311,9 @@ export type HomeAssets = {
   navBookingActiveIcon: string
   navServicesIcon: string
   navInfoIcon: string
+  navInfoActiveIcon: string
   navAccountIcon: string
+  navAccountActiveIcon: string
 }
 
 export type UmrahQuestionAssets = {

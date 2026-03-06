@@ -44,7 +44,9 @@ import type {
   ProfileData,
 } from './types'
 
-export const splashLogo = 'https://www.figma.com/api/mcp/asset/c4989d5f-ee63-47a9-a373-06f00977a94c'
+const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`
+
+export const splashLogo = publicAsset('assets/figma/logo-splash.png')
 
 export const walkthroughSlides: WalkthroughSlide[] = [
   {
@@ -349,28 +351,30 @@ export const myBookingDetailsById: Record<string, BookingDetail> = {
 
 export const homeAssets: HomeAssets = {
   pattern: 'https://www.figma.com/api/mcp/asset/78bd8aa3-fb8e-462b-9936-1f2727ad104d',
-  logo: 'https://www.figma.com/api/mcp/asset/c4989d5f-ee63-47a9-a373-06f00977a94c',
-  avatar: 'https://www.figma.com/api/mcp/asset/2ee4c898-8718-4d52-bbba-7caafed5ca88',
-  bell: 'https://www.figma.com/api/mcp/asset/aeeb8e3b-c540-4b18-a24f-1ecf5710909a',
-  sparkle: 'https://www.figma.com/api/mcp/asset/13f4b8c1-a1d5-4b72-ab75-d50ecc65d56f',
-  sparkleGlow: 'https://www.figma.com/api/mcp/asset/0c4b5c27-2aaf-4ba8-9e20-37f07248b30b',
-  searchIcon: 'https://www.figma.com/api/mcp/asset/cd0268f7-36f3-4c11-aa9c-829dec51f9d7',
-  infoIcon: 'https://www.figma.com/api/mcp/asset/d1efae61-9e61-45a6-920a-2e1985d81619',
-  arrowRight: 'https://www.figma.com/api/mcp/asset/1c8f6e3f-9ee8-498e-a251-f9cbd8a9ffa3',
-  chatbot: 'https://www.figma.com/api/mcp/asset/014c5f02-b4c7-4743-9622-8cd8592dd92d',
-  navHomeIcon: 'https://www.figma.com/api/mcp/asset/6d2fcfe4-f277-42bf-a91e-cbd3c3b0466a',
-  navHomeInactiveIcon: 'https://www.figma.com/api/mcp/asset/a028ad61-b776-4906-b67f-15da8514b0d5',
-  navBookingIcon: 'https://www.figma.com/api/mcp/asset/10455ef3-9f71-4b4f-996c-83dcc948ca95',
-  navBookingActiveIcon: 'https://www.figma.com/api/mcp/asset/7ced23ec-e00b-4972-8ca4-c244282dac46',
-  navServicesIcon: 'https://www.figma.com/api/mcp/asset/8af8d036-30ba-48d4-8767-072c8b763262',
-  navInfoIcon: 'https://www.figma.com/api/mcp/asset/1df397f5-9f40-4fcb-82e3-f0c76edf8842',
-  navAccountIcon: 'https://www.figma.com/api/mcp/asset/e56f81eb-4a8b-4503-89ca-b1ac651315bc',
+  logo:  publicAsset('assets/figma/maktub-ai-icon.svg'),
+  avatar: publicAsset('assets/figma/avatar-icon.svg'),
+  bell: publicAsset('assets/figma/bell-icon.svg'),
+  sparkle: publicAsset('assets/figma/maktub-ai-icon.svg'),
+  sparkleGlow: publicAsset('assets/figma/maktub-ai-glow-icon.svg'),
+  searchIcon: publicAsset('assets/figma/ai-search-icon.svg'),
+  infoIcon: publicAsset('assets/figma/home-info-icon.svg'),
+  arrowRight: publicAsset('assets/figma/info-chevron-icon.svg'),
+  chatbot: publicAsset('assets/figma/maktub-ai-icon.svg'),
+  navHomeIcon: publicAsset('assets/figma/nav-home-icon-active.svg'),
+  navHomeInactiveIcon: publicAsset('assets/figma/nav-home-icon.svg'),
+  navBookingIcon: publicAsset('assets/figma/nav-booking-icon.svg'),
+  navBookingActiveIcon: publicAsset('assets/figma/nav-booking-icon-active.svg'),
+  navServicesIcon: publicAsset('assets/figma/nav-services-icon.svg'),
+  navInfoIcon: publicAsset('assets/figma/nav-info-icon.svg'),
+  navInfoActiveIcon: publicAsset('assets/figma/nav-info-icon-active.svg'),
+  navAccountIcon: publicAsset('assets/figma/nav-account-icon.svg'),
+  navAccountActiveIcon: publicAsset('assets/figma/nav-account-icon-active.svg'),
 }
 
 export const services: ServiceItem[] = [
-  { label: 'Pesawat', icon: 'https://www.figma.com/api/mcp/asset/3b5073b3-f438-4230-9a43-b54635addd35' },
-  { label: 'Hotel', icon: 'https://www.figma.com/api/mcp/asset/74917ba5-5196-4787-b2ea-379b6b5a235b' },
-  { label: 'Visa & Lainnya', icon: 'https://www.figma.com/api/mcp/asset/69312a54-6ff7-4bc8-b78b-0b48cb08f504' },
+  { label: 'Pesawat', icon: publicAsset('assets/figma/service-pesawat.svg') },
+  { label: 'Hotel', icon: publicAsset('assets/figma/service-hotel.svg') },
+  { label: 'Visa & Lainnya', icon: publicAsset('assets/figma/service-visa.svg') },
 ]
 
 export const articles: ArticleItem[] = [
@@ -872,12 +876,12 @@ export const layananLainAssets: LayananLainAssets = {
   layananTambahanIcon: 'https://www.figma.com/api/mcp/asset/2abb5739-8fbe-44fb-9f80-026e337d31da',
   chatAssistantIcon: 'https://www.figma.com/api/mcp/asset/b2ad6b21-dcf5-47d3-a123-f3f270bb102a',
   rekomendasiPaketIcon: 'https://www.figma.com/api/mcp/asset/0d1b3448-e462-4ae7-87be-5ca09df0b7a0',
-  navHomeIcon: 'https://www.figma.com/api/mcp/asset/82788309-5691-477f-a42e-dbfc484c5e85',
-  navHomeInactiveIcon: 'https://www.figma.com/api/mcp/asset/a028ad61-b776-4906-b67f-15da8514b0d5',
-  navBookingIcon: 'https://www.figma.com/api/mcp/asset/10455ef3-9f71-4b4f-996c-83dcc948ca95',
-  navServicesActiveIcon: 'https://www.figma.com/api/mcp/asset/ab00a0c2-4867-4a3c-b01b-9de4559bb152',
-  navInfoIcon: 'https://www.figma.com/api/mcp/asset/1df397f5-9f40-4fcb-82e3-f0c76edf8842',
-  navAccountIcon: 'https://www.figma.com/api/mcp/asset/e56f81eb-4a8b-4503-89ca-b1ac651315bc',
+  navHomeIcon: publicAsset('assets/figma/nav-home-icon-active.svg'),
+  navHomeInactiveIcon: publicAsset('assets/figma/nav-home-icon.svg'),
+  navBookingIcon: publicAsset('assets/figma/nav-booking-icon.svg'),
+  navServicesActiveIcon: publicAsset('assets/figma/nav-services-icon-active.svg'),
+  navInfoIcon: publicAsset('assets/figma/nav-info-icon.svg'),
+  navAccountIcon: publicAsset('assets/figma/nav-account-icon.svg'),
 }
 
 export const rekomendasiPaketAssets: RekomendasiPaketAssets = {

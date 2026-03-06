@@ -29,7 +29,7 @@ export function InformasiScreen({
     { label: 'Home', icon: assets.navHomeInactiveIcon, active: false, onClick: onOpenHome },
     { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
     { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
-    { label: 'Informasi', icon: assets.navInfoIcon, active: true },
+    { label: 'Informasi', icon: assets.navInfoActiveIcon, active: true },
     { label: 'Akun', icon: assets.navAccountIcon, active: false, onClick: onOpenAkun },
   ]
 

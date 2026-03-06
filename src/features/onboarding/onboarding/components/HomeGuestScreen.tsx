@@ -5,6 +5,7 @@ type HomeGuestScreenProps = {
   services: ServiceItem[]
   articles: ArticleItem[]
   userDisplayName?: string
+  userPhotoUrl?: string
   onStartJourney: () => void
   onOpenFlightSearch: () => void
   onOpenHotelSearch: () => void
@@ -22,6 +23,7 @@ export function HomeGuestScreen({
   services,
   articles,
   userDisplayName,
+  userPhotoUrl,
   onStartJourney,
   onOpenFlightSearch,
   onOpenHotelSearch,
@@ -49,7 +51,16 @@ export function HomeGuestScreen({
       <div className="home-scroll">
         <div className="home-header-row">
           <div className="home-user-box">
-            <img src={assets.avatar} alt="Profile" className="home-avatar" />
+            {userPhotoUrl ? (
+              <img src={userPhotoUrl} alt="Profile" className="home-avatar" />
+            ) : (
+              <div className="home-avatar home-avatar--placeholder" aria-hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#B8B8B8" strokeWidth="1.5"/>
+                  <path d="M14 14H10C7.23858 14 5 16.2386 5 19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19C19 16.2386 16.7614 14 14 14Z" stroke="#B8B8B8" strokeWidth="1.5" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            )}
             <div>
               <p className="home-welcome">Selamat datang,</p>
               <p className="home-name">{userDisplayName || 'Teman Maktub'}</p>
