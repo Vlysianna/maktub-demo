@@ -35,6 +35,7 @@ import { MyBookingItineraryScreen } from './features/onboarding/onboarding/compo
 import { MyBookingItineraryEditScreen } from './features/onboarding/onboarding/components/MyBookingItineraryEditScreen'
 import { InformasiScreen } from './features/onboarding/onboarding/components/InformasiScreen'
 import { InformasiDetailScreen } from './features/onboarding/onboarding/components/InformasiDetailScreen'
+import { HomeBannerDetailScreen } from './features/onboarding/onboarding/components/HomeBannerDetailScreen'
 import { ArahKiblatJadwalScreen } from './features/onboarding/onboarding/components/ArahKiblatJadwalScreen'
 import { PanduanUmrahScreen } from './features/onboarding/onboarding/components/PanduanUmrahScreen'
 import { DoaUmrahScreen } from './features/onboarding/onboarding/components/DoaUmrahScreen'
@@ -54,6 +55,7 @@ import {
   hotelDetailTemplate,
   hotelOfferTemplate,
   homeAssets,
+  homeBannerDetailContent,
   layananLainAssets,
   rekomendasiPaketAssets,
   rekomendasiPaketItems,
@@ -1388,7 +1390,12 @@ function App() {
               setScreen('umrah-visa-services')
             })
           }}
+          onOpenBannerDetail={() => setScreen('home-banner-detail')}
         />
+      )}
+
+      {screen === 'home-banner-detail' && (
+        <HomeBannerDetailScreen content={homeBannerDetailContent} onBack={() => setScreen('home')} />
       )}
 
       {screen === 'my-booking' && (

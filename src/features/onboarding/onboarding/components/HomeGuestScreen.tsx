@@ -16,6 +16,7 @@ type HomeGuestScreenProps = {
   onOpenVisa?: () => void
   onOpenNotifikasi?: () => void
   onOpenChatAssistant?: () => void
+  onOpenBannerDetail?: () => void
 }
 
 export function HomeGuestScreen({
@@ -34,6 +35,7 @@ export function HomeGuestScreen({
   onOpenVisa,
   onOpenNotifikasi,
   onOpenChatAssistant,
+  onOpenBannerDetail,
 }: HomeGuestScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeIcon, active: true },
@@ -126,14 +128,28 @@ export function HomeGuestScreen({
           </div>
 
           <div className="articles-scroll">
-            {articles.map((article) => (
-              <article key={article.title} className="article-card">
-                <img src={article.image} alt={article.title} />
-                <div className="article-overlay" />
-                <p className="article-brand">Maktub.com | مكتوب</p>
-                <h3>{article.title}</h3>
-              </article>
-            ))}
+            {articles.map((article) =>
+              article.id === 'tempat-bersejarah' ? (
+                <button
+                  key={article.id}
+                  type="button"
+                  className="article-card article-card--button"
+                  onClick={onOpenBannerDetail}
+                >
+                  <img src={article.image} alt={article.title} />
+                  <div className="article-overlay" />
+                  <p className="article-brand">Maktub.com | مكتوب</p>
+                  <h3>{article.title}</h3>
+                </button>
+              ) : (
+                <article key={article.id} className="article-card">
+                  <img src={article.image} alt={article.title} />
+                  <div className="article-overlay" />
+                  <p className="article-brand">Maktub.com | مكتوب</p>
+                  <h3>{article.title}</h3>
+                </article>
+              ),
+            )}
           </div>
         </section>
       </div>

@@ -7,6 +7,7 @@ import type {
   FlightOffer,
   HotelDetail,
   HotelOffer,
+  HomeBannerDetailContent,
   ItinerarySuggestionGroup,
   InformasiContent,
   InformasiDetailContent,
@@ -359,7 +360,7 @@ export const homeAssets: HomeAssets = {
   searchIcon: publicAsset('assets/figma/ai-search-icon.svg'),
   infoIcon: publicAsset('assets/figma/home-info-icon.svg'),
   arrowRight: publicAsset('assets/figma/info-chevron-icon.svg'),
-  chatbot: publicAsset('assets/figma/maktub-ai-icon.svg'),
+  chatbot: publicAsset('assets/figma/chat-bot-bulk-rounded.svg'),
   navHomeIcon: publicAsset('assets/figma/nav-home-icon-active.svg'),
   navHomeInactiveIcon: publicAsset('assets/figma/nav-home-icon.svg'),
   navBookingIcon: publicAsset('assets/figma/nav-booking-icon.svg'),
@@ -379,22 +380,49 @@ export const services: ServiceItem[] = [
 
 export const articles: ArticleItem[] = [
   {
+    id: 'tempat-bersejarah',
     title: 'Tempat-tempat bersejarah yang bisa dikunjungi',
     image: 'https://www.figma.com/api/mcp/asset/b9570035-d2f2-4b9f-b94c-6eab8f697f1c',
   },
   {
+    id: 'cara-ke-arab-saudi',
     title: 'Cara berpergian ke Arab Saudi (Bandara dan Jenis Visa)',
     image: 'https://www.figma.com/api/mcp/asset/dea9a7c2-1f37-4ba2-b3c2-06e429bb517a',
   },
   {
+    id: 'apa-itu-umrah',
     title: 'Apa itu ibadah Umrah? Dan kenapa harus sekarang?',
     image: 'https://www.figma.com/api/mcp/asset/8d77d06a-9808-4f47-aa4b-469058ecccc2',
   },
   {
+    id: 'tata-cara-umrah',
     title: 'Tata cara ibadah Umrah',
     image: 'https://www.figma.com/api/mcp/asset/7ad3ba8b-3445-4bf3-bd48-e8d4ae966245',
   },
 ]
+
+export const homeBannerDetailContent: HomeBannerDetailContent = {
+  backIcon: 'https://www.figma.com/api/mcp/asset/8406fbab-3839-4dc1-88d9-6dcdf6c26e6b',
+  headingLogo: 'https://www.figma.com/api/mcp/asset/e742b640-6b2e-414b-a9a4-8887ac7b1558',
+  brand: 'Maktub.com | مكتوب',
+  title: 'Tempat-tempat bersejarah yang bisa dikunjungi',
+  heroImage: 'https://www.figma.com/api/mcp/asset/0247c8c8-5bdd-498a-850b-8e6b54c99209',
+  heroImageAlt: 'Tempat-tempat bersejarah yang bisa dikunjungi',
+  description:
+    'Saat ibadah umrah di Mekkah dan Madinah, ada banyak tempat bersejarah yang sangat dianjurkan untuk dikunjungi karena memiliki nilai penting dalam sejarah Islam dan kehidupan Nabi Muhammad.',
+  sectionTitle: 'Tempat Bersejarah di Mekkah',
+  galleryMainImage: 'https://www.figma.com/api/mcp/asset/f6962765-f6fc-4304-b312-3647a8c64e6b',
+  galleryTopImage: 'https://www.figma.com/api/mcp/asset/4f80c547-0f94-4960-852a-e91df7dff432',
+  galleryBottomImage: 'https://www.figma.com/api/mcp/asset/e59b319c-3712-4be0-87e8-b1d2d5fc2165',
+  places: [
+    {
+      id: 'masjidil-haram',
+      title: 'Masjidil Haram',
+      description:
+        "Masjid paling suci dalam Islam, di dalamnya terdapat Ka'bah, kiblat umat Islam. Tempat utama untuk tawaf dan sholat",
+    },
+  ],
+}
 
 export const informasiContent: InformasiContent = {
   title: 'Informasi',
@@ -630,7 +658,7 @@ export const cityOptions = ['Madinah', 'Jeddah', 'Riyadh', 'Dammam', 'Al Ula']
 export const budgetOptions = ['Kurang dari 25.000.000', '25.000.000 sampai 40.000.000', 'Lebih dari 40.000.000']
 
 export const umrahProcessingAssets: UmrahProcessingAssets = {
-  aiMagic: 'https://www.figma.com/api/mcp/asset/6da643ed-f854-4183-90d0-b1f428712cc7',
+  aiMagic: publicAsset('assets/figma/ai-magic.svg'),
 }
 
 export const umrahFlightSearchAssets: UmrahFlightSearchAssets = {

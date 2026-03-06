@@ -2,6 +2,7 @@ export type Screen =
   | 'splash'
   | 'walkthrough'
   | 'home'
+  | 'home-banner-detail'
   | 'my-booking'
   | 'my-booking-detail'
   | 'my-booking-itinerary'
@@ -188,8 +189,30 @@ export type ServiceItem = {
 }
 
 export type ArticleItem = {
+  id: string
   title: string
   image: string
+}
+
+export type HomeBannerDetailPlace = {
+  id: string
+  title: string
+  description: string
+}
+
+export type HomeBannerDetailContent = {
+  backIcon: string
+  headingLogo: string
+  brand: string
+  title: string
+  heroImage: string
+  heroImageAlt: string
+  description: string
+  sectionTitle: string
+  galleryMainImage: string
+  galleryTopImage: string
+  galleryBottomImage: string
+  places: HomeBannerDetailPlace[]
 }
 
 export type InformasiPrayerTime = {
