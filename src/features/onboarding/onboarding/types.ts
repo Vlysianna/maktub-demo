@@ -541,6 +541,7 @@ export type HotelDetail = {
 }
 
 export type UmrahPaymentAssets = {
+  backIcon: string
   bankBniLogo: string
   bankBriLogo: string
   bankMandiriLogo: string

@@ -62,7 +62,7 @@ export function UmrahPaymentOverviewScreen({
     <section className={`phone-shell umrah-payment-shell${isHotelOnly ? ' hotel-only' : ''}${isFlightOnly ? ' flight-only' : ''}`} aria-label="Pembayaran">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>Pembayaran</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />
@@ -151,22 +151,24 @@ export function UmrahPaymentOverviewScreen({
             <section className="umrah-payment-block hotel-only-summary">
               <h2>Hotel</h2>
               {primaryHotel && (
-                <article className="umrah-payment-hotel-card">
-                  <div className="umrah-payment-hotel-head">
-                    <img src={primaryHotel.image} alt={primaryHotel.name} />
-                    <div>
-                      <p>{primaryHotel.name}</p>
-                      <small>{primaryHotel.nightsLabel}</small>
-                      <em>{stars(primaryHotel.rating)}</em>
+                <div className="umrah-payment-hotel-list">
+                  <article className="umrah-payment-hotel-card">
+                    <div className="umrah-payment-hotel-head">
+                      <img src={primaryHotel.image} alt={primaryHotel.name} />
+                      <div>
+                        <p>{primaryHotel.name}</p>
+                        <small>{primaryHotel.nightsLabel}</small>
+                        <em>{stars(primaryHotel.rating)}</em>
+                      </div>
                     </div>
-                  </div>
-                  <p className="umrah-payment-night-price">
-                    {toRupiah(primaryHotel.pricePerNight)} <span>/malam</span>
-                  </p>
-                  <p className="umrah-payment-total-price">
-                    <strong>{toRupiah(primaryHotel.totalPrice)}</strong> untuk {primaryHotel.travelerLabel}
-                  </p>
-                </article>
+                    <p className="umrah-payment-night-price">
+                      {toRupiah(primaryHotel.pricePerNight)} <span>/malam</span>
+                    </p>
+                    <p className="umrah-payment-total-price">
+                      <strong>{toRupiah(primaryHotel.totalPrice)}</strong> untuk {primaryHotel.travelerLabel}
+                    </p>
+                  </article>
+                </div>
               )}
             </section>
 

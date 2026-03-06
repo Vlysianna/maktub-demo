@@ -4829,7 +4829,8 @@
 }
 
 .umrah-payment-shell.hotel-only .umrah-payment-scroll {
-  /* flex handles positioning now */
+  background: #f5f7f9;
+  padding-bottom: 0;
 }
 
 .umrah-payment-shell.hotel-only .umrah-payment-block {
@@ -4845,6 +4846,7 @@
 }
 
 .umrah-payment-block.hotel-only-detail {
+  flex: 1 0 auto;
   min-height: 520px;
 }
 
@@ -4905,6 +4907,11 @@
   display: flex;
   gap: 10px;
   align-items: center;
+}
+
+.umrah-payment-hotel-head > div {
+  display: grid;
+  gap: 4px;
 }
 
 .umrah-payment-hotel-head img {
@@ -5079,6 +5086,53 @@
   color: #03694b;
   font-size: 15px;
   font-weight: 700;
+}
+
+.umrah-payment-shell.hotel-only .umrah-payment-hotel-list {
+  gap: 0;
+}
+
+.umrah-payment-shell.hotel-only .umrah-payment-hotel-card {
+  padding: 14px 15px 15px;
+}
+
+.umrah-payment-shell.hotel-only .umrah-payment-hotel-head {
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.umrah-payment-shell.hotel-only .umrah-payment-night-price {
+  margin-top: 12px;
+}
+
+.umrah-payment-shell.hotel-only .umrah-payment-total-price {
+  margin-top: 0;
+}
+
+.umrah-payment-shell.hotel-only .umrah-payment-detail {
+  padding-bottom: 24px;
+}
+
+.umrah-payment-shell .umrah-ticket-footer {
+  background: #fff;
+  border-top: 1px solid #d1d5da;
+  padding: 8px 16px max(18px, env(safe-area-inset-bottom));
+}
+
+.umrah-payment-shell .home-indicator {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 0 0 8px;
+  flex-shrink: 0;
+}
+
+.umrah-payment-shell .home-indicator span {
+  width: 121px;
+  height: 4px;
+  border-radius: 2.5px;
+  background: #0a0c0e;
+  opacity: 0.25;
 }
 
 .umrah-payment-summary-box {
@@ -6064,16 +6118,16 @@ button.umrah-visa-package-card {
   width: 80px;
   height: 34px;
   border-radius: 8px;
-  border: 1px solid #03694b;
-  background: #fff;
-  color: #03694b;
+  border: 0;
+  background: #03694b;
+  color: #fff;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
 }
 
 .umrah-ticket-select-btn.active {
-  background: #03694b;
+  background: #024f3b;
   color: #fff;
 }
 

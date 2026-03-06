@@ -2,6 +2,7 @@ import type { UmrahPaymentAssets } from '../types'
 
 type UmrahPaymentSuccessScreenProps = {
   assets: UmrahPaymentAssets
+  hideStepper?: boolean
   flightOnly?: boolean
   virtualAccountNumber: string
   virtualAccountName: string
@@ -16,6 +17,7 @@ function toRupiah(amount: number) {
 
 export function UmrahPaymentSuccessScreen({
   assets,
+  hideStepper = false,
   flightOnly = false,
   virtualAccountNumber,
   virtualAccountName,
@@ -27,13 +29,13 @@ export function UmrahPaymentSuccessScreen({
     <section className="phone-shell umrah-payment-shell" aria-label="Pembayaran Berhasil">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>Pembayaran</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />
       </header>
 
-      {!flightOnly && (
+      {!hideStepper && !flightOnly && (
         <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
           <span className="umrah-flight-step active">
             <i>2</i>

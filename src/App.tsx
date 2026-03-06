@@ -1813,6 +1813,12 @@ function App() {
               setSelectedReturnHotelRoomId(room.id)
             }
 
+            if (isHotelOnlyFlow) {
+              setPaymentFlow('package')
+              setScreen('umrah-payment-overview')
+              return
+            }
+
             setScreen('umrah-hotel-ticket-info')
           }}
         />
@@ -1893,7 +1899,7 @@ function App() {
           isHotelOnly={isHotelOnlyFlow}
           onBack={() => {
             if (isHotelOnlyFlow) {
-              setScreen('umrah-hotel-ticket-info')
+              setScreen('umrah-hotel-detail')
               return
             }
 
@@ -1911,6 +1917,7 @@ function App() {
         <UmrahPaymentMethodScreen
           assets={umrahPaymentAssets}
           breakdown={activePaymentBreakdown}
+          hideStepper={isHotelOnlyFlow}
           paymentFor={paymentFlow}
           packageSummaryLabel={isHotelOnlyFlow && paymentFlow === 'package' ? 'Harga tiket hotel' : undefined}
           visaLabel={visaPackageLabelMap[selectedVisaPackage]}
@@ -1939,6 +1946,7 @@ function App() {
       {screen === 'umrah-payment-pending' && (
         <UmrahPaymentPendingScreen
           assets={umrahPaymentAssets}
+          hideStepper={isHotelOnlyFlow}
           flightOnly={flightSearchEntry === 'home'}
           virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
           virtualAccountName={selectedPaymentLabel}
@@ -1972,6 +1980,7 @@ function App() {
       {screen === 'umrah-payment-success' && (
         <UmrahPaymentSuccessScreen
           assets={umrahPaymentAssets}
+          hideStepper={isHotelOnlyFlow}
           flightOnly={flightSearchEntry === 'home'}
           virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
           virtualAccountName={selectedPaymentLabel}

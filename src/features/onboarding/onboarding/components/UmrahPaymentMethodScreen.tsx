@@ -46,7 +46,7 @@ export function UmrahPaymentMethodScreen({
     <section className="phone-shell umrah-payment-shell" aria-label="Metode Pembayaran">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>{title}</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />

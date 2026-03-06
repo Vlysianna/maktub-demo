@@ -761,23 +761,23 @@ export const flightOfferTemplate: FlightOffer[] = [
 ]
 
 export const umrahHotelAssets: UmrahHotelAssets = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/98bcbc58-672c-47f1-8a7e-e75af7171b82',
-  chevronRight: 'https://www.figma.com/api/mcp/asset/2ccd8fb3-cbbc-4b67-bb88-9725a7b8c843',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  chevronRight: publicAsset('assets/figma/Chevron-2.svg'),
   sortIcon: 'https://www.figma.com/api/mcp/asset/cf251695-41f5-4018-bed5-f89aa9d08dcc',
   filterIcon: 'https://www.figma.com/api/mcp/asset/50f5038a-530c-4a22-ace9-1129547bed19',
-  calendarIcon: 'https://www.figma.com/api/mcp/asset/ddb86521-8919-4954-8b59-3f732a0a912c',
+  calendarIcon: publicAsset('assets/figma/calendar.svg'),
   userIcon: 'https://www.figma.com/api/mcp/asset/752ee1b6-50f7-48a6-8333-1e8958fee749',
   roomIcon: 'https://www.figma.com/api/mcp/asset/6383630d-21f0-41ab-9f1f-535275a685a2',
-  locationIcon: 'https://www.figma.com/api/mcp/asset/745cb550-f2a3-4683-afab-c9210a864b6a',
-  sparkleIcon: 'https://www.figma.com/api/mcp/asset/28ffc00b-0b3d-48d9-8942-74c4406ab88a',
-  facilityIcon: 'https://www.figma.com/api/mcp/asset/36118d8f-cfaa-4859-97cc-8934a25e07f0',
-  bedIcon: 'https://www.figma.com/api/mcp/asset/f8956d00-daa8-451a-b7cf-f7d67fa0156f',
-  areaIcon: 'https://www.figma.com/api/mcp/asset/d77b956f-4188-44d7-9b98-1fbf22d4df7d',
-  wifiIcon: 'https://www.figma.com/api/mcp/asset/86cbd17e-7a9f-4cc0-a323-cd8d974e2a01',
-  breakfastIcon: 'https://www.figma.com/api/mcp/asset/a52f06b2-4063-494e-9f72-44892d902d29',
-  noSmokingIcon: 'https://www.figma.com/api/mcp/asset/4f28da0d-f4f4-43d1-a18a-c860399aa286',
-  bathtubIcon: 'https://www.figma.com/api/mcp/asset/b0d4fdac-ebee-4c21-8b29-09bb2986f7c0',
-  policyIcon: 'https://www.figma.com/api/mcp/asset/ca455b7e-d7d8-4669-b271-9066e5c4148f',
+  locationIcon: publicAsset('assets/figma/location.svg'),
+  sparkleIcon: publicAsset('assets/figma/sparkle-icon.svg'),
+  facilityIcon: publicAsset('assets/figma/facility-icon.svg'),
+  bedIcon: publicAsset('assets/figma/bed-double.svg'),
+  areaIcon: publicAsset('assets/figma/area-icon.svg'),
+  wifiIcon: publicAsset('assets/figma/wifi-icon.svg'),
+  breakfastIcon: publicAsset('assets/figma/serving-food.svg'),
+  noSmokingIcon: publicAsset('assets/figma/no-smoking-icon.svg'),
+  bathtubIcon: publicAsset('assets/figma/bathtub-icon.svg'),
+  policyIcon: publicAsset('assets/figma/information-green-icon.svg'),
 }
 
 export const hotelOfferTemplate: HotelOffer[] = [
@@ -878,20 +878,21 @@ export const hotelDetailTemplate: HotelDetail = {
 }
 
 export const umrahPaymentAssets: UmrahPaymentAssets = {
-  bankBniLogo: 'https://www.figma.com/api/mcp/asset/34021b3d-7977-4403-b495-e5df18bd2384',
-  bankBriLogo: 'https://www.figma.com/api/mcp/asset/f92c3412-2699-4783-9684-828d8db17b12',
-  bankMandiriLogo: 'https://www.figma.com/api/mcp/asset/03b9ed78-30a7-4141-9ec6-053022997f77',
-  bankBcaLogo: 'https://www.figma.com/api/mcp/asset/7b99033e-a382-4a21-b463-7425234b197e',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  bankBniLogo: publicAsset('assets/figma/bni.svg'),
+  bankBriLogo: publicAsset('assets/figma/bri.svg'),
+  bankMandiriLogo: publicAsset('assets/figma/mandiri.svg'),
+  bankBcaLogo: publicAsset('assets/figma/bca.svg'),
   visaLogo: 'https://www.figma.com/api/mcp/asset/56be393a-ef11-4776-b245-715bf6e36998',
   mastercardLogo: 'https://www.figma.com/api/mcp/asset/74de822d-daec-4a9a-9c11-3a83dc26b58a',
-  copyIcon: 'https://www.figma.com/api/mcp/asset/d0c3043d-ff28-47b3-9f3b-06aae2d2002d',
+  copyIcon: publicAsset('assets/figma/copy-icon.svg'),
   userIcon: 'https://www.figma.com/api/mcp/asset/dd2ccf07-d695-4b7b-ab8c-cb8eafc864e7',
   planeLogo: 'https://www.figma.com/api/mcp/asset/8dab0ef3-efa7-49fb-a4fc-c290567cd467',
 }
 
 export const umrahCompletionAssets: UmrahCompletionAssets = {
   backIcon: 'https://www.figma.com/api/mcp/asset/cd2f5bf6-0efd-4acf-a72b-180c5eacd71e',
-  successBadge: 'https://www.figma.com/api/mcp/asset/373a1061-a3fe-4b48-9f73-b9987f54e2cf',
+  successBadge: publicAsset('assets/figma/done-icon.svg'),
 }
 
 export const layananLainAssets: LayananLainAssets = {
