@@ -56,7 +56,7 @@ export function UmrahTravelerScreen({
 
   return (
     <section className="phone-shell umrah-traveler-shell" aria-label="Pertanyaan Jumlah Peserta">
-      <img src={assets.blur} alt="" className="umrah-bg-blur" aria-hidden />
+      <div className="umrah-bg-blur" aria-hidden />
 
       <header className="umrah-topbar">
         <h1>

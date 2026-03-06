@@ -1,5 +1,12 @@
 import { useState } from 'react'
 import type { ProfileData } from '../types'
+import {
+  EMAIL_VALIDATION_MESSAGE,
+  INDONESIAN_PHONE_VALIDATION_MESSAGE,
+  isValidEmail,
+  isValidIndonesianPhoneNumber,
+  normalizeIndonesianPhoneNumber,
+} from '../utils/validation'
 
 type EditableField = 'name' | 'email' | 'phone'
 
@@ -79,6 +86,7 @@ const formatBirthDate = (inputValue: string): ProfileData['birthDate'] | null =>
 export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDeleteAccount }: ProfileSettingsScreenProps) {
   const [editingField, setEditingField] = useState<EditableField | null>(null)
   const [editingValue, setEditingValue] = useState('')
+  const [editingError, setEditingError] = useState('')
   const [isGenderModalOpen, setIsGenderModalOpen] = useState(false)
   const [selectedGender, setSelectedGender] = useState(profile.gender)
   const [isBirthDateModalOpen, setIsBirthDateModalOpen] = useState(false)
@@ -87,19 +95,37 @@ export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDelete
   const openTextEditor = (field: EditableField, value: string) => {
     setEditingField(field)
     setEditingValue(value)
+    setEditingError('')
   }
 
   const saveTextField = () => {
-    if (!editingField || !editingValue.trim()) {
+    const trimmedValue = editingValue.trim()
+
+    if (!editingField || !trimmedValue) {
       return
     }
 
+    if (editingField === 'email' && !isValidEmail(trimmedValue)) {
+      setEditingError(EMAIL_VALIDATION_MESSAGE)
+      return
+    }
+
+    if (editingField === 'phone' && !isValidIndonesianPhoneNumber(trimmedValue)) {
+      setEditingError(INDONESIAN_PHONE_VALIDATION_MESSAGE)
+      return
+    }
+
+    const normalizedValue = editingField === 'phone'
+      ? normalizeIndonesianPhoneNumber(trimmedValue)
+      : trimmedValue
+
     onSaveProfile({
       ...profile,
-      [editingField]: editingValue.trim(),
+      [editingField]: normalizedValue,
     })
 
     setEditingField(null)
+    setEditingError('')
   }
 
   const saveBirthDate = () => {
@@ -219,10 +245,17 @@ export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDelete
             </button>
             <p className="profile-sheet-title">{fieldLabels[editingField]}</p>
             <input
-              className="profile-sheet-input"
+              type={editingField === 'email' ? 'email' : editingField === 'phone' ? 'tel' : 'text'}
+              className={editingError ? 'profile-sheet-input profile-sheet-input--invalid' : 'profile-sheet-input'}
               value={editingValue}
-              onChange={(event) => setEditingValue(event.target.value)}
+              onChange={(event) => {
+                setEditingValue(event.target.value)
+                if (editingError) {
+                  setEditingError('')
+                }
+              }}
             />
+            {editingError && <span className="profile-sheet-error">{editingError}</span>}
             <button type="button" className="profile-sheet-save" onClick={saveTextField}>Simpan</button>
           </div>
         </div>

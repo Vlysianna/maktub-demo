@@ -95,7 +95,7 @@ export function UmrahPaymentMethodScreen({
                     ? `Harga ${visaLabel ?? 'Visa Umrah'}`
                     : flightOnly
                       ? 'Harga tiket pesawat'
-                      : packageSummaryLabel ?? 'Harga paket hotel &amp; flight'}
+                      : packageSummaryLabel ?? 'Harga paket hotel & flight'}
                 </span>
                 <span>{toRupiah(breakdown.subtotal)}</span>
               </p>

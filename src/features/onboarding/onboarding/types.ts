@@ -317,7 +317,6 @@ export type HomeAssets = {
 }
 
 export type UmrahQuestionAssets = {
-  blur: string
   aiMagic: string
   closeIcon: string
   chevronLeft: string
@@ -325,7 +324,6 @@ export type UmrahQuestionAssets = {
 }
 
 export type UmrahTravelerAssets = {
-  blur: string
   aiMagic: string
   closeIcon: string
   infoIcon: string
@@ -335,7 +333,6 @@ export type UmrahTravelerAssets = {
 }
 
 export type UmrahStepAssets = {
-  blur: string
   aiMagic: string
   closeIcon: string
 }
@@ -356,7 +353,6 @@ export type UmrahFlightSearchAssets = {
 }
 
 export type UmrahProcessingAssets = {
-  blur: string
   aiMagic: string
 }
 

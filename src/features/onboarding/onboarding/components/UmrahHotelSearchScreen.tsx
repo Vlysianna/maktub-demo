@@ -12,7 +12,6 @@ type HotelSearchResult = {
 
 type UmrahHotelSearchScreenProps = {
   assets: UmrahHotelSearchAssets
-  blurImage: string
   destinationOptions: string[]
   recentDestinations: string[]
   nearbyDestination: string
@@ -77,7 +76,6 @@ function formatHotelDateLabel(date: Date) {
 
 export function UmrahHotelSearchScreen({
   assets,
-  blurImage,
   destinationOptions,
   recentDestinations,
   nearbyDestination,
@@ -167,7 +165,7 @@ export function UmrahHotelSearchScreen({
       </button>
       <h1>Cari Tiket Hotel</h1>
 
-      <img src={blurImage} alt="" className="umrah-flight-search-blur" aria-hidden />
+      <div className="umrah-flight-search-blur" aria-hidden />
 
       <div className="umrah-hotel-search-fields">
         <button

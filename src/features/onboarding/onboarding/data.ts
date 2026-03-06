@@ -585,39 +585,34 @@ export const doaUmrahContent: GuideListContent = {
 }
 
 export const umrahQuestionAssets: UmrahQuestionAssets = {
-  blur: 'https://www.figma.com/api/mcp/asset/57cd73b2-73b0-45af-9e07-23a80ca00208',
-  aiMagic: 'https://www.figma.com/api/mcp/asset/1feef05b-cfe4-40bb-8b0e-a7dafc9409f4',
-  closeIcon: 'https://www.figma.com/api/mcp/asset/bcc18140-1ac7-4603-99eb-b0a7ee936de9',
-  chevronLeft: 'https://www.figma.com/api/mcp/asset/2909023e-2b4e-45be-90c0-4046f05ddf6f',
-  chevronRight: 'https://www.figma.com/api/mcp/asset/2909023e-2b4e-45be-90c0-4046f05ddf6f',
+  aiMagic: publicAsset('assets/figma/maktub-ai-icon.svg'),
+  closeIcon: publicAsset('assets/figma/arrow-left.svg'),
+  chevronLeft: publicAsset('assets/figma/Chevron-2.svg'),
+  chevronRight: publicAsset('assets/figma/Chevron-2.svg'),
 }
 
 export const umrahTravelerAssets: UmrahTravelerAssets = {
-  blur: 'https://www.figma.com/api/mcp/asset/3235ff8f-15a5-41c3-95dd-ae87f8c5538a',
-  aiMagic: 'https://www.figma.com/api/mcp/asset/3f678205-b134-40e4-b065-bec207aa59c9',
-  closeIcon: 'https://www.figma.com/api/mcp/asset/3bdf8886-99cb-4f94-8784-1c5f2593caf2',
-  infoIcon: 'https://www.figma.com/api/mcp/asset/1fa0ffed-d6ea-4a52-ba4e-cf3d87da1055',
-  roomPersonIcon: 'https://www.figma.com/api/mcp/asset/78ab5720-cb64-4cec-b27f-763db97d4bdc',
-  counterMinusIcon: 'https://www.figma.com/api/mcp/asset/5643ad0d-3639-47c5-b0f4-b98e4e113763',
-  counterPlusIcon: 'https://www.figma.com/api/mcp/asset/be789df1-bd16-435d-805f-3e37ccc75f68',
+  aiMagic: publicAsset('assets/figma/maktub-ai-icon.svg'),
+  closeIcon: publicAsset('assets/figma/arrow-left.svg'),
+  infoIcon: publicAsset('assets/figma/information-circle.svg'),
+  roomPersonIcon: publicAsset('assets/figma/user.svg'),
+  counterMinusIcon: publicAsset('assets/figma/counter-minus-icon.svg'),
+  counterPlusIcon: publicAsset('assets/figma/counter-plus-icon.svg'),
 }
 
 export const umrahDepartureAssets: UmrahStepAssets = {
-  blur: 'https://www.figma.com/api/mcp/asset/e00530b7-d21e-447a-97e9-d0ee4fa421ae',
-  aiMagic: 'https://www.figma.com/api/mcp/asset/254e0df3-fcf8-4317-966c-ba9a63d8b1fa',
-  closeIcon: 'https://www.figma.com/api/mcp/asset/f64c2462-b9a8-4eb6-aa24-670325f3bdd0',
+  aiMagic: publicAsset('assets/figma/maktub-ai-icon.svg'),
+  closeIcon: publicAsset('assets/figma/arrow-left.svg'),
 }
 
 export const umrahArrivalReturnAssets: UmrahStepAssets = {
-  blur: 'https://www.figma.com/api/mcp/asset/38079669-9c73-4b68-8b5a-d045e5adcee7',
-  aiMagic: 'https://www.figma.com/api/mcp/asset/5397ca90-b838-49a9-8053-9d6d98888d63',
-  closeIcon: 'https://www.figma.com/api/mcp/asset/7c1e43f5-1fbd-402c-a654-c5b6b8a30dd6',
+  aiMagic: publicAsset('assets/figma/maktub-ai-icon.svg'),
+  closeIcon: publicAsset('assets/figma/arrow-left.svg'),
 }
 
 export const umrahBudgetAssets: UmrahStepAssets = {
-  blur: 'https://www.figma.com/api/mcp/asset/cdf75d82-ef88-4d08-b8c9-1c2c08257b15',
-  aiMagic: 'https://www.figma.com/api/mcp/asset/b8aa6fba-2b23-46fe-9019-0b3ab88a4f10',
-  closeIcon: 'https://www.figma.com/api/mcp/asset/8dd801ba-baa5-4edd-8784-751aa7b93acc',
+  aiMagic: publicAsset('assets/figma/maktub-ai-icon.svg'),
+  closeIcon: publicAsset('assets/figma/arrow-left.svg'),
 }
 
 export const departureAirportOptions: AirportOption[] = [
@@ -635,7 +630,6 @@ export const cityOptions = ['Madinah', 'Jeddah', 'Riyadh', 'Dammam', 'Al Ula']
 export const budgetOptions = ['Kurang dari 25.000.000', '25.000.000 sampai 40.000.000', 'Lebih dari 40.000.000']
 
 export const umrahProcessingAssets: UmrahProcessingAssets = {
-  blur: 'https://www.figma.com/api/mcp/asset/58437689-866d-4268-8b5d-93d54ca054f8',
   aiMagic: 'https://www.figma.com/api/mcp/asset/6da643ed-f854-4183-90d0-b1f428712cc7',
 }
 
@@ -661,12 +655,12 @@ export const umrahHotelSearchAssets: UmrahHotelSearchAssets = {
 }
 
 export const umrahFlightAssets: UmrahFlightAssets = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/98bcbc58-672c-47f1-8a7e-e75af7171b82',
-  chevronRight: 'https://www.figma.com/api/mcp/asset/2909023e-2b4e-45be-90c0-4046f05ddf6f',
-  planeArrow: 'https://www.figma.com/api/mcp/asset/688642d2-4cbb-4446-8c03-fca5f6f79fb5',
-  calendarIcon: 'https://www.figma.com/api/mcp/asset/1a763ef6-9068-46bc-80c6-26bd7dd39624',
-  clockIcon: 'https://www.figma.com/api/mcp/asset/d5c5a1b7-b622-41b5-b260-318df2d2bad0',
-  userIcon: 'https://www.figma.com/api/mcp/asset/4e2be065-7116-468f-9dfb-84821b5ce614',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  chevronRight: publicAsset('assets/figma/Chevron-2.svg'),
+  planeArrow: publicAsset('assets/figma/arrow-left-2.svg'),
+  calendarIcon: publicAsset('assets/figma/calendar.svg'),
+  clockIcon: publicAsset('assets/figma/clock-01.svg'),
+  userIcon: publicAsset('assets/figma/user.svg'),
   omanAirLogo: 'https://www.figma.com/api/mcp/asset/132c5a5b-2ea6-4a64-a196-1a1edade8dba',
   saudiaLogo: 'https://www.figma.com/api/mcp/asset/d67010ae-af44-458b-80de-86d77fa8c491',
   matchIcon: 'https://www.figma.com/api/mcp/asset/90601efb-89e0-4c31-a094-3ff6af4aa203',
@@ -675,16 +669,16 @@ export const umrahFlightAssets: UmrahFlightAssets = {
 }
 
 export const umrahTicketAssets: UmrahTicketAssets = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/dedb9764-b443-421d-ba7e-5eeddcc5e597',
-  bagIcon: 'https://www.figma.com/api/mcp/asset/4e81b705-b584-4039-a351-3036bbbb4e09',
-  checkIcon: 'https://www.figma.com/api/mcp/asset/669fb3d7-1e98-4f05-9050-62b5506ce875',
-  cancelIcon: 'https://www.figma.com/api/mcp/asset/732d02b8-2432-46fe-a244-ff629d44b415',
-  infoSolidIcon: 'https://www.figma.com/api/mcp/asset/2f0ab62f-cfa6-4f08-9628-cf6d7ae23342',
-  clockIcon: 'https://www.figma.com/api/mcp/asset/d0db7771-dde9-4ad6-b572-57a0b0db7c0c',
-  timelineIcon: 'https://www.figma.com/api/mcp/asset/ac12b151-8be3-4ab1-83e7-c0c267bf8396',
-  infoOutlineIcon: 'https://www.figma.com/api/mcp/asset/dbaf5613-d7c8-48bd-80a1-ffecd76954cb',
-  routeDivider: 'https://www.figma.com/api/mcp/asset/73dda14a-6ee8-4e70-b2ef-c72f34a83a1b',
-  addCircleIcon: 'https://www.figma.com/api/mcp/asset/20b6f12e-1d02-44cf-a178-5301cd0e0287',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  bagIcon: publicAsset('assets/figma/travel-bag.svg'),
+  checkIcon: publicAsset('assets/figma/checkmark-circle.svg'),
+  cancelIcon: publicAsset('assets/figma/cancel-circle.svg'),
+  infoSolidIcon: publicAsset('assets/figma/information-green-icon.svg'),
+  clockIcon: publicAsset('assets/figma/clock-01.svg'),
+  timelineIcon: publicAsset('assets/figma/timeline-icon.svg'),
+  infoOutlineIcon: publicAsset('assets/figma/eva_info-outline.svg'),
+  routeDivider: publicAsset('assets/figma/arrow-right.svg'),
+  addCircleIcon: publicAsset('assets/figma/add-circle.svg'),
   cameraIcon: 'https://www.figma.com/api/mcp/asset/eac09041-3669-43e8-bc51-228266a8a363',
   chevronDownIcon: 'https://www.figma.com/api/mcp/asset/01ef2f68-a662-43c7-99d2-88c44d2811f3',
   cameraSamplePassport: 'https://www.figma.com/api/mcp/asset/429a70e0-7bc1-42c3-9417-6f9cc917a64b',
@@ -930,7 +924,7 @@ export const onboardingConfig: OnboardingConfig = {
   defaultContact: {
     name: 'Noermansyah',
     email: 'noermansyah@gmail.com',
-    phone: '081288990011',
+    phone: '+6281288990011',
     virtualAccountNumber: '8848800096475552',
     passportNumber: 'C1234567A',
   },
@@ -1118,7 +1112,7 @@ export const loginGuestContent: LoginGuestContent = {
   subtitle: 'It’s written',
   googleButtonLabel: 'Lanjutkan dengan akun google',
   orLabel: 'atau',
-  phonePlaceholder: 'Masukan nomor telepon',
+  phonePlaceholder: '812xxxxxxx',
   continueLabel: 'Lanjutkan',
   legalPrefix: 'Dengan mengklik "Lanjutkan", Anda menerima ',
   legalTerms: 'Syarat dan Ketentuan',
@@ -1154,7 +1148,7 @@ export const profileData: ProfileData = {
   avatar: 'https://www.figma.com/api/mcp/asset/5791793b-087a-46e8-be34-37715e874d94',
   name: 'Nama Anda',
   email: '',
-  phone: '081312341234',
+  phone: '+6281312341234',
   gender: '',
   birthDate: {
     day: '29',

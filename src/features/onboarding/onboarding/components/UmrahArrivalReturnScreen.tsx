@@ -27,7 +27,7 @@ export function UmrahArrivalReturnScreen({
 
   return (
     <section className="phone-shell umrah-traveler-shell" aria-label="Pertanyaan Kota Kedatangan dan Kepulangan">
-      <img src={assets.blur} alt="" className="umrah-bg-blur" aria-hidden />
+      <div className="umrah-bg-blur" aria-hidden />
 
       <header className="umrah-topbar">
         <h1>

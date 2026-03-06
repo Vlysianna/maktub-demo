@@ -102,6 +102,10 @@ import type {
   TicketFareOption,
   VisaPackageId,
 } from './features/onboarding/onboarding/types'
+import {
+  isValidEmail,
+  normalizeIndonesianPhoneNumber,
+} from './features/onboarding/onboarding/utils/validation'
 
 const budgetProfiles: Record<
   string,
@@ -1288,10 +1292,11 @@ function App() {
     })
   }
 
+  const hasValidProfileEmail = isValidEmail(userProfile.email)
   const isProfileIncomplete =
     !userProfile.name.trim() ||
     userProfile.name.trim().toLowerCase() === 'nama anda' ||
-    !userProfile.email.trim() ||
+    !hasValidProfileEmail ||
     !userProfile.gender.trim()
 
   useEffect(() => {
@@ -1549,7 +1554,6 @@ function App() {
       {screen === 'umrah-flight-search' && (
         <UmrahFlightSearchScreen
           assets={umrahFlightSearchAssets}
-          blurImage={umrahProcessingAssets.blur}
           cabinClasses={onboardingConfig.flightCabinClasses}
           departureOptions={departureAirportOptions}
           destinationOptions={flightDestinationOptions}
@@ -1593,7 +1597,6 @@ function App() {
       {screen === 'umrah-hotel-search' && (
         <UmrahHotelSearchScreen
           assets={umrahHotelSearchAssets}
-          blurImage={umrahProcessingAssets.blur}
           destinationOptions={hotelDestinationOptions}
           recentDestinations={onboardingConfig.hotelRecentCities}
           nearbyDestination={onboardingConfig.hotelNearbyCity}
@@ -2282,7 +2285,7 @@ function App() {
           onClose={() => setScreen(loginGuestBackScreen)}
           onContinueWithGoogle={() => {}}
           onContinueWithPhone={(phoneNumber) => {
-            const normalizedPhone = phoneNumber.replace(/\D/g, '')
+            const normalizedPhone = normalizeIndonesianPhoneNumber(phoneNumber)
 
             if (!normalizedPhone) {
               return
@@ -2346,7 +2349,7 @@ function App() {
           onBack={() => setScreen('profile')}
           onSaveProfile={(nextProfile) => {
             setUserProfile(nextProfile)
-            if (nextProfile.email.trim() && nextProfile.gender.trim()) {
+            if (isValidEmail(nextProfile.email) && nextProfile.gender.trim()) {
               setShowProfileCompletionPopup(false)
             }
           }}

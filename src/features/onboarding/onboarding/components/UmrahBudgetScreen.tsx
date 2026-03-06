@@ -21,7 +21,7 @@ export function UmrahBudgetScreen({
 }: UmrahBudgetScreenProps) {
   return (
     <section className="phone-shell umrah-traveler-shell" aria-label="Pertanyaan Budget Umrah">
-      <img src={assets.blur} alt="" className="umrah-bg-blur" aria-hidden />
+      <div className="umrah-bg-blur" aria-hidden />
 
       <header className="umrah-topbar">
         <h1>

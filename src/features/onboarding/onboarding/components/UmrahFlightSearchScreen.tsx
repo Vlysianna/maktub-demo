@@ -28,7 +28,6 @@ type FlightSearchResult = {
 
 type UmrahFlightSearchScreenProps = {
   assets: UmrahFlightSearchAssets
-  blurImage: string
   cabinClasses: string[]
   departureOptions: AirportOption[]
   destinationOptions: DestinationOption[]
@@ -101,7 +100,6 @@ function buildCalendarCells(visibleMonth: Date) {
 
 export function UmrahFlightSearchScreen({
   assets,
-  blurImage,
   cabinClasses,
   departureOptions,
   destinationOptions,
@@ -219,7 +217,7 @@ export function UmrahFlightSearchScreen({
 
       <h1>Cari Tiket Pesawat</h1>
 
-      <img src={blurImage} alt="" className="umrah-flight-search-blur" aria-hidden />
+      <div className="umrah-flight-search-blur" aria-hidden />
 
       <div className="umrah-flight-search-fields">
         <button type="button" className={`flight-search-field${hasAttemptedSearch && !departureOption ? ' invalid' : ''}`} onClick={openDepartureSheet}>

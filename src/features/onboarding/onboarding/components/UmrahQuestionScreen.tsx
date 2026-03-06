@@ -137,7 +137,7 @@ export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionSc
 
   return (
     <section className="phone-shell umrah-question-shell" aria-label="Pertanyaan Umrah">
-      <img src={assets.blur} alt="" className="umrah-bg-blur" aria-hidden />
+      <div className="umrah-bg-blur" aria-hidden />
 
       <header className="umrah-topbar">
         <h1>
