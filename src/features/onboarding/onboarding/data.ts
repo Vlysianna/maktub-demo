@@ -77,12 +77,12 @@ export const walkthroughSlides: WalkthroughSlide[] = [
 ]
 
 export const myBookingAssets: MyBookingAssets = {
-  clockIcon: 'https://www.figma.com/api/mcp/asset/19c0d9ad-cdbe-4853-9e7c-28dbc52521cf',
-  calendarIcon: 'https://www.figma.com/api/mcp/asset/ca9ec913-c997-42a1-bb0d-587a25f9a856',
-  calendarMutedIcon: 'https://www.figma.com/api/mcp/asset/e27f7468-cfdb-4caa-a98e-038caa844870',
-  userIcon: 'https://www.figma.com/api/mcp/asset/444fc19d-380d-49b6-9073-1aa70982f178',
-  routeArrowIcon: 'https://www.figma.com/api/mcp/asset/3bab3297-3cbc-4d3c-b1a7-268858a06a2e',
-  chevronRightIcon: 'https://www.figma.com/api/mcp/asset/1ecf49a5-3ae9-46b3-ad55-047320735bd5',
+  clockIcon: publicAsset('assets/figma/clock-01.svg'),
+  calendarIcon: publicAsset('assets/figma/calendar.svg'),
+  calendarMutedIcon: publicAsset('assets/figma/calendar.svg'),
+  userIcon: publicAsset('assets/figma/user.svg'),
+  routeArrowIcon: publicAsset('assets/figma/arrow-left-2.svg'),
+  chevronRightIcon: publicAsset('assets/figma/Chevron-2.svg'),
 }
 
 export const myBookingItems: BookingItem[] = [
@@ -213,15 +213,15 @@ export const myBookingItems: BookingItem[] = [
 ]
 
 export const myBookingDetailAssets: MyBookingDetailAssets = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/f268e9c8-4f64-4151-9015-3e0c50d52f95',
-  itineraryArrowIcon: 'https://www.figma.com/api/mcp/asset/db8144b7-d07f-4ee0-b0ef-83a8ab7b5307',
-  bedIcon: 'https://www.figma.com/api/mcp/asset/f72cd021-2f83-485a-9003-21522ca32331',
-  userIcon: 'https://www.figma.com/api/mcp/asset/f3105d7b-87f7-4e55-8a87-7f9114096afb',
-  routeTimelineIcon: 'https://www.figma.com/api/mcp/asset/3693d3ab-8b55-44ad-b8cb-f805493720ea',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  itineraryArrowIcon: publicAsset('assets/figma/arrow-left-2.svg'),
+  bedIcon: publicAsset('assets/figma/bed-double.svg'),
+  userIcon: publicAsset('assets/figma/user.svg'),
+  routeTimelineIcon: publicAsset('assets/figma/linne.svg'),
   airlineLogo: 'https://www.figma.com/api/mcp/asset/367bc467-f614-4b22-8be8-689aa3321204',
-  baggageIcon: 'https://www.figma.com/api/mcp/asset/937d6de2-4db7-409b-b76c-660360c760dc',
-  infoIcon: 'https://www.figma.com/api/mcp/asset/1fe7d242-c9cf-4848-9387-166f13820a4e',
-  bankLogo: 'https://www.figma.com/api/mcp/asset/936e35be-3c08-492f-ba4c-063fc1f18f22',
+  baggageIcon: publicAsset('assets/figma/bagasi.svg'),
+  infoIcon: publicAsset('assets/figma/eva_info-outline.svg'),
+  bankLogo: publicAsset('assets/figma/bni.svg'),
 }
 
 export const itinerarySuggestionGroups: ItinerarySuggestionGroup[] = [
@@ -703,18 +703,18 @@ export const umrahTicketAssets: UmrahTicketAssets = {
   cancelIcon: publicAsset('assets/figma/cancel-circle.svg'),
   infoSolidIcon: publicAsset('assets/figma/information-green-icon.svg'),
   clockIcon: publicAsset('assets/figma/clock-01.svg'),
-  timelineIcon: publicAsset('assets/figma/timeline-icon.svg'),
+  timelineIcon: publicAsset('assets/figma/linne.svg'),
   infoOutlineIcon: publicAsset('assets/figma/eva_info-outline.svg'),
-  routeDivider: publicAsset('assets/figma/arrow-right.svg'),
+  routeDivider: publicAsset('assets/figma/1.svg'),
   addCircleIcon: publicAsset('assets/figma/add-circle.svg'),
-  cameraIcon: 'https://www.figma.com/api/mcp/asset/eac09041-3669-43e8-bc51-228266a8a363',
-  chevronDownIcon: 'https://www.figma.com/api/mcp/asset/01ef2f68-a662-43c7-99d2-88c44d2811f3',
-  cameraSamplePassport: 'https://www.figma.com/api/mcp/asset/429a70e0-7bc1-42c3-9417-6f9cc917a64b',
-  cameraGuideFrame: 'https://www.figma.com/api/mcp/asset/a9dbadda-8e05-4960-a834-a5af8df8cbda',
-  cameraMaskOverlay: 'https://www.figma.com/api/mcp/asset/3b265557-4f3e-4a78-b8c7-7763b52482ad',
-  cameraFlashIcon: 'https://www.figma.com/api/mcp/asset/0fe3ee2c-2a65-4586-ad0a-5a9414da2704',
-  cameraShutterOuter: 'https://www.figma.com/api/mcp/asset/df507603-f71c-48d3-b48f-6e49cc5e4cdb',
-  cameraShutterInner: 'https://www.figma.com/api/mcp/asset/81f2455d-ee40-4b39-aab6-536b8103d91b',
+  cameraIcon: publicAsset('assets/figma/camera-icon.svg'),
+  chevronDownIcon: publicAsset('assets/figma/chevron-down.svg'),
+  cameraSamplePassport: publicAsset('assets/figma/camera-sample-passport.svg'),
+  cameraGuideFrame: publicAsset('assets/figma/camera-guide-frame.svg'),
+  cameraMaskOverlay: publicAsset('assets/figma/camera-mask-overlay.svg'),
+  cameraFlashIcon: publicAsset('assets/figma/flashlight.svg'),
+  cameraShutterOuter: publicAsset('assets/figma/camera-shutter-outer.svg'),
+  cameraShutterInner: publicAsset('assets/figma/camera-shutter-inner.svg'),
 }
 
 export const cityAirportCodeMap: Record<string, string> = {
