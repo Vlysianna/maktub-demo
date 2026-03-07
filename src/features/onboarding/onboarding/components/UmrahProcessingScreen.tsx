@@ -7,7 +7,7 @@ type UmrahProcessingScreenProps = {
 export function UmrahProcessingScreen({ assets }: UmrahProcessingScreenProps) {
   return (
     <section className="phone-shell umrah-processing-shell" aria-label="Memproses Rekomendasi">
-      <div className="umrah-processing-blur" aria-hidden />
+      <div className="umrah-bg-blur" aria-hidden />
 
       <div className="umrah-processing-center">
         <img src={assets.aiMagic} alt="" className="umrah-processing-icon" aria-hidden />

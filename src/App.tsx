@@ -1283,6 +1283,11 @@ function App() {
       setScreen('login-guest')
       return
     }
+    if (isProfileIncomplete) {
+      setShowProfileCompletionPopup(true)
+      setScreen('profile-settings')
+      return
+    }
 
     onAllowed()
   }
@@ -1294,12 +1299,7 @@ function App() {
     })
   }
 
-  const hasValidProfileEmail = isValidEmail(userProfile.email)
-  const isProfileIncomplete =
-    !userProfile.name.trim() ||
-    userProfile.name.trim().toLowerCase() === 'nama anda' ||
-    !hasValidProfileEmail ||
-    !userProfile.gender.trim()
+  const isProfileIncomplete = !userProfile.name.trim() || userProfile.name.trim().toLowerCase() === 'nama anda'
 
   useEffect(() => {
     if (isLoggedIn) {
