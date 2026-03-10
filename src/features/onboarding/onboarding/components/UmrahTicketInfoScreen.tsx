@@ -57,7 +57,6 @@ type UmrahTicketInfoScreenProps = {
   totalPrice: number
   validationMessage?: string
   flightOnly?: boolean
-  onChangeContact: (field: 'name' | 'email' | 'phone', value: string) => void
   onBack: () => void
   onAddPassenger: () => void
   onEditPassenger: (index: number) => void
@@ -195,7 +194,6 @@ export function UmrahTicketInfoScreen({
   totalPrice,
   validationMessage,
   flightOnly = false,
-  onChangeContact,
   onBack,
   onAddPassenger,
   onEditPassenger,
@@ -298,18 +296,10 @@ export function UmrahTicketInfoScreen({
         <h2 className="umrah-ticket-title">Kontak</h2>
         <p className="umrah-info-caption">E-ticket akan dikirim kepada orang dibawah ini.</p>
         <article className="umrah-info-contact-card">
-          <label className="umrah-contact-field">
-            <span>Nama</span>
-            <input type="text" value={contactName} onChange={(event) => onChangeContact('name', event.target.value)} />
-          </label>
-          <label className="umrah-contact-field">
-            <span>Email</span>
-            <input type="email" value={contactEmail} onChange={(event) => onChangeContact('email', event.target.value)} />
-          </label>
-          <label className="umrah-contact-field">
-            <span>No. Telepon</span>
-            <input type="tel" value={contactPhone} onChange={(event) => onChangeContact('phone', event.target.value)} />
-          </label>
+          <p>{contactName}</p>
+          <small>
+            {contactEmail} <span>•</span> {contactPhone}
+          </small>
         </article>
 
         <h2 className="umrah-ticket-title">Harga Tiket</h2>

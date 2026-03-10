@@ -8187,8 +8187,7 @@ background: #03694b;
   border-radius: 18px;
   background: #fff;
   border: 1px solid rgba(3, 105, 75, 0.08);
-  display: grid;
-  gap: 12px;
+  box-shadow: 0 12px 24px rgba(44, 50, 72, 0.06);
 }
 
 .doa-umrah-arabic-card,
@@ -8493,33 +8492,6 @@ background: #03694b;
   font-family: 'Inter', sans-serif;
   font-size: 31px;
   line-height: 1;
-
-.umrah-contact-field {
-  display: grid;
-  gap: 6px;
-}
-
-.umrah-contact-field span {
-  color: rgba(50, 51, 51, 0.72);
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.umrah-contact-field input {
-  width: 100%;
-  border: 1px solid #d7dfda;
-  border-radius: 8px;
-  background: #f8faf9;
-  padding: 10px 12px;
-  color: #323333;
-  font-size: 13px;
-  outline: none;
-}
-
-.umrah-contact-field input:focus {
-  border-color: #0c8b63;
-  background: #fff;
-}
   color: #0e1315;
 }
 

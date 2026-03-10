@@ -319,11 +319,6 @@ function App() {
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
   const [visaFromHome, setVisaFromHome] = useState(false)
-  const [ticketContact, setTicketContact] = useState({
-    name: onboardingConfig.defaultContact.name,
-    email: onboardingConfig.defaultContact.email,
-    phone: onboardingConfig.defaultContact.phone,
-  })
   const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId>(
     onboardingConfig.visaPackages[0].id,
   )
@@ -436,11 +431,6 @@ function App() {
     setPaymentFlow('package')
     setPaymentCompletedAt(null)
     setIsHotelOnlyFlow(false)
-    setTicketContact({
-      name: onboardingConfig.defaultContact.name,
-      email: userProfile.email || onboardingConfig.defaultContact.email,
-      phone: userProfile.phone || onboardingConfig.defaultContact.phone,
-    })
   }
 
   useEffect(() => {
@@ -1300,16 +1290,6 @@ function App() {
     [],
   )
 
-  const ensureLoggedInForService = (fallbackScreen: Screen, onAllowed: () => void) => {
-    if (!isLoggedIn) {
-      setLoginGuestBackScreen(fallbackScreen)
-      setScreen('login-guest')
-      return
-    }
-
-    onAllowed()
-  }
-
   const openChatAssistant = (backScreen: Screen) => {
     setChatAssistantBackScreen(backScreen)
     setScreen('chat-assistant')
@@ -1385,7 +1365,7 @@ function App() {
             setPaymentFlow('package')
             setScreen('umrah-hotel-search')
           }}
-          onOpenMyBooking={() => ensureLoggedInForService('home', () => setScreen('my-booking'))}
+          onOpenMyBooking={() => setScreen('my-booking')}
           onOpenLayananLain={() => setScreen('layanan-lain')}
           onOpenInformasi={() => setScreen('informasi')}
           onOpenAkun={() => openAkunMenu('home')}
@@ -1706,14 +1686,11 @@ function App() {
           returnSeatLayoutLabel="3-3"
           returnSeatPitchLabel="29 inches (Standar)"
           travelerNames={travelerNames}
-          contactName={ticketContact.name || userProfile.name || travelerNames[0] || onboardingConfig.defaultContact.name}
-          contactEmail={ticketContact.email || userProfile.email || onboardingConfig.defaultContact.email}
-          contactPhone={ticketContact.phone || userProfile.phone || onboardingConfig.defaultContact.phone}
+          contactName={userProfile.name || travelerNames[0]}
+          contactEmail={userProfile.email || onboardingConfig.defaultContact.email}
+          contactPhone={userProfile.phone || onboardingConfig.defaultContact.phone}
           totalPrice={selectedDepartureFare.totalPrice + selectedReturnFare.totalPrice}
           flightOnly={flightSearchEntry === 'home'}
-          onChangeContact={(field, value) => {
-            setTicketContact((prev) => ({ ...prev, [field]: value }))
-          }}
           onBack={() => setScreen('umrah-flight-detail')}
           onAddPassenger={() => {
             setTicketInfoValidationMessage('')
@@ -1847,14 +1824,11 @@ function App() {
           travelerText={`${travelerParticipants.dewasa} Dewasa / Kamar`}
           checkInLabel={`${hotelCheckInLabel} (16:00)`}
           checkOutLabel={`${hotelCheckOutLabel} (12:00)`}
-          contactName={ticketContact.name || userProfile.name || travelerNames[0] || onboardingConfig.defaultContact.name}
-          contactEmail={ticketContact.email || userProfile.email || onboardingConfig.defaultContact.email}
-          contactPhone={ticketContact.phone || userProfile.phone || onboardingConfig.defaultContact.phone}
+          contactName={userProfile.name || travelerNames[0]}
+          contactEmail={userProfile.email || onboardingConfig.defaultContact.email}
+          contactPhone={userProfile.phone || onboardingConfig.defaultContact.phone}
           totalPrice={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalPrice : selectedReturnHotelRoom!.totalPrice}
           totalLabel={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalLabel : selectedReturnHotelRoom!.totalLabel}
-          onChangeContact={(field, value) => {
-            setTicketContact((prev) => ({ ...prev, [field]: value }))
-          }}
           onBack={() => setScreen('umrah-hotel-detail')}
           onNext={() => {
             if (isHotelOnlyFlow) {
@@ -2017,7 +1991,7 @@ function App() {
         <UmrahPaymentCompleteScreen
           assets={umrahCompletionAssets}
           ctaLabel="Lihat Paket Umrah Saya"
-          onBack={() => setScreen('umrah-payment-success')}
+          onBack={() => setScreen(paymentFlow === 'package' && !visaFromHome && flightSearchEntry !== 'home' && !isHotelOnlyFlow ? 'umrah-visa-services' : 'umrah-payment-success')}
           onNext={() => setScreen(visaFromHome ? 'home' : 'my-booking')}
         />
       )}
@@ -2049,8 +2023,13 @@ function App() {
             setScreen('umrah-payment-method')
           }}
           onSkip={() => {
-            setVisaFromHome(false)
-            setScreen('my-booking')
+            if (visaFromHome) {
+              setVisaFromHome(false)
+              setScreen('home')
+              return
+            }
+
+            setScreen('umrah-payment-complete')
           }}
         />
       )}
@@ -2158,7 +2137,7 @@ function App() {
             },
           ]}
           onOpenHome={() => setScreen('home')}
-          onOpenMyBooking={() => ensureLoggedInForService('layanan-lain', () => setScreen('my-booking'))}
+          onOpenMyBooking={() => setScreen('my-booking')}
           onOpenInformasi={() => setScreen('informasi')}
           onOpenAkun={() => openAkunMenu('layanan-lain')}
         />
@@ -2169,7 +2148,7 @@ function App() {
           assets={homeAssets}
           content={informasiContent}
           onOpenHome={() => setScreen('home')}
-          onOpenMyBooking={() => ensureLoggedInForService('informasi', () => setScreen('my-booking'))}
+          onOpenMyBooking={() => setScreen('my-booking')}
           onOpenLayananLain={() => setScreen('layanan-lain')}
           onOpenArahKiblat={() => setScreen('arah-kiblat-jadwal')}
           onOpenPanduanUmrah={() => setScreen('panduan-umrah')}
