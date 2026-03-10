@@ -819,6 +819,60 @@ function createDoaUmrahDetailContent(title: string, subtitle: string): GuideDeta
   }
 }
 
+function createPanduanUmrahDetailContent(title: string, subtitle: string): GuideDetailContent {
+  return {
+    backIcon: panduanUmrahContent.backIcon,
+    title,
+    categoryLabel: 'Panduan Umrah',
+    contextLabel: subtitle,
+    heroLabel: 'Panduan Langkah',
+    translationTitle: 'Ringkasan Tahapan',
+    translationText: `${title} merupakan bagian penting dari rangkaian ibadah umrah. Pahami urutannya dan lakukan dengan tenang agar pelaksanaan ibadah tetap tertib dan sesuai tuntunan.`,
+    sections: [
+      {
+        title: 'Penjelasan Singkat',
+        description: subtitle,
+      },
+      {
+        title: 'Hal yang Perlu Diperhatikan',
+        description: `Saat melaksanakan ${title.toLowerCase()}, pastikan kondisi tetap tenang, memahami tujuannya, dan mengikuti urutan ibadah dengan benar.`,
+        bullets: [
+          'Pastikan memahami kapan tahapan ini dilakukan dalam rangkaian umrah.',
+          'Lakukan dengan tertib, tidak tergesa-gesa, dan tetap menjaga adab ibadah.',
+          'Jika beribadah bersama rombongan, ikuti arahan pembimbing agar pelaksanaan lebih teratur.',
+        ],
+      },
+    ],
+  }
+}
+
+function createDoaHarianDetailContent(title: string, subtitle: string): GuideDetailContent {
+  return {
+    backIcon: doaHarianContent.backIcon,
+    title,
+    categoryLabel: 'Do’a Harian',
+    contextLabel: subtitle,
+    heroLabel: 'Doa Harian',
+    translationTitle: 'Makna Doa',
+    translationText: `${title} dibaca sebagai bentuk ibadah dan pengingat agar setiap aktivitas harian dijalani dengan memohon perlindungan, keberkahan, serta pertolongan Allah.`,
+    sections: [
+      {
+        title: 'Dibaca Saat',
+        description: subtitle,
+      },
+      {
+        title: 'Cara Mengamalkan',
+        description: `Biasakan membaca ${title.toLowerCase()} dengan penuh kesadaran sebelum atau sesudah aktivitas terkait agar doa menjadi bagian dari kebiasaan ibadah harian.`,
+        bullets: [
+          'Usahakan membaca doa dalam keadaan tenang dan tidak terburu-buru.',
+          'Pahami maknanya agar doa tidak hanya menjadi hafalan, tetapi juga penghayatan.',
+          'Ajarkan dan biasakan doa ini dalam aktivitas sehari-hari agar menjadi amalan rutin.',
+        ],
+      },
+    ],
+  }
+}
+
 function createSholatDetailContent(index: number, title: string, subtitle: string): SholatDetailContent {
   return {
     backIcon: tataCaraSholatContent.backIcon,
@@ -848,6 +902,14 @@ export const dzikirHarianDetailById: Record<string, GuideDetailContent> = Object
 
 export const doaUmrahDetailById: Record<string, GuideDetailContent> = Object.fromEntries(
   doaUmrahContent.items.map((item) => [item.id, createDoaUmrahDetailContent(item.title, item.subtitle)]),
+)
+
+export const panduanUmrahDetailById: Record<string, GuideDetailContent> = Object.fromEntries(
+  panduanUmrahContent.items.map((item) => [item.id, createPanduanUmrahDetailContent(item.title, item.subtitle)]),
+)
+
+export const doaHarianDetailById: Record<string, GuideDetailContent> = Object.fromEntries(
+  doaHarianContent.items.map((item) => [item.id, createDoaHarianDetailContent(item.title, item.subtitle)]),
 )
 
 export const tataCaraSholatDetailById: Record<string, SholatDetailContent> = Object.fromEntries(

@@ -94,10 +94,12 @@ import {
   informasiDetailContent,
   kiblatScheduleContent,
   panduanUmrahContent,
+  panduanUmrahDetailById,
   doaUmrahContent,
   dzikirHarianContent,
   dzikirHarianDetailById,
   doaHarianContent,
+  doaHarianDetailById,
   doaUmrahDetailById,
   tataCaraSholatContent,
   tataCaraSholatDetailById,
@@ -331,6 +333,8 @@ function App() {
   const [selectedRekomendasiPaketId, setSelectedRekomendasiPaketId] = useState<string | null>(null)
   const [selectedDzikirHarianDetailId, setSelectedDzikirHarianDetailId] = useState<string | null>(null)
   const [selectedDoaUmrahDetailId, setSelectedDoaUmrahDetailId] = useState<string | null>(null)
+  const [selectedPanduanUmrahDetailId, setSelectedPanduanUmrahDetailId] = useState<string | null>(null)
+  const [selectedDoaHarianDetailId, setSelectedDoaHarianDetailId] = useState<string | null>(null)
   const [selectedTataCaraSholatDetailId, setSelectedTataCaraSholatDetailId] = useState<string | null>(null)
   const [selectedInformasiDetailId, setSelectedInformasiDetailId] = useState<string | null>(null)
   const [ticketInfoValidationMessage, setTicketInfoValidationMessage] = useState('')
@@ -2210,7 +2214,14 @@ function App() {
       )}
 
       {screen === 'panduan-umrah' && (
-        <PanduanUmrahScreen content={panduanUmrahContent} onBack={() => setScreen('informasi')} />
+        <PanduanUmrahScreen
+          content={panduanUmrahContent}
+          onBack={() => setScreen('informasi')}
+          onOpenDetail={(itemId) => {
+            setSelectedPanduanUmrahDetailId(itemId)
+            setScreen('panduan-umrah-detail')
+          }}
+        />
       )}
 
       {screen === 'doa-umrah' && (
@@ -2236,7 +2247,21 @@ function App() {
       )}
 
       {screen === 'doa-harian' && (
-        <DoaHarianScreen content={doaHarianContent} onBack={() => setScreen('informasi')} />
+        <DoaHarianScreen
+          content={doaHarianContent}
+          onBack={() => setScreen('informasi')}
+          onOpenDetail={(itemId) => {
+            setSelectedDoaHarianDetailId(itemId)
+            setScreen('doa-harian-detail')
+          }}
+        />
+      )}
+
+      {screen === 'panduan-umrah-detail' && (
+        <DzikirHarianDetailScreen
+          content={panduanUmrahDetailById[selectedPanduanUmrahDetailId ?? panduanUmrahContent.items[0].id]}
+          onBack={() => setScreen('panduan-umrah')}
+        />
       )}
 
       {screen === 'tata-cara-sholat' && (
@@ -2261,6 +2286,13 @@ function App() {
         <DoaUmrahDetailScreen
           content={doaUmrahDetailById[selectedDoaUmrahDetailId ?? doaUmrahContent.items[0].id]}
           onBack={() => setScreen('doa-umrah')}
+        />
+      )}
+
+      {screen === 'doa-harian-detail' && (
+        <DzikirHarianDetailScreen
+          content={doaHarianDetailById[selectedDoaHarianDetailId ?? doaHarianContent.items[0].id]}
+          onBack={() => setScreen('doa-harian')}
         />
       )}
 

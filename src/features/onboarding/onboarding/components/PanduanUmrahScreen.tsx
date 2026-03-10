@@ -3,9 +3,10 @@ import type { GuideListContent } from '../types'
 type PanduanUmrahScreenProps = {
   content: GuideListContent
   onBack: () => void
+  onOpenDetail: (itemId: string) => void
 }
 
-export function PanduanUmrahScreen({ content, onBack }: PanduanUmrahScreenProps) {
+export function PanduanUmrahScreen({ content, onBack, onOpenDetail }: PanduanUmrahScreenProps) {
   return (
     <section className="phone-shell guide-list-shell" aria-label={content.title}>
       <header className="guide-list-header">
@@ -20,7 +21,7 @@ export function PanduanUmrahScreen({ content, onBack }: PanduanUmrahScreenProps)
 
       <div className="guide-list-scroll">
         {content.items.map((item) => (
-          <button key={item.id} type="button" className="guide-list-item">
+          <button key={item.id} type="button" className="guide-list-item" onClick={() => onOpenDetail(item.id)}>
             <span className="guide-list-item-icon-wrap">
               <img src={content.icon} alt="" aria-hidden />
             </span>
