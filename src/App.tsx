@@ -318,7 +318,6 @@ function App() {
   const [ticketInfoValidationMessage, setTicketInfoValidationMessage] = useState('')
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
-  const [hasVisa, setHasVisa] = useState(false)
   const [visaFromHome, setVisaFromHome] = useState(false)
   const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId>(
     onboardingConfig.visaPackages[0].id,
@@ -431,7 +430,6 @@ function App() {
     setSelectedReturnHotelRoomId(null)
     setPaymentFlow('package')
     setPaymentCompletedAt(null)
-    setHasVisa(false)
     setIsHotelOnlyFlow(false)
   }
 
@@ -1470,11 +1468,10 @@ function App() {
         <UmrahQuestionScreen
           assets={umrahQuestionAssets}
           onClose={() => setScreen('home')}
-          onNext={(selectedDate, alreadyHasVisa) => {
+          onNext={(selectedDate) => {
             setTravelDate(selectedDate)
             setHotelStartDate(selectedDate)
             setHotelEndDate(addDays(selectedDate, onboardingConfig.defaultHotelNightCount))
-            setHasVisa(alreadyHasVisa)
             setPaymentCompletedAt(null)
             setScreen('umrah-traveler')
           }}
@@ -2041,7 +2038,6 @@ function App() {
           onOpenForm={() => setScreen('umrah-visa-form-personal')}
           onBuy={() => {
             setPaymentFlow('visa')
-            setHasVisa(true)
             setScreen('umrah-payment-method')
           }}
           onSkip={() => {
