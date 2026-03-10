@@ -150,7 +150,8 @@ export type MyBookingDetailAssets = {
   bedIcon: string
   userIcon: string
   routeTimelineIcon: string
-  airlineLogo: string
+  omanAirLogo: string
+  saudiaLogo: string
   baggageIcon: string
   infoIcon: string
   bankLogo: string
@@ -366,6 +367,7 @@ export type AirportOption = {
 }
 
 export type UmrahFlightSearchAssets = {
+  backIcon: string
   iconTakeOff: string
   iconLanding: string
   iconCalendar: string

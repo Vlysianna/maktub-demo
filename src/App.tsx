@@ -1571,7 +1571,6 @@ function App() {
           initialPassengers={travelerParticipants}
           initialCabinClass={selectedFlightCabinLabel}
           onBack={() => setScreen(flightSearchEntry === 'maktub-ai' ? 'umrah-budget' : 'home')}
-          onClose={() => setScreen('home')}
           onSearch={(payload) => {
             const nextTravelerCount = Math.max(payload.passengers.dewasa + payload.passengers.anak + payload.passengers.bayi, 1)
 
@@ -2037,6 +2036,7 @@ function App() {
         <UmrahVisaFormPersonalScreen
           value={visaPersonalForm}
           monthOptions={onboardingConfig.monthOptions}
+          nationalityOptions={onboardingConfig.nationalityOptions}
           yearSpan={onboardingConfig.passportYearSpan}
           hideStepper={visaFromHome}
           onChange={(field, value) => {

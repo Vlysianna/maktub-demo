@@ -18,6 +18,7 @@ type VisaPersonalFormValue = {
 type UmrahVisaFormPersonalScreenProps = {
   value: VisaPersonalFormValue
   monthOptions: string[]
+  nationalityOptions: string[]
   yearSpan: number
   hideStepper?: boolean
   onChange: (field: keyof VisaPersonalFormValue, nextValue: string) => void
@@ -51,7 +52,7 @@ function validate(value: VisaPersonalFormValue): FieldErrors {
   return errors
 }
 
-export function UmrahVisaFormPersonalScreen({ value, monthOptions, yearSpan, hideStepper, onChange, onBack, onNext }: UmrahVisaFormPersonalScreenProps) {
+export function UmrahVisaFormPersonalScreen({ value, monthOptions, nationalityOptions, yearSpan, hideStepper, onChange, onBack, onNext }: UmrahVisaFormPersonalScreenProps) {
   const yearOptions = Array.from({ length: yearSpan }, (_, index) => String(currentYear - index))
   const [hasAttempted, setHasAttempted] = useState(false)
   const errors = hasAttempted ? validate(value) : {}
@@ -143,7 +144,14 @@ export function UmrahVisaFormPersonalScreen({ value, monthOptions, yearSpan, hid
 
         <label>
           Negara tempat lahir *
-          <input className={errors.birthCountry ? 'input-invalid' : ''} value={value.birthCountry} onChange={(event) => onChange('birthCountry', event.target.value)} />
+          <select className={errors.birthCountry ? 'input-invalid' : ''} value={value.birthCountry} onChange={(event) => onChange('birthCountry', event.target.value)}>
+            <option value="">Pilih negara</option>
+            {nationalityOptions.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
           {errors.birthCountry && <span className="visa-field-error">{errors.birthCountry}</span>}
         </label>
 
@@ -172,7 +180,14 @@ export function UmrahVisaFormPersonalScreen({ value, monthOptions, yearSpan, hid
 
         <label>
           Warga negara *
-          <input className={errors.nationality ? 'input-invalid' : ''} value={value.nationality} onChange={(event) => onChange('nationality', event.target.value)} />
+          <select className={errors.nationality ? 'input-invalid' : ''} value={value.nationality} onChange={(event) => onChange('nationality', event.target.value)}>
+            <option value="">Pilih negara</option>
+            {nationalityOptions.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
           {errors.nationality && <span className="visa-field-error">{errors.nationality}</span>}
         </label>
       </div>

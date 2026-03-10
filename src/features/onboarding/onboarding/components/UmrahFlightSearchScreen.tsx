@@ -38,7 +38,6 @@ type UmrahFlightSearchScreenProps = {
   initialPassengers: PassengerState
   initialCabinClass: FlightCabinClass | null
   onBack: () => void
-  onClose: () => void
   onSearch: (payload: FlightSearchResult) => void
 }
 
@@ -110,7 +109,6 @@ export function UmrahFlightSearchScreen({
   initialPassengers,
   initialCabinClass,
   onBack,
-  onClose,
   onSearch,
 }: UmrahFlightSearchScreenProps) {
   const minimumDepartureDate = addDays(startOfDay(new Date()), 1)
@@ -212,7 +210,7 @@ export function UmrahFlightSearchScreen({
   return (
     <section className="phone-shell umrah-flight-search-shell" aria-label="Cari tiket pesawat">
       <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-        ←
+        <img src={assets.backIcon} alt="" aria-hidden />
       </button>
 
       <h1>Cari Tiket Pesawat</h1>
@@ -622,10 +620,6 @@ export function UmrahFlightSearchScreen({
           </button>
         </section>
       )}
-
-      <button type="button" className="umrah-flight-close-search" aria-label="Tutup" onClick={onClose}>
-        ×
-      </button>
     </section>
   )
 }

@@ -23,6 +23,13 @@ const statusBadgeClassName: Record<BookingStatus, string> = {
 
 export function MyBookingDetailScreen({ assets, detail, onBack, onOpenItinerary }: MyBookingDetailScreenProps) {
   const showPayNow = detail.status === 'menunggu-pembayaran'
+  
+  const getAirlineLogo = (airlineName: string) => {
+    if (airlineName.toLowerCase().includes('saudi')) {
+      return assets.saudiaLogo
+    }
+    return assets.omanAirLogo
+  }
 
   return (
     <section className="phone-shell my-booking-detail-shell" aria-label="My Booking Detail">
@@ -85,7 +92,7 @@ export function MyBookingDetailScreen({ assets, detail, onBack, onOpenItinerary 
 
               <div className="my-booking-flight-info-card">
                 <div className="my-booking-airline">
-                  <img src={assets.airlineLogo} alt={detail.flight.airlineName} />
+                  <img src={getAirlineLogo(detail.flight.airlineName)} alt={detail.flight.airlineName} />
                   <div>
                     <strong>{detail.flight.airlineName}</strong>
                     <p>

@@ -6114,12 +6114,13 @@ button.umrah-visa-package-card {
   font-size: 12px;
 }
 
+
 .umrah-ticket-select-btn {
   width: 80px;
   height: 34px;
   border-radius: 8px;
   border: 0;
-  background: #03694b;
+  background: #03694b; 
   color: #fff;
   font-size: 12px;
   font-weight: 500;
@@ -6127,8 +6128,7 @@ button.umrah-visa-package-card {
 }
 
 .umrah-ticket-select-btn.active {
-  background: #024f3b;
-  color: #fff;
+background: #03694b; 
 }
 
 .umrah-ticket-feature-list {

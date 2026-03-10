@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import type { ProfileData } from '../types'
+
+const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`
 import {
   EMAIL_VALIDATION_MESSAGE,
   INDONESIAN_PHONE_VALIDATION_MESSAGE,
@@ -159,7 +161,7 @@ export function ProfileSettingsScreen({ profile, onBack, onSaveProfile, onDelete
     <section className="phone-shell profile-settings-shell" aria-label="Profil Pengaturan">
       <header className="profile-settings-header">
         <button type="button" className="profile-settings-back" onClick={onBack} aria-label="Kembali">
-          ←
+          <img src={publicAsset('assets/figma/arrow-right.svg')} alt="" aria-hidden />
         </button>
         <h1>Profil</h1>
       </header>

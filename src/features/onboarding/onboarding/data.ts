@@ -51,27 +51,27 @@ export const splashLogo = publicAsset('assets/figma/logo-splash.png')
 
 export const walkthroughSlides: WalkthroughSlide[] = [
   {
-    image: 'https://www.figma.com/api/mcp/asset/aaa80ea6-944b-4a79-9c82-0a33b1a2289d',
+    image: publicAsset('assets/figma/screen1.jpg'),
     text: [
       'Maktub adalah aplikasi yang membantu memudahkan perjalanan umrah anda yang bersifat fleksibel dengan menentukan tanggal keberangkatan anda sendiri, lebih private, dan aman',
     ],
   },
   {
-    image: 'https://www.figma.com/api/mcp/asset/ae710786-d755-47ee-81a5-87de789ca8d8',
+    image: publicAsset('assets/figma/screen2.jpg'),
     text: ['Di aplikasi ini anda bisa melakukan pembelian pesawat, hotel, visa, mutawif dan pelayanan lainnya'],
   },
   {
-    image: 'https://www.figma.com/api/mcp/asset/08f4a287-866a-4c52-b8ac-aa8c29953fca',
+    image: publicAsset('assets/figma/screen3.jpg'),
     text: ['Anda juga bisa mengkombinasikan perjalanan Umrah anda dengan perjalanan wisata lainnya di Arab Saudi'],
   },
   {
-    image: 'https://www.figma.com/api/mcp/asset/4dd95110-ede1-4b2a-a41f-e663c5590319',
+    image: publicAsset('assets/figma/screen4.jpg'),
     text: [
       'Kenapa anda harus berpergian bersama kami, karena kami memiliki tim di Arab Saudi yang membantu kemudahan perjalanan anda, dan informasi transparan yang kami berikan di aplikasi kami',
     ],
   },
   {
-    image: 'https://www.figma.com/api/mcp/asset/ef8a91e9-4763-46f1-a473-d704adf8621b',
+    image: publicAsset('assets/figma/screen5.jpg'),
     text: ['Maktub', 'Ditulis oleh–Nya', 'Diusahakan olehmu'],
   },
 ]
@@ -218,7 +218,8 @@ export const myBookingDetailAssets: MyBookingDetailAssets = {
   bedIcon: publicAsset('assets/figma/bed-double.svg'),
   userIcon: publicAsset('assets/figma/user.svg'),
   routeTimelineIcon: publicAsset('assets/figma/linne.svg'),
-  airlineLogo: 'https://www.figma.com/api/mcp/asset/367bc467-f614-4b22-8be8-689aa3321204',
+  omanAirLogo: publicAsset('assets/figma/omanair.png'),
+  saudiaLogo: publicAsset('assets/figma/saudi.png'),
   baggageIcon: publicAsset('assets/figma/bagasi.svg'),
   infoIcon: publicAsset('assets/figma/eva_info-outline.svg'),
   bankLogo: publicAsset('assets/figma/bni.svg'),
@@ -382,22 +383,22 @@ export const articles: ArticleItem[] = [
   {
     id: 'tempat-bersejarah',
     title: 'Tempat-tempat bersejarah yang bisa dikunjungi',
-    image: 'https://www.figma.com/api/mcp/asset/b9570035-d2f2-4b9f-b94c-6eab8f697f1c',
+    image: publicAsset('assets/figma/home1.jpg'),
   },
   {
     id: 'cara-ke-arab-saudi',
     title: 'Cara berpergian ke Arab Saudi (Bandara dan Jenis Visa)',
-    image: 'https://www.figma.com/api/mcp/asset/dea9a7c2-1f37-4ba2-b3c2-06e429bb517a',
+    image: publicAsset('assets/figma/home2.jpg'),
   },
   {
     id: 'apa-itu-umrah',
     title: 'Apa itu ibadah Umrah? Dan kenapa harus sekarang?',
-    image: 'https://www.figma.com/api/mcp/asset/8d77d06a-9808-4f47-aa4b-469058ecccc2',
+    image: publicAsset('assets/figma/home3.jpg'),
   },
   {
     id: 'tata-cara-umrah',
     title: 'Tata cara ibadah Umrah',
-    image: 'https://www.figma.com/api/mcp/asset/7ad3ba8b-3445-4bf3-bd48-e8d4ae966245',
+    image: publicAsset('assets/figma/home4.jpg'),
   },
 ]
 
@@ -662,24 +663,25 @@ export const umrahProcessingAssets: UmrahProcessingAssets = {
 }
 
 export const umrahFlightSearchAssets: UmrahFlightSearchAssets = {
-  iconTakeOff: 'https://www.figma.com/api/mcp/asset/092d46f6-7d23-4f7d-b169-11a0eaeca787',
-  iconLanding: 'https://www.figma.com/api/mcp/asset/db56c24b-822b-4d66-87ca-9e1b5cf6283a',
-  iconCalendar: 'https://www.figma.com/api/mcp/asset/b6bad521-4bc7-411a-a70d-2c02a8c3f378',
-  iconPassenger: 'https://www.figma.com/api/mcp/asset/4b8645af-ffe9-47c8-bc61-53118eaa9979',
-  iconSeat: 'https://www.figma.com/api/mcp/asset/6a410462-9ea6-403d-b1f3-814b1f1ac4e0',
-  iconSwap: 'https://www.figma.com/api/mcp/asset/3b08b953-71de-4411-b922-3fd624a10668',
-  iconSearch: 'https://www.figma.com/api/mcp/asset/39ce97cb-9ca4-4fec-a2fa-49a64dd3d2fa',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  iconTakeOff: publicAsset('assets/figma/airplane-take-off-01.svg'),
+  iconLanding: publicAsset('assets/figma/airplane-landing-01.svg'),
+  iconCalendar: publicAsset('assets/figma/calendar.svg'),
+  iconPassenger: publicAsset('assets/figma/user-multiple-02.svg'),
+  iconSeat: publicAsset('assets/figma/airplane-seat.svg'),
+  iconSwap: publicAsset('assets/figma/search.svg'),
+  iconSearch: publicAsset('assets/figma/search.svg'),
 }
 
 export const umrahHotelSearchAssets: UmrahHotelSearchAssets = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/98bcbc58-672c-47f1-8a7e-e75af7171b82',
-  iconLocation: 'https://www.figma.com/api/mcp/asset/03b3e842-1914-4706-9ea1-70cbd1d6aaf6',
-  iconCalendar: 'https://www.figma.com/api/mcp/asset/ad87ffeb-a104-4976-aef5-bc76abad9a8f',
-  iconGuest: 'https://www.figma.com/api/mcp/asset/87379399-e322-44d0-8ea1-afa952a33903',
-  iconSearch: 'https://www.figma.com/api/mcp/asset/10fb2bb7-1570-40de-976f-f5d8b60c3475',
-  iconNearMe: 'https://www.figma.com/api/mcp/asset/4c6e8642-f8d5-4751-8106-9eb50a564080',
-  iconMap: 'https://www.figma.com/api/mcp/asset/ef86a6c3-438a-4fd2-bf86-cd903574f85d',
-  iconClock: 'https://www.figma.com/api/mcp/asset/355510cb-684f-4fd2-9933-91348527420b',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  iconLocation: publicAsset('assets/figma/location-1.svg'),
+  iconCalendar: publicAsset('assets/figma/calendar.svg'),
+  iconGuest: publicAsset('assets/figma/user-multiple-02.svg'),
+  iconSearch: publicAsset('assets/figma/search.svg'),
+  iconNearMe: publicAsset('assets/figma/nearme.svg'),
+  iconMap: publicAsset('assets/figma/maps.svg'),
+  iconClock: publicAsset('assets/figma/clock-01.svg'),
 }
 
 export const umrahFlightAssets: UmrahFlightAssets = {
@@ -733,7 +735,7 @@ export const flightOfferTemplate: FlightOffer[] = [
       { time: '21:45', code: 'JED' },
     ],
     airline: 'Oman Air',
-    airlineLogo: 'https://www.figma.com/api/mcp/asset/132c5a5b-2ea6-4a64-a196-1a1edade8dba',
+    airlineLogo: publicAsset('assets/figma/omanair.png'),
     price: 10800000,
     isRecommended: true,
   },
@@ -745,7 +747,7 @@ export const flightOfferTemplate: FlightOffer[] = [
       { time: '22:45', code: 'JED' },
     ],
     airline: 'Oman Air',
-    airlineLogo: 'https://www.figma.com/api/mcp/asset/132c5a5b-2ea6-4a64-a196-1a1edade8dba',
+    airlineLogo: publicAsset('assets/figma/omanair.png'),
     price: 11520000,
   },
   {
@@ -755,7 +757,7 @@ export const flightOfferTemplate: FlightOffer[] = [
       { time: '01:45', code: 'JED' },
     ],
     airline: 'Saudi Arabia Airlines',
-    airlineLogo: 'https://www.figma.com/api/mcp/asset/d67010ae-af44-458b-80de-86d77fa8c491',
+    airlineLogo: publicAsset('assets/figma/saudi.png'),
     price: 12500000,
   },
 ]
@@ -789,7 +791,7 @@ export const hotelOfferTemplate: HotelOffer[] = [
     pricePerNight: 3200000,
     totalPrice: 12000000,
     rating: 5,
-    image: 'https://www.figma.com/api/mcp/asset/5eb9c5c6-52fc-4c37-8cf1-526464a5b58c',
+    image: publicAsset('assets/figma/pulmanhotel.jpg'),
     propertyType: 'Hotel',
     facilities: ['Layanan Kamar', 'Free WiFi', 'TV'],
     isRecommended: true,
@@ -802,7 +804,7 @@ export const hotelOfferTemplate: HotelOffer[] = [
     pricePerNight: 3370000,
     totalPrice: 16500000,
     rating: 5,
-    image: 'https://www.figma.com/api/mcp/asset/ec3c22ee-8727-49dd-ac6c-702da916e5cb',
+    image: publicAsset('assets/figma/anjumhotel.jpg'),
     propertyType: 'Apartment',
     facilities: ['Free WiFi', 'Kolam Renang', 'Smoking Area'],
   },
@@ -814,7 +816,7 @@ export const hotelOfferTemplate: HotelOffer[] = [
     pricePerNight: 4550000,
     totalPrice: 18600000,
     rating: 5,
-    image: 'https://www.figma.com/api/mcp/asset/859548e7-3f5c-41c0-8e0b-e13d013fc76d',
+    image: publicAsset('assets/figma/elafhotel.jpg'),
     propertyType: 'Home Stays',
     facilities: ['TV', 'Smoking Area'],
   },
@@ -828,16 +830,16 @@ export const hotelDetailTemplate: HotelDetail = {
     'Discover the epitome of family living in this semi-furnished 4-Bedroom Villa at Ain Khalid Gate, nestled in a delightful residential area enjoy a wealth of amenities.',
   facilities: ['Squash room', 'Supermarket', 'Laundry shop', 'Outdoor children’s play', 'Library', 'Sport area', 'Beauty salon'],
   locationName: 'Viva Bahriya Tower 19, The Pearl, Qatar',
-  locationDistanceLabel: '1,2 km ke arah Mekah',
-  mapImage: 'https://www.figma.com/api/mcp/asset/2cf654c3-d1b3-4422-90e2-9460f0dcef6e',
-  heroImage: 'https://www.figma.com/api/mcp/asset/61c90fde-cbf9-46a2-94a2-5159c307810c',
+  locationDistanceLabel: '1,2 km ke arah `Mekah',
+  mapImage: publicAsset('assets/figma/map.svg'),
+  heroImage: publicAsset('assets/figma/pulman-hero.jpg'),
   rooms: [
     {
       id: 'room-1',
       name: 'Deluxe King Room',
       images: [
-        'https://www.figma.com/api/mcp/asset/40876946-7f3e-46b4-a616-ad56918faaaa',
-        'https://www.figma.com/api/mcp/asset/28323d74-f127-427e-96f0-bc7db8dd8f62',
+        publicAsset('assets/figma/deluxe (2).jpg'),
+        publicAsset('assets/figma/deluxe (1).jpg'),
       ],
       features: ['1 King bed', '30 m2', 'Wifi', 'Sarapan', 'Bebas asap rokok'],
       pricePerNight: 3200000,
@@ -848,8 +850,8 @@ export const hotelDetailTemplate: HotelDetail = {
       id: 'room-2',
       name: 'Luxury King Room',
       images: [
-        'https://www.figma.com/api/mcp/asset/532f730a-f487-4d5a-812f-ad6b8e742f45',
-        'https://www.figma.com/api/mcp/asset/28ffee5a-b7d2-4a08-99c0-26b7717728af',
+        publicAsset('assets/figma/luxury (2).jpg'),
+        publicAsset('assets/figma/luxury (1).jpg'),
       ],
       features: ['Bathtub', '1 King bed', '50 m2', 'Wifi', 'Sarapan', 'Bebas asap rokok'],
       pricePerNight: 1400000,
@@ -883,15 +885,15 @@ export const umrahPaymentAssets: UmrahPaymentAssets = {
   bankBriLogo: publicAsset('assets/figma/bri.svg'),
   bankMandiriLogo: publicAsset('assets/figma/mandiri.svg'),
   bankBcaLogo: publicAsset('assets/figma/bca.svg'),
-  visaLogo: 'https://www.figma.com/api/mcp/asset/56be393a-ef11-4776-b245-715bf6e36998',
-  mastercardLogo: 'https://www.figma.com/api/mcp/asset/74de822d-daec-4a9a-9c11-3a83dc26b58a',
+  visaLogo: publicAsset('assets/figma/visa.png'),
+  mastercardLogo: publicAsset('assets/figma/mastercard.png'),
   copyIcon: publicAsset('assets/figma/copy-icon.svg'),
-  userIcon: 'https://www.figma.com/api/mcp/asset/dd2ccf07-d695-4b7b-ab8c-cb8eafc864e7',
-  planeLogo: 'https://www.figma.com/api/mcp/asset/8dab0ef3-efa7-49fb-a4fc-c290567cd467',
+  userIcon: publicAsset('assets/figma/user.svg'),
+  planeLogo: publicAsset('assets/figma/plane.svg'),
 }
 
 export const umrahCompletionAssets: UmrahCompletionAssets = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/cd2f5bf6-0efd-4acf-a72b-180c5eacd71e',
+  backIcon: publicAsset('assets/figma/arrow-left-white.svg'),
   successBadge: publicAsset('assets/figma/done-icon.svg'),
 }
 
@@ -951,11 +953,11 @@ export const rekomendasiPaketItems: RekomendasiPaketItem[] = [
 
 export const onboardingConfig: OnboardingConfig = {
   defaultContact: {
-    name: 'Noermansyah',
-    email: 'noermansyah@gmail.com',
-    phone: '+6281288990011',
+    name: '',
+    email: '',
+    phone: '+',
     virtualAccountNumber: '8848800096475552',
-    passportNumber: 'C1234567A',
+    passportNumber: '',
   },
   defaultDepartureCode: 'CGK',
   defaultArrivalCity: 'Jeddah',
