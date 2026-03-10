@@ -7782,7 +7782,7 @@ background: #03694b;
 }
 
 .informasi-detail-shell {
-  background: #f5f7f9;
+  background: #f6f6f6;
 }
 
 .informasi-detail-header {
@@ -7815,7 +7815,7 @@ background: #03694b;
 .informasi-detail-scroll {
   height: 100%;
   overflow-y: auto;
-  padding: 91px 16px 140px;
+  padding: 92px 16px 40px;
 }
 
 .informasi-detail-scroll::-webkit-scrollbar {
@@ -7823,32 +7823,97 @@ background: #03694b;
   height: 0;
 }
 
+.informasi-detail-media-wrap {
+  position: relative;
+}
+
 .informasi-detail-scroll h1 {
   margin: 0;
-  width: 343px;
+  max-width: 295px;
   font-size: 17px;
-  line-height: 1.2;
-  color: #0a0c0e;
-  font-weight: 600;
-  letter-spacing: -0.3333px;
+  line-height: 1.32;
+  color: #414141;
+  font-weight: 700;
+  letter-spacing: -0.2px;
 }
 
 .informasi-detail-brand {
   margin: 8px 0 0;
-  color: #878787;
+  color: #7c7c7c;
   font-size: 12px;
+  line-height: 1.2;
 }
 
 .informasi-detail-image {
-  margin-top: 16px;
-  width: 343px;
-  height: 221px;
+  display: block;
+  width: 100%;
+  height: 183px;
   border-radius: 8px;
   object-fit: cover;
 }
 
-.informasi-detail-article {
+.informasi-detail-play-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.informasi-detail-play-icon {
+  margin-left: 3px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 13px solid #c79a2b;
+}
+
+.informasi-detail-media-wrap + h1 {
   margin-top: 16px;
+}
+
+.informasi-detail-summary {
+  margin: 18px 0 0;
+  color: #4d4d4d;
+  font-size: 13px;
+  line-height: 1.75;
+  letter-spacing: -0.1px;
+}
+
+.informasi-detail-checklist {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.informasi-detail-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4a4a4a;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.informasi-detail-checklist img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.informasi-detail-article {
+  margin-top: 18px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -7865,10 +7930,10 @@ background: #03694b;
 
 .informasi-detail-article article p {
   margin: 8px 0 0;
-  color: #0a0c0e;
+  color: #4d4d4d;
   font-size: 13px;
-  line-height: 20px;
-  letter-spacing: -0.3333px;
+  line-height: 1.75;
+  letter-spacing: -0.1px;
 }
 
 .informasi-detail-cta-wrap {
@@ -7880,6 +7945,12 @@ background: #03694b;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.informasi-hero-card {
+  border: 0;
+  text-align: left;
+  cursor: pointer;
 }
 
 .informasi-detail-cta-bg {

@@ -490,6 +490,7 @@ export const informasiContent: InformasiContent = {
     { id: 'tata-cara-sholat', label: 'Tata Cara Sholat', icon: publicAsset('assets/figma/sujood.svg') },
   ],
   hero: {
+    id: 'syarat-perlengkapan-umrah',
     image: publicAsset('assets/figma/information-hero.jpg'),
     alt: 'Lantas apa saja syarat perlengkapan Umrah?',
     headingLogo: publicAsset('assets/figma/icon-logo.svg'),
@@ -521,28 +522,97 @@ export const informasiContent: InformasiContent = {
   ],
 }
 
-export const informasiDetailContent: InformasiDetailContent = {
+const informasiDetailBaseAssets = {
   backIcon: publicAsset('assets/figma/arrow-right.svg'),
-  title: 'Perbedaan Umrah dan Haji: Penjelasan Lengkap untuk Perbedaan Umrah dan Haji',
-  brand: 'Maktub • Umrah',
-  image: publicAsset('assets/figma/article1.jpg'),
-  sections: [
-    {
-      title: 'Perbedaan Umrah dan Haji dalam Islam',
-      description:
-        'Umrah dan haji merupakan dua ibadah yang dilaksanakan oleh umat Islam di Tanah Suci, Makkah. Keduanya memiliki kesamaan dalam beberapa rangkaian ibadah, seperti tawaf dan sa’i. Namun, umrah dan haji juga memiliki perbedaan mendasar yang perlu dipahami agar umat Islam dapat menjalankannya dengan benar sesuai syariat.',
-    },
-    {
-      title: 'Pengertian Umrah dan Haji',
-      description:
-        'Haji adalah ibadah wajib bagi umat Islam yang mampu secara fisik, finansial, dan mental, serta hanya diwajibkan sekali seumur hidup. Ibadah haji memiliki waktu pelaksanaan dan rukun tertentu yang harus dipenuhi. Sementara itu, umrah adalah ibadah sunnah yang juga dilakukan di Tanah Suci. Umrah sering disebut sebagai “haji kecil” karena rangkaiannya lebih singkat dan tidak memiliki beberapa rukun utama seperti pada haji.',
-    },
-  ],
+  checklistIcon: publicAsset('assets/figma/checkmark-circle.svg'),
   ctaPrefix: 'Mulai Cari',
   ctaHighlight: 'Paket perjalanan',
   ctaIcon: publicAsset('assets/figma/arrow-right.svg'),
   ctaPattern: publicAsset('assets/figma/pattern.png'),
 }
+
+export const informasiDetailById: Record<string, InformasiDetailContent> = {
+  'syarat-perlengkapan-umrah': {
+    ...informasiDetailBaseAssets,
+    title: 'Lantas apa saja syarat perlengkapan Umrah?',
+    brand: 'Maktub • Umrah',
+    image: publicAsset('assets/figma/information-hero.jpg'),
+    imageAlt: 'Lantas apa saja syarat perlengkapan Umrah?',
+    showPlayButton: true,
+    summary:
+      'Syarat dan perlengkapan umrah yang perlu disiapkan, baik dari sisi dokumen resmi, kesehatan, peralatan ibadah, maupun kebutuhan pribadi. Ini penting agar ibadah berjalan lancar, aman, dan nyaman.',
+    checklistItems: [
+      'Syarat Administratif & Dokumen Resmi',
+      'Perlengkapan Pakaian & Pribadi',
+      'Perlengkapan Kesehatan',
+      'Perlengkapan Ibadah',
+      'Perlengkapan Teknologi',
+    ],
+    ctaPrefix: undefined,
+    ctaHighlight: undefined,
+    ctaIcon: undefined,
+    ctaPattern: undefined,
+  },
+  'perbedaan-umrah-haji': {
+    ...informasiDetailBaseAssets,
+    title: 'Perbedaan Umrah dan Haji: Penjelasan Lengkap untuk Perbedaan Umrah dan Haji',
+    brand: 'Maktub • Umrah',
+    image: publicAsset('assets/figma/article1.jpg'),
+    imageAlt: 'Perbedaan Umrah dan Haji',
+    sections: [
+      {
+        title: 'Perbedaan Umrah dan Haji dalam Islam',
+        description:
+          'Umrah dan haji merupakan dua ibadah yang dilaksanakan oleh umat Islam di Tanah Suci, Makkah. Keduanya memiliki kesamaan dalam beberapa rangkaian ibadah, seperti tawaf dan sa’i. Namun, umrah dan haji juga memiliki perbedaan mendasar yang perlu dipahami agar umat Islam dapat menjalankannya dengan benar sesuai syariat.',
+      },
+      {
+        title: 'Pengertian Umrah dan Haji',
+        description:
+          'Haji adalah ibadah wajib bagi umat Islam yang mampu secara fisik, finansial, dan mental, serta hanya diwajibkan sekali seumur hidup. Ibadah haji memiliki waktu pelaksanaan dan rukun tertentu yang harus dipenuhi. Sementara itu, umrah adalah ibadah sunnah yang juga dilakukan di Tanah Suci. Umrah sering disebut sebagai “haji kecil” karena rangkaiannya lebih singkat dan tidak memiliki beberapa rukun utama seperti pada haji.',
+      },
+    ],
+  },
+  'waktu-terbaik-umrah': {
+    ...informasiDetailBaseAssets,
+    title: 'Waktu Terbaik untuk Menunaikan Umrah: Tips dan Pertimbangan',
+    brand: 'Maktub • Umrah',
+    image: publicAsset('assets/figma/article2.jpg'),
+    imageAlt: 'Waktu terbaik untuk menunaikan umrah',
+    sections: [
+      {
+        title: 'Memilih Musim yang Tepat',
+        description:
+          'Waktu terbaik untuk menunaikan umrah bergantung pada kesiapan fisik, anggaran, dan preferensi kenyamanan. Di luar musim liburan dan Ramadan, kondisi biasanya lebih lengang sehingga ibadah lebih tenang serta proses perjalanan lebih fleksibel.',
+      },
+      {
+        title: 'Pertimbangan Cuaca dan Biaya',
+        description:
+          'Cuaca di Arab Saudi cenderung sangat panas pada periode tertentu. Karena itu, penting mempertimbangkan musim yang lebih bersahabat, sekaligus membandingkan harga tiket, hotel, dan layanan pendukung agar perjalanan tetap nyaman dan efisien.',
+      },
+    ],
+  },
+  'barang-bawaan-umrah': {
+    ...informasiDetailBaseAssets,
+    title: 'Barang Bawaan Wajib Saat Umrah: Apa Saja yang Harus Disiapkan?',
+    brand: 'Maktub • Umrah',
+    image: publicAsset('assets/figma/article3.jpg'),
+    imageAlt: 'Barang bawaan wajib saat umrah',
+    sections: [
+      {
+        title: 'Barang Penting yang Wajib Dibawa',
+        description:
+          'Sebelum berangkat umrah, jamaah perlu menyiapkan dokumen perjalanan, pakaian yang sesuai, obat-obatan pribadi, perlengkapan ibadah, dan kebutuhan harian. Persiapan yang rapi akan membantu perjalanan menjadi lebih tertib dan mengurangi risiko kendala di lapangan.',
+      },
+      {
+        title: 'Susun Barang Sesuai Prioritas',
+        description:
+          'Pisahkan barang yang wajib dibawa di tas kabin dan koper utama. Dokumen, obat, gawai, charger, serta perlengkapan ibadah ringan sebaiknya mudah dijangkau agar jamaah tetap siap saat proses check-in, transit, maupun ketika sudah tiba di Tanah Suci.',
+      },
+    ],
+  },
+}
+
+export const informasiDetailContent = informasiDetailById[informasiContent.hero.id]
 
 export const kiblatScheduleContent: KiblatScheduleContent = {
   backIcon: publicAsset('assets/figma/arrow-right.svg'),

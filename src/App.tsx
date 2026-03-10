@@ -90,6 +90,7 @@ import {
   myBookingDetailAssets,
   itinerarySuggestionGroups,
   informasiContent,
+  informasiDetailById,
   informasiDetailContent,
   kiblatScheduleContent,
   panduanUmrahContent,
@@ -331,6 +332,7 @@ function App() {
   const [selectedDzikirHarianDetailId, setSelectedDzikirHarianDetailId] = useState<string | null>(null)
   const [selectedDoaUmrahDetailId, setSelectedDoaUmrahDetailId] = useState<string | null>(null)
   const [selectedTataCaraSholatDetailId, setSelectedTataCaraSholatDetailId] = useState<string | null>(null)
+  const [selectedInformasiDetailId, setSelectedInformasiDetailId] = useState<string | null>(null)
   const [ticketInfoValidationMessage, setTicketInfoValidationMessage] = useState('')
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
@@ -2188,13 +2190,19 @@ function App() {
           onOpenDzikirHarian={() => setScreen('dzikir-harian')}
           onOpenDoaHarian={() => setScreen('doa-harian')}
           onOpenTataCaraSholat={() => setScreen('tata-cara-sholat')}
-          onOpenInformasiDetail={() => setScreen('informasi-detail')}
+          onOpenInformasiDetail={(itemId) => {
+            setSelectedInformasiDetailId(itemId)
+            setScreen('informasi-detail')
+          }}
           onOpenAkun={() => openAkunMenu('informasi')}
         />
       )}
 
       {screen === 'informasi-detail' && (
-        <InformasiDetailScreen content={informasiDetailContent} onBack={() => setScreen('informasi')} />
+        <InformasiDetailScreen
+          content={informasiDetailById[selectedInformasiDetailId ?? informasiContent.hero.id] ?? informasiDetailContent}
+          onBack={() => setScreen('informasi')}
+        />
       )}
 
       {screen === 'arah-kiblat-jadwal' && (

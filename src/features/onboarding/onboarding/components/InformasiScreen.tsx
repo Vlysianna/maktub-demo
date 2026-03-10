@@ -12,7 +12,7 @@ type InformasiScreenProps = {
   onOpenDzikirHarian: () => void
   onOpenDoaHarian: () => void
   onOpenTataCaraSholat: () => void
-  onOpenInformasiDetail: () => void
+  onOpenInformasiDetail: (itemId: string) => void
   onOpenAkun?: () => void
 }
 
@@ -113,7 +113,7 @@ export function InformasiScreen({
           </div>
         </section>
 
-        <article className="informasi-hero-card">
+        <button type="button" className="informasi-hero-card" onClick={() => onOpenInformasiDetail(content.hero.id)}>
           <img src={content.hero.image} alt={content.hero.alt} />
           <div className="informasi-hero-overlay" />
           <div className="informasi-hero-content">
@@ -130,7 +130,7 @@ export function InformasiScreen({
               <span key={`dot-${index}`} className={index === content.hero.activeDotIndex ? 'active' : ''} />
             ))}
           </div>
-        </article>
+        </button>
 
         <div className="informasi-tab-scroll" role="tablist" aria-label="Kategori informasi">
           {content.tabs.map((tab, index) => (
@@ -145,7 +145,7 @@ export function InformasiScreen({
             const [brandLabel, categoryLabel] = item.brand.split('•').map((value) => value.trim())
 
             return (
-              <button key={item.id} type="button" className="informasi-article-card" onClick={item.id === 'perbedaan-umrah-haji' ? onOpenInformasiDetail : undefined}>
+              <button key={item.id} type="button" className="informasi-article-card" onClick={() => onOpenInformasiDetail(item.id)}>
                 <img src={item.image} alt={item.title} />
                 <div className="informasi-article-copy">
                   <h4>{item.title}</h4>

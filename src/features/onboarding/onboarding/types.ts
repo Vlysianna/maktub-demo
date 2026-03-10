@@ -248,6 +248,7 @@ export type InformasiGuideItem = {
 }
 
 export type InformasiHero = {
+  id: string
   image: string
   alt: string
   headingLogo: string
@@ -278,7 +279,7 @@ export type InformasiContent = {
 }
 
 export type InformasiDetailSection = {
-  title: string
+  title?: string
   description: string
 }
 
@@ -287,11 +288,16 @@ export type InformasiDetailContent = {
   title: string
   brand: string
   image: string
-  sections: InformasiDetailSection[]
-  ctaPrefix: string
-  ctaHighlight: string
-  ctaIcon: string
-  ctaPattern: string
+  imageAlt?: string
+  showPlayButton?: boolean
+  summary?: string
+  checklistIcon?: string
+  checklistItems?: string[]
+  sections?: InformasiDetailSection[]
+  ctaPrefix?: string
+  ctaHighlight?: string
+  ctaIcon?: string
+  ctaPattern?: string
 }
 
 export type KiblatScheduleItem = {
