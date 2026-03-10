@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
+import { AboutUsScreen } from './features/onboarding/onboarding/components/AboutUsScreen'
 import { HomeGuestScreen } from './features/onboarding/onboarding/components/HomeGuestScreen'
 import { LayananLainScreen } from './features/onboarding/onboarding/components/LayananLainScreen'
 import { RekomendasiPaketScreen } from './features/onboarding/onboarding/components/RekomendasiPaketScreen'
@@ -53,7 +54,9 @@ import { ProfileSettingsScreen } from './features/onboarding/onboarding/componen
 import { ChatAssistantScreen } from './features/onboarding/onboarding/components/ChatAssistantScreen'
 import {
   articles,
+  aboutUsContent,
   budgetOptions,
+  chatAssistantAssets,
   cityAirportCodeMap,
   cityOptions,
   departureAirportOptions,
@@ -76,6 +79,7 @@ import {
   umrahCompletionAssets,
   umrahBudgetAssets,
   umrahDepartureAssets,
+  umrahVisaFormAssets,
   umrahProcessingAssets,
   umrahQuestionAssets,
   umrahTicketAssets,
@@ -1380,7 +1384,12 @@ function App() {
             setScreen('umrah-visa-services')
           }}
           onOpenBannerDetail={() => setScreen('home-banner-detail')}
+          onOpenAboutUs={() => setScreen('about-us')}
         />
+      )}
+
+      {screen === 'about-us' && (
+        <AboutUsScreen content={aboutUsContent} onBack={() => setScreen('home')} />
       )}
 
       {screen === 'home-banner-detail' && (
@@ -1998,6 +2007,7 @@ function App() {
 
       {screen === 'umrah-visa-services' && (
         <UmrahVisaServicesScreen
+          assets={umrahVisaFormAssets}
           packages={onboardingConfig.visaPackages}
           landArrangementPrices={onboardingConfig.visaLandArrangementPrices}
           additionalServices={onboardingConfig.visaAdditionalServices}
@@ -2036,6 +2046,7 @@ function App() {
 
       {screen === 'umrah-visa-form-personal' && (
         <UmrahVisaFormPersonalScreen
+          assets={umrahVisaFormAssets}
           value={visaPersonalForm}
           monthOptions={onboardingConfig.monthOptions}
           nationalityOptions={onboardingConfig.nationalityOptions}
@@ -2051,6 +2062,7 @@ function App() {
 
       {screen === 'umrah-visa-form-docs' && (
         <UmrahVisaFormDocsScreen
+          assets={umrahVisaFormAssets}
           value={visaDocsForm}
           hideStepper={visaFromHome}
           onUpload={(field, file) => {
@@ -2340,6 +2352,7 @@ function App() {
 
       {screen === 'chat-assistant' && (
         <ChatAssistantScreen
+          assets={chatAssistantAssets}
           displayName={userProfile.name || 'Teman Maktub'}
           onBack={() => setScreen(chatAssistantBackScreen)}
         />

@@ -17,6 +17,7 @@ type HomeGuestScreenProps = {
   onOpenNotifikasi?: () => void
   onOpenChatAssistant?: () => void
   onOpenBannerDetail?: () => void
+  onOpenAboutUs?: () => void
 }
 
 export function HomeGuestScreen({
@@ -36,6 +37,7 @@ export function HomeGuestScreen({
   onOpenNotifikasi,
   onOpenChatAssistant,
   onOpenBannerDetail,
+  onOpenAboutUs,
 }: HomeGuestScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeIcon, active: true },
@@ -96,7 +98,7 @@ export function HomeGuestScreen({
           </button>
         </section>
 
-        <button className="about-strip" type="button">
+        <button className="about-strip" type="button" onClick={onOpenAboutUs}>
           <img src={assets.infoIcon} alt="Info" />
           <span>Cari tau tentang Maktub</span>
           <img src={assets.arrowRight} alt="Lanjut" />

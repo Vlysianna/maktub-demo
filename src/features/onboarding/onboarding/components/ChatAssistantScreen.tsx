@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import type { ChatAssistantAssets } from '../types'
 
 type ChatMessage = {
   id: string
@@ -8,13 +9,10 @@ type ChatMessage = {
 }
 
 type ChatAssistantScreenProps = {
+  assets: ChatAssistantAssets
   displayName: string
   onBack: () => void
 }
-
-const botIcon = 'https://www.figma.com/api/mcp/asset/87ad1f5b-8f4e-4eb2-a839-09da5fa6d24a'
-const sendIcon = 'https://www.figma.com/api/mcp/asset/4311bb95-c7b2-4381-903e-05033d3bd5b4'
-const micIcon = 'https://www.figma.com/api/mcp/asset/f03ddf33-6368-4097-88cd-88433003dba9'
 
 function nowLabel() {
   const value = new Date()
@@ -23,7 +21,7 @@ function nowLabel() {
   return `${hours}.${minutes}`
 }
 
-export function ChatAssistantScreen({ displayName, onBack }: ChatAssistantScreenProps) {
+export function ChatAssistantScreen({ assets, displayName, onBack }: ChatAssistantScreenProps) {
   const [inputValue, setInputValue] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -59,11 +57,11 @@ export function ChatAssistantScreen({ displayName, onBack }: ChatAssistantScreen
     <section className="phone-shell chat-assistant-shell" aria-label="Chat Assistant">
       <header className="chat-assistant-header">
         <button type="button" className="chat-assistant-back" onClick={onBack} aria-label="Kembali">
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <div className="chat-assistant-title-wrap">
           <span className="chat-assistant-title-icon">
-            <img src={botIcon} alt="" />
+            <img src={assets.botIcon} alt="" />
           </span>
           <div>
             <h1>Maktub</h1>
@@ -77,7 +75,7 @@ export function ChatAssistantScreen({ displayName, onBack }: ChatAssistantScreen
           <div key={message.id} className={`chat-row ${message.role === 'user' ? 'user' : 'assistant'}`}>
             {message.role === 'assistant' ? (
               <span className="chat-bot-badge" aria-hidden>
-                <img src={botIcon} alt="" />
+                <img src={assets.botIcon} alt="" />
               </span>
             ) : null}
             <article className={`chat-bubble ${message.role === 'user' ? 'user' : 'assistant'}`}>
@@ -98,7 +96,7 @@ export function ChatAssistantScreen({ displayName, onBack }: ChatAssistantScreen
           />
         </label>
         <button type="button" className="chat-assistant-mic" aria-label="Microphone">
-          <img src={micIcon} alt="" />
+          <img src={assets.micIcon} alt="" />
         </button>
         <button
           type="button"
@@ -107,7 +105,7 @@ export function ChatAssistantScreen({ displayName, onBack }: ChatAssistantScreen
           disabled={!canSend}
           onClick={handleSend}
         >
-          <img src={sendIcon} alt="" />
+          <img src={assets.sendIcon} alt="" />
         </button>
       </footer>
 

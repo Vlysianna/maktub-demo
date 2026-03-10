@@ -5,6 +5,7 @@ import type {
   BookingItem,
   FlightFareTemplate,
   FlightOffer,
+  AboutUsContent,
   HotelDetail,
   HotelOffer,
   HomeBannerDetailContent,
@@ -21,6 +22,7 @@ import type {
   LoginNameContent,
   LoginOtpAssets,
   LoginOtpContent,
+  ChatAssistantAssets,
   NotificationItem,
   NotifikasiAssets,
   UmrahCompletionAssets,
@@ -42,6 +44,7 @@ import type {
   GuideDetailContent,
   VisaPackage,
   SholatDetailContent,
+  UmrahVisaFormAssets,
   WalkthroughSlide,
   OnboardingConfig,
   ProfileData,
@@ -425,6 +428,18 @@ export const homeBannerDetailContent: HomeBannerDetailContent = {
         "Masjid paling suci dalam Islam, di dalamnya terdapat Ka'bah, kiblat umat Islam. Tempat utama untuk tawaf dan sholat",
     },
   ],
+}
+
+export const aboutUsContent: AboutUsContent = {
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  arabicTitle: 'مكتوب',
+  subtitle: "It's written",
+  paragraphs: [
+    'Maktub adalah aplikasi yang membantu memudahkan perjalanan umrah anda yang bersifat fleksibel dengan menentukan tanggal keberangkatan anda sendiri, lebih private, dan aman. Di aplikasi ini anda bisa melakukan pembelian pesawat, hotel, visa, mutawif dan pelayanan lainnya.',
+    'Anda juga bisa mengkombinasikan perjalanan Umrah anda dengan perjalanan wisata lainnya di Arab Saudi. Kenapa anda harus berpergian bersama kami, karena kami memiliki tim di Arab Saudi yang membantu kemudahan perjalanan anda, dan informasi transparan yang kami berikan di aplikasi kami.',
+  ],
+  signatureTitle: 'Maktub',
+  signatureLines: ['Ditulis oleh-Nya', 'Diusahakan olehmu'],
 }
 
 export const informasiContent: InformasiContent = {
@@ -1047,6 +1062,17 @@ export const umrahPaymentAssets: UmrahPaymentAssets = {
   copyIcon: publicAsset('assets/figma/copy-icon.svg'),
   userIcon: publicAsset('assets/figma/user.svg'),
   planeLogo: publicAsset('assets/figma/plane.svg'),
+}
+
+export const umrahVisaFormAssets: UmrahVisaFormAssets = {
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+}
+
+export const chatAssistantAssets: ChatAssistantAssets = {
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  botIcon: 'https://www.figma.com/api/mcp/asset/87ad1f5b-8f4e-4eb2-a839-09da5fa6d24a',
+  sendIcon: 'https://www.figma.com/api/mcp/asset/4311bb95-c7b2-4381-903e-05033d3bd5b4',
+  micIcon: 'https://www.figma.com/api/mcp/asset/f03ddf33-6368-4097-88cd-88433003dba9',
 }
 
 export const umrahCompletionAssets: UmrahCompletionAssets = {

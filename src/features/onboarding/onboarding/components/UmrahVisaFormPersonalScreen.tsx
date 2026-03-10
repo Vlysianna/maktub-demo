@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { UmrahVisaFormAssets } from '../types'
 
 type VisaPersonalFormValue = {
   familyName: string
@@ -16,6 +17,7 @@ type VisaPersonalFormValue = {
 }
 
 type UmrahVisaFormPersonalScreenProps = {
+  assets: UmrahVisaFormAssets
   value: VisaPersonalFormValue
   monthOptions: string[]
   nationalityOptions: string[]
@@ -52,7 +54,7 @@ function validate(value: VisaPersonalFormValue): FieldErrors {
   return errors
 }
 
-export function UmrahVisaFormPersonalScreen({ value, monthOptions, nationalityOptions, yearSpan, hideStepper, onChange, onBack, onNext }: UmrahVisaFormPersonalScreenProps) {
+export function UmrahVisaFormPersonalScreen({ assets, value, monthOptions, nationalityOptions, yearSpan, hideStepper, onChange, onBack, onNext }: UmrahVisaFormPersonalScreenProps) {
   const yearOptions = Array.from({ length: yearSpan }, (_, index) => String(currentYear - index))
   const [hasAttempted, setHasAttempted] = useState(false)
   const errors = hasAttempted ? validate(value) : {}
@@ -62,7 +64,7 @@ export function UmrahVisaFormPersonalScreen({ value, monthOptions, nationalityOp
     <section className="phone-shell umrah-visa-shell" aria-label="Formulir Visa Saudi Online">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>Formulir Visa Saudi Online</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />

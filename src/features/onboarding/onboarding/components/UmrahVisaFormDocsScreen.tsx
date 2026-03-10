@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react'
+import type { UmrahVisaFormAssets } from '../types'
 
 type VisaDocumentField = 'passport' | 'ktp' | 'familyCard' | 'marriageBook' | 'birthCertificate' | 'photo'
 
 type VisaDocumentsValue = Record<VisaDocumentField, File | null>
 
 type UmrahVisaFormDocsScreenProps = {
+  assets: UmrahVisaFormAssets
   value: VisaDocumentsValue
   hideStepper?: boolean
   onUpload: (field: VisaDocumentField, file: File | null) => void
@@ -23,7 +25,7 @@ const docItems: Array<{ field: VisaDocumentField; label: string; hint?: string; 
   { field: 'photo', label: 'Pas Foto', required: true, hint: 'Pas foto terbaru dengan latar belakang putih, ukuran 4×6 cm.' },
 ]
 
-export function UmrahVisaFormDocsScreen({ value, hideStepper, onUpload, onBack, onSave }: UmrahVisaFormDocsScreenProps) {
+export function UmrahVisaFormDocsScreen({ assets, value, hideStepper, onUpload, onBack, onSave }: UmrahVisaFormDocsScreenProps) {
   const [hasAttempted, setHasAttempted] = useState(false)
   const requiredComplete = useMemo(() => requiredFields.every((field) => value[field]), [value])
 
@@ -31,7 +33,7 @@ export function UmrahVisaFormDocsScreen({ value, hideStepper, onUpload, onBack, 
     <section className="phone-shell umrah-visa-shell" aria-label="Form Dokumen Visa">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>Formulir Visa Saudi Online</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />

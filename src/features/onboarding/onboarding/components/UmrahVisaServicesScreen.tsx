@@ -1,6 +1,7 @@
-import type { VisaPackage } from '../types'
+import type { UmrahVisaFormAssets, VisaPackage } from '../types'
 
 type UmrahVisaServicesScreenProps = {
+  assets: UmrahVisaFormAssets
   packages: VisaPackage[]
   landArrangementPrices: string[]
   additionalServices: string[]
@@ -19,6 +20,7 @@ type UmrahVisaServicesScreenProps = {
 }
 
 export function UmrahVisaServicesScreen({
+  assets,
   packages,
   landArrangementPrices,
   additionalServices,
@@ -39,7 +41,7 @@ export function UmrahVisaServicesScreen({
     <section className="phone-shell umrah-visa-shell" aria-label="Visa dan Lainnya">
       <header className="umrah-flight-header">
         <button type="button" className="umrah-flight-back" aria-label="Kembali" onClick={onBack}>
-          ←
+          <img src={assets.backIcon} alt="" aria-hidden />
         </button>
         <h1>Visa &amp; Lainnya</h1>
         <span className="umrah-ticket-head-spacer" aria-hidden />

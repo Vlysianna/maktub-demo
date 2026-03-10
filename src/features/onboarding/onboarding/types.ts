@@ -2,6 +2,7 @@ export type Screen =
   | 'splash'
   | 'walkthrough'
   | 'home'
+  | 'about-us'
   | 'home-banner-detail'
   | 'my-booking'
   | 'my-booking-detail'
@@ -220,6 +221,15 @@ export type HomeBannerDetailContent = {
   galleryTopImage: string
   galleryBottomImage: string
   places: HomeBannerDetailPlace[]
+}
+
+export type AboutUsContent = {
+  backIcon: string
+  arabicTitle: string
+  subtitle: string
+  paragraphs: string[]
+  signatureTitle: string
+  signatureLines: string[]
 }
 
 export type InformasiPrayerTime = {
@@ -590,6 +600,17 @@ export type UmrahPaymentAssets = {
   copyIcon: string
   userIcon: string
   planeLogo: string
+}
+
+export type UmrahVisaFormAssets = {
+  backIcon: string
+}
+
+export type ChatAssistantAssets = {
+  backIcon: string
+  botIcon: string
+  sendIcon: string
+  micIcon: string
 }
 
 export type UmrahCompletionAssets = {
