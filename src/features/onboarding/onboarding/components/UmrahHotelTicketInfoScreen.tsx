@@ -12,6 +12,9 @@ type UmrahHotelTicketInfoScreenProps = {
   contactName: string
   contactEmail: string
   contactPhone: string
+  contactEditable?: boolean
+  contactValidationMessage?: string
+  onContactChange?: (field: 'name' | 'email' | 'phone', value: string) => void
   totalPrice: number
   totalLabel: string
   onBack: () => void
@@ -34,6 +37,9 @@ export function UmrahHotelTicketInfoScreen({
   contactName,
   contactEmail,
   contactPhone,
+  contactEditable = false,
+  contactValidationMessage,
+  onContactChange,
   totalPrice,
   totalLabel,
   onBack,
@@ -110,11 +116,31 @@ export function UmrahHotelTicketInfoScreen({
           <h2>Kontak</h2>
           <p className="umrah-info-caption">E-ticket akan dikirim kepada orang dibawah ini.</p>
           <article className="umrah-info-contact-card">
-            <p>{contactName}</p>
-            <small>
-              {contactEmail} <span>•</span> {contactPhone}
-            </small>
+            {contactEditable && onContactChange ? (
+              <>
+                <label className="umrah-info-contact-field">
+                  <span>Nama</span>
+                  <input type="text" value={contactName} onChange={(event) => onContactChange('name', event.target.value)} />
+                </label>
+                <label className="umrah-info-contact-field">
+                  <span>Email</span>
+                  <input type="email" value={contactEmail} onChange={(event) => onContactChange('email', event.target.value)} />
+                </label>
+                <label className="umrah-info-contact-field">
+                  <span>No. Telp</span>
+                  <input type="tel" value={contactPhone} onChange={(event) => onContactChange('phone', event.target.value)} />
+                </label>
+              </>
+            ) : (
+              <>
+                <p>{contactName}</p>
+                <small>
+                  {contactEmail} <span>•</span> {contactPhone}
+                </small>
+              </>
+            )}
           </article>
+          {contactValidationMessage ? <p className="visa-field-error umrah-contact-error">{contactValidationMessage}</p> : null}
         </section>
 
         <section className="umrah-hotel-ticket-section">

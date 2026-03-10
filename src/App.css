@@ -6578,6 +6578,10 @@ background: #03694b;
   gap: 10px;
 }
 
+.umrah-info-contact-card label {
+  margin: 0;
+}
+
 .umrah-info-contact-card p {
   margin: 0;
   color: #0a0c0e;

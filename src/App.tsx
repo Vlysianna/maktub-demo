@@ -125,6 +125,7 @@ import type {
 } from './features/onboarding/onboarding/types'
 import {
   isValidEmail,
+  isValidIndonesianPhoneNumber,
   normalizeIndonesianPhoneNumber,
 } from './features/onboarding/onboarding/utils/validation'
 
@@ -210,6 +211,14 @@ function parseRupiahLabelToNumber(label: string) {
   const numeric = label.replace(/[^\d]/g, '')
   const parsed = Number.parseInt(numeric, 10)
   return Number.isNaN(parsed) ? 0 : parsed
+}
+
+function createInitialGuestBookingContact() {
+  return {
+    name: 'Jamaah 1',
+    email: onboardingConfig.defaultContact.email,
+    phone: onboardingConfig.defaultContact.phone,
+  }
 }
 
 function createTicketFareOptions(basePrice: number, travelerCount: number): TicketFareOption[] {
@@ -338,10 +347,12 @@ function App() {
   const [selectedTataCaraSholatDetailId, setSelectedTataCaraSholatDetailId] = useState<string | null>(null)
   const [selectedInformasiDetailId, setSelectedInformasiDetailId] = useState<string | null>(null)
   const [ticketInfoValidationMessage, setTicketInfoValidationMessage] = useState('')
+  const [contactValidationMessage, setContactValidationMessage] = useState('')
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
   const [visaFromHome, setVisaFromHome] = useState(false)
   const [visaStandaloneBackScreen, setVisaStandaloneBackScreen] = useState<Screen>('home')
+  const [guestBookingContact, setGuestBookingContact] = useState(createInitialGuestBookingContact)
   const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId>(
     onboardingConfig.visaPackages[0].id,
   )
@@ -453,6 +464,8 @@ function App() {
     setSelectedReturnHotelRoomId(null)
     setPaymentFlow('package')
     setPaymentCompletedAt(null)
+    setContactValidationMessage('')
+    setGuestBookingContact(createInitialGuestBookingContact())
     setIsHotelOnlyFlow(false)
   }
 
@@ -955,6 +968,45 @@ function App() {
       : flightSearchEntry === 'home'
         ? flightOnlyPaymentBreakdown
         : paymentBreakdown
+
+  const activeContactName = isLoggedIn ? userProfile.name || travelerNames[0] : guestBookingContact.name
+  const activeContactEmail = isLoggedIn ? userProfile.email || onboardingConfig.defaultContact.email : guestBookingContact.email
+  const activeContactPhone = isLoggedIn ? userProfile.phone || onboardingConfig.defaultContact.phone : guestBookingContact.phone
+
+  const validateContactDetails = () => {
+    if (isLoggedIn) {
+      setContactValidationMessage('')
+      return true
+    }
+
+    const trimmedName = guestBookingContact.name.trim()
+    const trimmedEmail = guestBookingContact.email.trim()
+    const normalizedPhone = normalizeIndonesianPhoneNumber(guestBookingContact.phone)
+
+    if (!trimmedName) {
+      setContactValidationMessage('Nama kontak wajib diisi.')
+      return false
+    }
+
+    if (!isValidEmail(trimmedEmail)) {
+      setContactValidationMessage('Email kontak belum valid.')
+      return false
+    }
+
+    if (!isValidIndonesianPhoneNumber(normalizedPhone)) {
+      setContactValidationMessage('Nomor telepon kontak belum valid. Gunakan format +62812xxxxxx.')
+      return false
+    }
+
+    setGuestBookingContact((prev) => ({
+      ...prev,
+      name: trimmedName,
+      email: trimmedEmail,
+      phone: normalizedPhone,
+    }))
+    setContactValidationMessage('')
+    return true
+  }
 
   const hotelPaymentCards = useMemo(() => {
     if (!selectedHotelOffer) {
@@ -1725,9 +1777,15 @@ function App() {
           returnSeatLayoutLabel="3-3"
           returnSeatPitchLabel="29 inches (Standar)"
           travelerNames={travelerNames}
-          contactName={userProfile.name || travelerNames[0]}
-          contactEmail={userProfile.email || onboardingConfig.defaultContact.email}
-          contactPhone={userProfile.phone || onboardingConfig.defaultContact.phone}
+          contactName={activeContactName}
+          contactEmail={activeContactEmail}
+          contactPhone={activeContactPhone}
+          contactEditable={!isLoggedIn}
+          contactValidationMessage={contactValidationMessage}
+          onContactChange={(field, value) => {
+            setContactValidationMessage('')
+            setGuestBookingContact((prev) => ({ ...prev, [field]: value }))
+          }}
           totalPrice={selectedDepartureFare.totalPrice + selectedReturnFare.totalPrice}
           flightOnly={flightSearchEntry === 'home'}
           onBack={() => setScreen('umrah-flight-detail')}
@@ -1754,6 +1812,10 @@ function App() {
             }
 
             setTicketInfoValidationMessage('')
+
+            if (!validateContactDetails()) {
+              return
+            }
 
             if (flightSearchEntry === 'home') {
               setPaymentFlow('package')
@@ -1863,13 +1925,23 @@ function App() {
           travelerText={`${travelerParticipants.dewasa} Dewasa / Kamar`}
           checkInLabel={`${hotelCheckInLabel} (16:00)`}
           checkOutLabel={`${hotelCheckOutLabel} (12:00)`}
-          contactName={userProfile.name || travelerNames[0]}
-          contactEmail={userProfile.email || onboardingConfig.defaultContact.email}
-          contactPhone={userProfile.phone || onboardingConfig.defaultContact.phone}
+          contactName={activeContactName}
+          contactEmail={activeContactEmail}
+          contactPhone={activeContactPhone}
+          contactEditable={!isLoggedIn}
+          contactValidationMessage={contactValidationMessage}
+          onContactChange={(field, value) => {
+            setContactValidationMessage('')
+            setGuestBookingContact((prev) => ({ ...prev, [field]: value }))
+          }}
           totalPrice={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalPrice : selectedReturnHotelRoom!.totalPrice}
           totalLabel={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalLabel : selectedReturnHotelRoom!.totalLabel}
           onBack={() => setScreen('umrah-hotel-detail')}
           onNext={() => {
+            if (!validateContactDetails()) {
+              return
+            }
+
             if (isHotelOnlyFlow) {
               setPaymentFlow('package')
               setScreen('umrah-payment-overview')
