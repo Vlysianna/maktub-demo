@@ -52,7 +52,7 @@
 .splash-pattern {
   position: absolute;
   inset: 0;
-  background: url('https://www.figma.com/api/mcp/asset/e10540b9-9e54-4de4-8c50-3c2d87f1ca4d') center / cover no-repeat;
+  background: url(assets/figma/pattern.png) center / cover no-repeat;
   mix-blend-mode: multiply;
 }
 
