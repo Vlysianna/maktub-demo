@@ -1700,6 +1700,8 @@ function App() {
           departureCode={departureCode ?? 'CGK'}
           destinationLabel={destinationLabel}
           destinationCode={destinationCode}
+          returnDestinationLabel={returnDestinationLabel}
+          returnDestinationCode={returnDestinationCode}
           departureDateLabel={shortDepartureDateLabel}
           returnDateLabel={shortReturnDateLabel}
           departureTime={selectedFlightDepartureTime}

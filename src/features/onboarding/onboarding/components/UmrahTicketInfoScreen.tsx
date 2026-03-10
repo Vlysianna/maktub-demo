@@ -30,6 +30,8 @@ type UmrahTicketInfoScreenProps = {
   departureCode: string
   destinationLabel: string
   destinationCode: string
+  returnDestinationLabel: string
+  returnDestinationCode: string
   departureDateLabel: string
   returnDateLabel: string
   departureTime: string
@@ -167,6 +169,8 @@ export function UmrahTicketInfoScreen({
   departureCode,
   destinationLabel,
   destinationCode,
+  returnDestinationLabel,
+  returnDestinationCode,
   departureDateLabel,
   returnDateLabel,
   departureTime,
@@ -262,8 +266,8 @@ export function UmrahTicketInfoScreen({
           aircraftLabel={returnAircraftLabel}
           seatLayoutLabel={returnSeatLayoutLabel}
           seatPitchLabel={returnSeatPitchLabel}
-          fromLabel={destinationLabel}
-          fromCode={destinationCode}
+          fromLabel={returnDestinationLabel}
+          fromCode={returnDestinationCode}
           toLabel={departureLabel}
           toCode={departureCode}
           departTime={returnDepartureTime}
