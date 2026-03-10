@@ -341,6 +341,7 @@ function App() {
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
   const [visaFromHome, setVisaFromHome] = useState(false)
+  const [visaStandaloneBackScreen, setVisaStandaloneBackScreen] = useState<Screen>('home')
   const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId>(
     onboardingConfig.visaPackages[0].id,
   )
@@ -1406,6 +1407,7 @@ function App() {
           onOpenChatAssistant={() => openChatAssistant('home')}
           onOpenVisa={() => {
             setVisaFromHome(true)
+            setVisaStandaloneBackScreen('home')
             setTravelerParticipants({ dewasa: 1, anak: 0, bayi: 0 })
             setScreen('umrah-visa-services')
           }}
@@ -1941,7 +1943,7 @@ function App() {
         <UmrahPaymentMethodScreen
           assets={umrahPaymentAssets}
           breakdown={activePaymentBreakdown}
-          hideStepper={isHotelOnlyFlow}
+          hideStepper={isHotelOnlyFlow || visaFromHome}
           paymentFor={paymentFlow}
           packageSummaryLabel={isHotelOnlyFlow && paymentFlow === 'package' ? 'Harga tiket hotel' : undefined}
           visaLabel={visaPackageLabelMap[selectedVisaPackage]}
@@ -1970,7 +1972,7 @@ function App() {
       {screen === 'umrah-payment-pending' && (
         <UmrahPaymentPendingScreen
           assets={umrahPaymentAssets}
-          hideStepper={isHotelOnlyFlow}
+          hideStepper={isHotelOnlyFlow || visaFromHome}
           flightOnly={flightSearchEntry === 'home'}
           virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
           virtualAccountName={selectedPaymentLabel}
@@ -2004,7 +2006,7 @@ function App() {
       {screen === 'umrah-payment-success' && (
         <UmrahPaymentSuccessScreen
           assets={umrahPaymentAssets}
-          hideStepper={isHotelOnlyFlow}
+          hideStepper={isHotelOnlyFlow || visaFromHome}
           flightOnly={flightSearchEntry === 'home'}
           virtualAccountNumber={onboardingConfig.defaultContact.virtualAccountNumber}
           virtualAccountName={selectedPaymentLabel}
@@ -2029,7 +2031,7 @@ function App() {
           assets={umrahCompletionAssets}
           ctaLabel="Lihat Paket Umrah Saya"
           onBack={() => setScreen(paymentFlow === 'package' && !visaFromHome && flightSearchEntry !== 'home' && !isHotelOnlyFlow ? 'umrah-visa-services' : 'umrah-payment-success')}
-          onNext={() => setScreen(visaFromHome ? 'home' : 'my-booking')}
+          onNext={() => setScreen(visaFromHome ? visaStandaloneBackScreen : 'my-booking')}
         />
       )}
 
@@ -2049,7 +2051,7 @@ function App() {
           onBack={() => {
             if (visaFromHome) {
               setVisaFromHome(false)
-              setScreen('home')
+              setScreen(visaStandaloneBackScreen)
             } else {
               setScreen('umrah-payment-success')
             }
@@ -2063,7 +2065,7 @@ function App() {
           onSkip={() => {
             if (visaFromHome) {
               setVisaFromHome(false)
-              setScreen('home')
+              setScreen(visaStandaloneBackScreen)
               return
             }
 
@@ -2161,7 +2163,12 @@ function App() {
               id: 'layanan-tambahan',
               label: 'Layanan Tambahan',
               icon: layananLainAssets.layananTambahanIcon,
-              onClick: () => {},
+              onClick: () => {
+                setVisaFromHome(true)
+                setVisaStandaloneBackScreen('layanan-lain')
+                setTravelerParticipants({ dewasa: 1, anak: 0, bayi: 0 })
+                setScreen('umrah-visa-services')
+              },
             },
             {
               id: 'chat-assistant',
