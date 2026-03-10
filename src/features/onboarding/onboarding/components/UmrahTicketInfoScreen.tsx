@@ -139,7 +139,7 @@ function RouteCard({
                 <span>: {seatLayoutLabel}</span>
               </p>
               <p>
-                <span>Jakar antar kursi</span>
+                <span>Jarak antar kursi</span>
                 <span>: {seatPitchLabel}</span>
               </p>
             </div>

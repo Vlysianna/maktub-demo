@@ -6425,6 +6425,8 @@ background: #03694b;
   border-radius: 8px;
   background: #f5f7f9;
   padding: 12px 14px;
+  display: grid;
+  gap: 10px;
 }
 
 .umrah-info-contact-card p {
@@ -6442,6 +6444,31 @@ background: #03694b;
   gap: 8px;
   color: #727272;
   font-size: 12px;
+}
+
+.umrah-info-contact-field {
+  display: grid;
+  gap: 6px;
+}
+
+.umrah-info-contact-field span {
+  color: #0a0c0e;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.umrah-info-contact-field input {
+  height: 36px;
+  border: 1px solid #d1d5da;
+  border-radius: 8px;
+  background: #fff;
+  color: #0a0c0e;
+  font-size: 13px;
+  padding: 0 10px;
+}
+
+.umrah-contact-error {
+  margin: 6px 0 0;
 }
 
 .umrah-info-price {
