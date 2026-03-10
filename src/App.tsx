@@ -187,6 +187,18 @@ function createBookingId() {
   return `booking-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 }
 
+function resolveMaxAllowedTravelerRoom(totalParticipants: number): 2 | 3 | 4 {
+  if (totalParticipants <= 2) {
+    return 2
+  }
+
+  if (totalParticipants === 3) {
+    return 3
+  }
+
+  return 4
+}
+
 function formatCurrency(amount: number) {
   return `Rp ${amount.toLocaleString('id-ID')}`
 }
@@ -489,6 +501,14 @@ function App() {
     () => travelerParticipants.dewasa + travelerParticipants.anak + travelerParticipants.bayi,
     [travelerParticipants],
   )
+
+  useEffect(() => {
+    const maxAllowedRoom = resolveMaxAllowedTravelerRoom(totalParticipants)
+
+    if (travelerRoom > maxAllowedRoom) {
+      setTravelerRoom(maxAllowedRoom)
+    }
+  }, [totalParticipants, travelerRoom])
 
   const travelerCount = Math.max(totalParticipants, 1)
   const passengerText = `${travelerCount} orang`

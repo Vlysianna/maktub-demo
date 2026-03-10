@@ -2459,6 +2459,11 @@
   background: rgba(44, 50, 72, 0.08);
 }
 
+.room-chip.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .room-chip img {
   width: 14px;
   height: 14px;

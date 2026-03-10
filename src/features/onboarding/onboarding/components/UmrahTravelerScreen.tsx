@@ -38,6 +38,17 @@ export function UmrahTravelerScreen({
     () => participants.dewasa + participants.anak + participants.bayi,
     [participants],
   )
+  const maxAllowedRoom = useMemo<RoomType>(() => {
+    if (totalParticipants <= 2) {
+      return 2
+    }
+
+    if (totalParticipants === 3) {
+      return 3
+    }
+
+    return 4
+  }, [totalParticipants])
 
   const canProceed = totalParticipants > 0
   const requiredRooms = useMemo(() => Math.ceil(totalParticipants / selectedRoom), [totalParticipants, selectedRoom])
@@ -117,7 +128,8 @@ export function UmrahTravelerScreen({
             <button
               key={room}
               type="button"
-              className={`room-chip ${selectedRoom === room ? 'active' : ''}`}
+              className={`room-chip ${selectedRoom === room ? 'active' : ''} ${room > maxAllowedRoom ? 'disabled' : ''}`}
+              disabled={room > maxAllowedRoom}
               onClick={() => onSelectRoom(room)}
             >
               <img src={assets.roomPersonIcon} alt="" aria-hidden />
