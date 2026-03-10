@@ -851,8 +851,8 @@ export const umrahFlightAssets: UmrahFlightAssets = {
   omanAirLogo: 'https://www.figma.com/api/mcp/asset/132c5a5b-2ea6-4a64-a196-1a1edade8dba',
   saudiaLogo: 'https://www.figma.com/api/mcp/asset/d67010ae-af44-458b-80de-86d77fa8c491',
   matchIcon: 'https://www.figma.com/api/mcp/asset/90601efb-89e0-4c31-a094-3ff6af4aa203',
-  sortIcon: 'https://www.figma.com/api/mcp/asset/b21e6d35-a177-447b-afb5-493cc51e015f',
-  filterIcon: 'https://www.figma.com/api/mcp/asset/53c67a8b-3aa7-434a-a503-0568774f8079',
+  sortIcon: publicAsset('assets/figma/sort.svg'),
+  filterIcon: publicAsset('assets/figma/filter-mail.svg'),
 }
 
 export const umrahTicketAssets: UmrahTicketAssets = {
@@ -922,8 +922,8 @@ export const flightOfferTemplate: FlightOffer[] = [
 export const umrahHotelAssets: UmrahHotelAssets = {
   backIcon: publicAsset('assets/figma/arrow-right.svg'),
   chevronRight: publicAsset('assets/figma/Chevron-2.svg'),
-  sortIcon: 'https://www.figma.com/api/mcp/asset/cf251695-41f5-4018-bed5-f89aa9d08dcc',
-  filterIcon: 'https://www.figma.com/api/mcp/asset/50f5038a-530c-4a22-ace9-1129547bed19',
+  sortIcon: publicAsset('assets/figma/sort.svg'),
+  filterIcon: publicAsset('assets/figma/filter-mail.svg'),
   calendarIcon: publicAsset('assets/figma/calendar.svg'),
   userIcon: 'https://www.figma.com/api/mcp/asset/752ee1b6-50f7-48a6-8333-1e8958fee749',
   roomIcon: 'https://www.figma.com/api/mcp/asset/6383630d-21f0-41ab-9f1f-535275a685a2',
