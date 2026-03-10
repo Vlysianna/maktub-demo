@@ -319,6 +319,11 @@ function App() {
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
   const [visaFromHome, setVisaFromHome] = useState(false)
+  const [ticketContact, setTicketContact] = useState({
+    name: onboardingConfig.defaultContact.name,
+    email: onboardingConfig.defaultContact.email,
+    phone: onboardingConfig.defaultContact.phone,
+  })
   const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId>(
     onboardingConfig.visaPackages[0].id,
   )
@@ -431,6 +436,11 @@ function App() {
     setPaymentFlow('package')
     setPaymentCompletedAt(null)
     setIsHotelOnlyFlow(false)
+    setTicketContact({
+      name: onboardingConfig.defaultContact.name,
+      email: userProfile.email || onboardingConfig.defaultContact.email,
+      phone: userProfile.phone || onboardingConfig.defaultContact.phone,
+    })
   }
 
   useEffect(() => {
@@ -1296,20 +1306,13 @@ function App() {
       setScreen('login-guest')
       return
     }
-    if (isProfileIncomplete) {
-      setShowProfileCompletionPopup(true)
-      setScreen('profile-settings')
-      return
-    }
 
     onAllowed()
   }
 
   const openChatAssistant = (backScreen: Screen) => {
-    ensureLoggedInForService(backScreen, () => {
-      setChatAssistantBackScreen(backScreen)
-      setScreen('chat-assistant')
-    })
+    setChatAssistantBackScreen(backScreen)
+    setScreen('chat-assistant')
   }
 
   const isProfileIncomplete = !userProfile.name.trim() || userProfile.name.trim().toLowerCase() === 'nama anda'
@@ -1362,31 +1365,25 @@ function App() {
           userDisplayName={isLoggedIn ? userProfile.name : undefined}
           userPhotoUrl={isLoggedIn ? userProfile.avatar : undefined}
           onStartJourney={() => {
-            ensureLoggedInForService('home', () => {
-              resetMaktubAiFlowState()
-              setFlightSearchEntry('maktub-ai')
-              setScreen('umrah-question')
-            })
+            resetMaktubAiFlowState()
+            setFlightSearchEntry('maktub-ai')
+            setScreen('umrah-question')
           }}
           onOpenFlightSearch={() => {
-            ensureLoggedInForService('home', () => {
-              setIsHotelOnlyFlow(false)
-              setFlightSelectionLeg('departure')
-              setFlightSearchEntry('home')
-              setScreen('umrah-flight-search')
-            })
+            setIsHotelOnlyFlow(false)
+            setFlightSelectionLeg('departure')
+            setFlightSearchEntry('home')
+            setScreen('umrah-flight-search')
           }}
           onOpenHotelSearch={() => {
-            ensureLoggedInForService('home', () => {
-              setIsHotelOnlyFlow(true)
-              setHotelSelectionLeg('departure')
-              setSelectedHotelId(null)
-              setSelectedHotelRoomId(null)
-              setSelectedReturnHotelId(null)
-              setSelectedReturnHotelRoomId(null)
-              setPaymentFlow('package')
-              setScreen('umrah-hotel-search')
-            })
+            setIsHotelOnlyFlow(true)
+            setHotelSelectionLeg('departure')
+            setSelectedHotelId(null)
+            setSelectedHotelRoomId(null)
+            setSelectedReturnHotelId(null)
+            setSelectedReturnHotelRoomId(null)
+            setPaymentFlow('package')
+            setScreen('umrah-hotel-search')
           }}
           onOpenMyBooking={() => ensureLoggedInForService('home', () => setScreen('my-booking'))}
           onOpenLayananLain={() => setScreen('layanan-lain')}
@@ -1398,11 +1395,9 @@ function App() {
           }}
           onOpenChatAssistant={() => openChatAssistant('home')}
           onOpenVisa={() => {
-            ensureLoggedInForService('home', () => {
-              setVisaFromHome(true)
-              setTravelerParticipants({ dewasa: 1, anak: 0, bayi: 0 })
-              setScreen('umrah-visa-services')
-            })
+            setVisaFromHome(true)
+            setTravelerParticipants({ dewasa: 1, anak: 0, bayi: 0 })
+            setScreen('umrah-visa-services')
           }}
           onOpenBannerDetail={() => setScreen('home-banner-detail')}
         />
@@ -1711,11 +1706,14 @@ function App() {
           returnSeatLayoutLabel="3-3"
           returnSeatPitchLabel="29 inches (Standar)"
           travelerNames={travelerNames}
-          contactName={userProfile.name || travelerNames[0]}
-          contactEmail={userProfile.email || onboardingConfig.defaultContact.email}
-          contactPhone={userProfile.phone || onboardingConfig.defaultContact.phone}
+          contactName={ticketContact.name || userProfile.name || travelerNames[0] || onboardingConfig.defaultContact.name}
+          contactEmail={ticketContact.email || userProfile.email || onboardingConfig.defaultContact.email}
+          contactPhone={ticketContact.phone || userProfile.phone || onboardingConfig.defaultContact.phone}
           totalPrice={selectedDepartureFare.totalPrice + selectedReturnFare.totalPrice}
           flightOnly={flightSearchEntry === 'home'}
+          onChangeContact={(field, value) => {
+            setTicketContact((prev) => ({ ...prev, [field]: value }))
+          }}
           onBack={() => setScreen('umrah-flight-detail')}
           onAddPassenger={() => {
             setTicketInfoValidationMessage('')
@@ -1849,11 +1847,14 @@ function App() {
           travelerText={`${travelerParticipants.dewasa} Dewasa / Kamar`}
           checkInLabel={`${hotelCheckInLabel} (16:00)`}
           checkOutLabel={`${hotelCheckOutLabel} (12:00)`}
-          contactName={userProfile.name || travelerNames[0]}
-          contactEmail={userProfile.email || onboardingConfig.defaultContact.email}
-          contactPhone={userProfile.phone || onboardingConfig.defaultContact.phone}
+          contactName={ticketContact.name || userProfile.name || travelerNames[0] || onboardingConfig.defaultContact.name}
+          contactEmail={ticketContact.email || userProfile.email || onboardingConfig.defaultContact.email}
+          contactPhone={ticketContact.phone || userProfile.phone || onboardingConfig.defaultContact.phone}
           totalPrice={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalPrice : selectedReturnHotelRoom!.totalPrice}
           totalLabel={hotelSelectionLeg === 'departure' ? selectedHotelRoom!.totalLabel : selectedReturnHotelRoom!.totalLabel}
+          onChangeContact={(field, value) => {
+            setTicketContact((prev) => ({ ...prev, [field]: value }))
+          }}
           onBack={() => setScreen('umrah-hotel-detail')}
           onNext={() => {
             if (isHotelOnlyFlow) {
@@ -2000,7 +2001,14 @@ function App() {
           onBack={() => setScreen('umrah-payment-pending')}
           onNext={() => {
             const shouldContinueToVisaServices = paymentFlow === 'package' && flightSearchEntry !== 'home' && !isHotelOnlyFlow
-            setScreen(shouldContinueToVisaServices ? 'umrah-visa-services' : 'umrah-payment-complete')
+            const shouldOpenMyBooking = paymentFlow === 'package' && !isHotelOnlyFlow
+
+            if (shouldContinueToVisaServices) {
+              setScreen('umrah-visa-services')
+              return
+            }
+
+            setScreen(shouldOpenMyBooking ? 'my-booking' : 'umrah-payment-complete')
           }}
         />
       )}
@@ -2010,7 +2018,7 @@ function App() {
           assets={umrahCompletionAssets}
           ctaLabel="Lihat Paket Umrah Saya"
           onBack={() => setScreen('umrah-payment-success')}
-          onNext={() => setScreen('home')}
+          onNext={() => setScreen(visaFromHome ? 'home' : 'my-booking')}
         />
       )}
 
@@ -2042,7 +2050,7 @@ function App() {
           }}
           onSkip={() => {
             setVisaFromHome(false)
-            setScreen('home')
+            setScreen('my-booking')
           }}
         />
       )}
@@ -2134,7 +2142,7 @@ function App() {
               id: 'layanan-tambahan',
               label: 'Layanan Tambahan',
               icon: layananLainAssets.layananTambahanIcon,
-              onClick: () => ensureLoggedInForService('layanan-lain', () => {}),
+              onClick: () => {},
             },
             {
               id: 'chat-assistant',
@@ -2146,7 +2154,7 @@ function App() {
               id: 'rekomendasi-paket',
               label: 'Rekomendasi Paket',
               icon: layananLainAssets.rekomendasiPaketIcon,
-              onClick: () => ensureLoggedInForService('layanan-lain', () => setScreen('rekomendasi-paket')),
+              onClick: () => setScreen('rekomendasi-paket'),
             },
           ]}
           onOpenHome={() => setScreen('home')}
