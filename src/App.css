@@ -8068,6 +8068,226 @@ background: #03694b;
   flex-shrink: 0;
 }
 
+.recitation-detail-shell {
+  background:
+    radial-gradient(circle at top right, rgba(214, 237, 221, 0.9) 0, rgba(214, 237, 221, 0) 38%),
+    #f5f7f9;
+}
+
+.recitation-detail-header,
+.sholat-detail-header {
+  position: absolute;
+  top: 54px;
+  left: 16px;
+  right: 16px;
+  display: grid;
+  grid-template-columns: 24px 1fr 24px;
+  align-items: center;
+  z-index: 2;
+}
+
+.recitation-detail-header h1,
+.sholat-detail-header h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0a0c0e;
+}
+
+.recitation-detail-back-btn,
+.sholat-detail-back-btn {
+  border: 0;
+  background: transparent;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.recitation-detail-back-btn img,
+.sholat-detail-back-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.recitation-detail-scroll,
+.sholat-detail-scroll {
+  height: 100%;
+  overflow-y: auto;
+  padding: 102px 16px 36px;
+}
+
+.recitation-detail-scroll::-webkit-scrollbar,
+.sholat-detail-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.recitation-hero-card,
+.sholat-detail-hero {
+  border-radius: 20px;
+  padding: 20px;
+  background: linear-gradient(145deg, #0f6d4f 0%, #043a2a 100%);
+  color: #fff;
+  box-shadow: 0 20px 40px rgba(1, 61, 43, 0.18);
+}
+
+.doa-umrah-hero-card {
+  background: linear-gradient(145deg, #2c3248 0%, #0b4a37 100%);
+}
+
+.recitation-hero-chip,
+.sholat-detail-hero span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.recitation-hero-card strong {
+  display: block;
+  margin-top: 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.recitation-hero-card h2,
+.sholat-detail-hero h2 {
+  margin: 10px 0 0;
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.recitation-hero-card p,
+.sholat-detail-hero p {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.recitation-arabic-card,
+.recitation-meaning-card,
+.recitation-section-card,
+.sholat-detail-focus-card,
+.sholat-detail-steps-card,
+.sholat-detail-reminder-card {
+  margin-top: 14px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(3, 105, 75, 0.08);
+  box-shadow: 0 12px 24px rgba(44, 50, 72, 0.06);
+}
+
+.doa-umrah-arabic-card,
+.doa-umrah-meaning-card {
+  border-color: rgba(44, 50, 72, 0.08);
+}
+
+.recitation-arabic-card {
+  padding: 20px;
+}
+
+.recitation-arabic-text {
+  margin: 0;
+  direction: rtl;
+  text-align: right;
+  font-size: 28px;
+  line-height: 1.85;
+  color: #0a0c0e;
+  font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+}
+
+.recitation-latin-text {
+  margin: 16px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #4e5965;
+}
+
+.recitation-meaning-card,
+.sholat-detail-focus-card,
+.sholat-detail-steps-card,
+.sholat-detail-reminder-card {
+  padding: 18px;
+}
+
+.recitation-meaning-card span,
+.sholat-detail-focus-card strong,
+.sholat-detail-steps-card h3,
+.sholat-detail-reminder-card h3,
+.recitation-section-card h3 {
+  display: block;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 700;
+  color: #0a0c0e;
+}
+
+.recitation-meaning-card p,
+.sholat-detail-focus-card p,
+.recitation-section-card p {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #38424d;
+}
+
+.recitation-section-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.recitation-section-card {
+  margin-top: 0;
+  padding: 18px;
+}
+
+.recitation-section-card ul,
+.sholat-detail-reminder-card ul,
+.sholat-detail-steps-card ol {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+
+.recitation-section-card li,
+.sholat-detail-reminder-card li,
+.sholat-detail-steps-card li {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #38424d;
+}
+
+.recitation-section-card li + li,
+.sholat-detail-reminder-card li + li,
+.sholat-detail-steps-card li + li {
+  margin-top: 8px;
+}
+
+.sholat-detail-shell {
+  background:
+    linear-gradient(180deg, rgba(3, 105, 75, 0.08) 0%, rgba(3, 105, 75, 0) 24%),
+    #f5f7f9;
+}
+
+.sholat-detail-hero {
+  background: linear-gradient(145deg, #0b4a37 0%, #2c3248 100%);
+}
+
 /* ─── Notifikasi Screen ─── */
 
 .notifikasi-shell {

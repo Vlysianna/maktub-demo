@@ -1,12 +1,11 @@
 import type { GuideListContent } from '../types'
 
-type DoaUmrahScreenProps = {
+type DoaHarianScreenProps = {
   content: GuideListContent
   onBack: () => void
-  onOpenDetail: (itemId: string) => void
 }
 
-export function DoaUmrahScreen({ content, onBack, onOpenDetail }: DoaUmrahScreenProps) {
+export function DoaHarianScreen({ content, onBack }: DoaHarianScreenProps) {
   return (
     <section className="phone-shell guide-list-shell" aria-label={content.title}>
       <header className="guide-list-header">
@@ -21,7 +20,7 @@ export function DoaUmrahScreen({ content, onBack, onOpenDetail }: DoaUmrahScreen
 
       <div className="guide-list-scroll">
         {content.items.map((item) => (
-          <button key={item.id} type="button" className="guide-list-item" onClick={() => onOpenDetail(item.id)}>
+          <button key={item.id} type="button" className="guide-list-item">
             <span className="guide-list-item-icon-wrap">
               <img src={content.icon} alt="" aria-hidden />
             </span>

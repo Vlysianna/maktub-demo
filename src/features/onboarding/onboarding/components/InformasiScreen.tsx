@@ -9,6 +9,9 @@ type InformasiScreenProps = {
   onOpenArahKiblat: () => void
   onOpenPanduanUmrah: () => void
   onOpenDoaUmrah: () => void
+  onOpenDzikirHarian: () => void
+  onOpenDoaHarian: () => void
+  onOpenTataCaraSholat: () => void
   onOpenInformasiDetail: () => void
   onOpenAkun?: () => void
 }
@@ -22,6 +25,9 @@ export function InformasiScreen({
   onOpenArahKiblat,
   onOpenPanduanUmrah,
   onOpenDoaUmrah,
+  onOpenDzikirHarian,
+  onOpenDoaHarian,
+  onOpenTataCaraSholat,
   onOpenInformasiDetail,
   onOpenAkun,
 }: InformasiScreenProps) {
@@ -89,6 +95,12 @@ export function InformasiScreen({
                       ? onOpenPanduanUmrah
                       : item.id === 'doa-umrah'
                         ? onOpenDoaUmrah
+                        : item.id === 'dzikir-harian'
+                          ? onOpenDzikirHarian
+                          : item.id === 'doa-harian'
+                            ? onOpenDoaHarian
+                            : item.id === 'tata-cara-sholat'
+                              ? onOpenTataCaraSholat
                         : undefined
                 }
               >

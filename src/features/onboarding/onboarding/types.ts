@@ -37,6 +37,12 @@ export type Screen =
   | 'arah-kiblat-jadwal'
   | 'panduan-umrah'
   | 'doa-umrah'
+  | 'dzikir-harian'
+  | 'doa-harian'
+  | 'tata-cara-sholat'
+  | 'dzikir-harian-detail'
+  | 'doa-umrah-detail'
+  | 'tata-cara-sholat-detail'
   | 'chat-assistant'
   | 'rekomendasi-paket'
   | 'rekomendasi-paket-payment'
@@ -316,6 +322,37 @@ export type GuideListContent = {
   chevronIcon: string
   searchIcon: string
   items: GuideListItem[]
+}
+
+export type GuideDetailSection = {
+  title: string
+  description: string
+  bullets?: string[]
+}
+
+export type GuideDetailContent = {
+  backIcon: string
+  title: string
+  categoryLabel: string
+  contextLabel: string
+  heroLabel: string
+  arabicText?: string
+  latinText?: string
+  translationTitle: string
+  translationText: string
+  sections: GuideDetailSection[]
+}
+
+export type SholatDetailContent = {
+  backIcon: string
+  title: string
+  stepLabel: string
+  summary: string
+  niatLabel: string
+  niatText: string
+  steps: string[]
+  reminderTitle: string
+  reminders: string[]
 }
 
 export type HomeAssets = {

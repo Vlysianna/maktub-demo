@@ -1,12 +1,12 @@
 import type { GuideListContent } from '../types'
 
-type DoaUmrahScreenProps = {
+type TataCaraSholatScreenProps = {
   content: GuideListContent
   onBack: () => void
   onOpenDetail: (itemId: string) => void
 }
 
-export function DoaUmrahScreen({ content, onBack, onOpenDetail }: DoaUmrahScreenProps) {
+export function TataCaraSholatScreen({ content, onBack, onOpenDetail }: TataCaraSholatScreenProps) {
   return (
     <section className="phone-shell guide-list-shell" aria-label={content.title}>
       <header className="guide-list-header">

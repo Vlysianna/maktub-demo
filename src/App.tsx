@@ -39,6 +39,12 @@ import { HomeBannerDetailScreen } from './features/onboarding/onboarding/compone
 import { ArahKiblatJadwalScreen } from './features/onboarding/onboarding/components/ArahKiblatJadwalScreen'
 import { PanduanUmrahScreen } from './features/onboarding/onboarding/components/PanduanUmrahScreen'
 import { DoaUmrahScreen } from './features/onboarding/onboarding/components/DoaUmrahScreen'
+import { DzikirHarianScreen } from './features/onboarding/onboarding/components/DzikirHarianScreen'
+import { DoaHarianScreen } from './features/onboarding/onboarding/components/DoaHarianScreen'
+import { TataCaraSholatScreen } from './features/onboarding/onboarding/components/TataCaraSholatScreen'
+import { DzikirHarianDetailScreen } from './features/onboarding/onboarding/components/DzikirHarianDetailScreen'
+import { DoaUmrahDetailScreen } from './features/onboarding/onboarding/components/DoaUmrahDetailScreen'
+import { TataCaraSholatDetailScreen } from './features/onboarding/onboarding/components/TataCaraSholatDetailScreen'
 import { NotifikasiScreen } from './features/onboarding/onboarding/components/NotifikasiScreen'
 import { LoginGuestScreen } from './features/onboarding/onboarding/components/LoginGuestScreen'
 import { LoginNameScreen } from './features/onboarding/onboarding/components/LoginNameScreen'
@@ -84,6 +90,12 @@ import {
   kiblatScheduleContent,
   panduanUmrahContent,
   doaUmrahContent,
+  dzikirHarianContent,
+  dzikirHarianDetailById,
+  doaHarianContent,
+  doaUmrahDetailById,
+  tataCaraSholatContent,
+  tataCaraSholatDetailById,
   loginGuestAssets,
   loginGuestContent,
   loginNameAssets,
@@ -300,6 +312,9 @@ function App() {
   const [selectedReturnHotelRoomId, setSelectedReturnHotelRoomId] = useState<string | null>(null)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('bni-va')
   const [selectedRekomendasiPaketId, setSelectedRekomendasiPaketId] = useState<string | null>(null)
+  const [selectedDzikirHarianDetailId, setSelectedDzikirHarianDetailId] = useState<string | null>(null)
+  const [selectedDoaUmrahDetailId, setSelectedDoaUmrahDetailId] = useState<string | null>(null)
+  const [selectedTataCaraSholatDetailId, setSelectedTataCaraSholatDetailId] = useState<string | null>(null)
   const [ticketInfoValidationMessage, setTicketInfoValidationMessage] = useState('')
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
@@ -1387,6 +1402,7 @@ function App() {
           onOpenVisa={() => {
             ensureLoggedInForService('home', () => {
               setVisaFromHome(true)
+              setTravelerParticipants({ dewasa: 1, anak: 0, bayi: 0 })
               setScreen('umrah-visa-services')
             })
           }}
@@ -1985,7 +2001,10 @@ function App() {
           virtualAccountName={selectedPaymentLabel}
           totalPayment={activePaymentBreakdown.grandTotal}
           onBack={() => setScreen('umrah-payment-pending')}
-          onNext={() => setScreen(flightSearchEntry === 'home' || hasVisa || isHotelOnlyFlow ? 'umrah-payment-complete' : 'umrah-visa-services')}
+          onNext={() => {
+            const shouldContinueToVisaServices = paymentFlow === 'package' && flightSearchEntry !== 'home' && !isHotelOnlyFlow
+            setScreen(shouldContinueToVisaServices ? 'umrah-visa-services' : 'umrah-payment-complete')
+          }}
         />
       )}
 
@@ -2151,6 +2170,9 @@ function App() {
           onOpenArahKiblat={() => setScreen('arah-kiblat-jadwal')}
           onOpenPanduanUmrah={() => setScreen('panduan-umrah')}
           onOpenDoaUmrah={() => setScreen('doa-umrah')}
+          onOpenDzikirHarian={() => setScreen('dzikir-harian')}
+          onOpenDoaHarian={() => setScreen('doa-harian')}
+          onOpenTataCaraSholat={() => setScreen('tata-cara-sholat')}
           onOpenInformasiDetail={() => setScreen('informasi-detail')}
           onOpenAkun={() => openAkunMenu('informasi')}
         />
@@ -2169,7 +2191,61 @@ function App() {
       )}
 
       {screen === 'doa-umrah' && (
-        <DoaUmrahScreen content={doaUmrahContent} onBack={() => setScreen('informasi')} />
+        <DoaUmrahScreen
+          content={doaUmrahContent}
+          onBack={() => setScreen('informasi')}
+          onOpenDetail={(itemId) => {
+            setSelectedDoaUmrahDetailId(itemId)
+            setScreen('doa-umrah-detail')
+          }}
+        />
+      )}
+
+      {screen === 'dzikir-harian' && (
+        <DzikirHarianScreen
+          content={dzikirHarianContent}
+          onBack={() => setScreen('informasi')}
+          onOpenDetail={(itemId) => {
+            setSelectedDzikirHarianDetailId(itemId)
+            setScreen('dzikir-harian-detail')
+          }}
+        />
+      )}
+
+      {screen === 'doa-harian' && (
+        <DoaHarianScreen content={doaHarianContent} onBack={() => setScreen('informasi')} />
+      )}
+
+      {screen === 'tata-cara-sholat' && (
+        <TataCaraSholatScreen
+          content={tataCaraSholatContent}
+          onBack={() => setScreen('informasi')}
+          onOpenDetail={(itemId) => {
+            setSelectedTataCaraSholatDetailId(itemId)
+            setScreen('tata-cara-sholat-detail')
+          }}
+        />
+      )}
+
+      {screen === 'dzikir-harian-detail' && (
+        <DzikirHarianDetailScreen
+          content={dzikirHarianDetailById[selectedDzikirHarianDetailId ?? dzikirHarianContent.items[0].id]}
+          onBack={() => setScreen('dzikir-harian')}
+        />
+      )}
+
+      {screen === 'doa-umrah-detail' && (
+        <DoaUmrahDetailScreen
+          content={doaUmrahDetailById[selectedDoaUmrahDetailId ?? doaUmrahContent.items[0].id]}
+          onBack={() => setScreen('doa-umrah')}
+        />
+      )}
+
+      {screen === 'tata-cara-sholat-detail' && (
+        <TataCaraSholatDetailScreen
+          content={tataCaraSholatDetailById[selectedTataCaraSholatDetailId ?? tataCaraSholatContent.items[0].id]}
+          onBack={() => setScreen('tata-cara-sholat')}
+        />
       )}
 
       {screen === 'rekomendasi-paket' && (

@@ -39,7 +39,9 @@ import type {
   UmrahTicketAssets,
   UmrahTravelerAssets,
   GuideListContent,
+  GuideDetailContent,
   VisaPackage,
+  SholatDetailContent,
   WalkthroughSlide,
   OnboardingConfig,
   ProfileData,
@@ -487,7 +489,7 @@ export const informasiContent: InformasiContent = {
     {
       id: 'perbedaan-umrah-haji',
       title: 'Perbedaan Umrah dan Haji: Penjelasan Lengkap untuk Pe..',
-      image: 'https://www.figma.com/api/mcp/asset/c4f01da2-91a0-4abf-b2e3-547275ba6863',
+      image: publicAsset('assets/figma/article1.jpg'),
       brand: 'Maktub • Umrah',
     },
     {
@@ -509,7 +511,7 @@ export const informasiDetailContent: InformasiDetailContent = {
   backIcon: 'https://www.figma.com/api/mcp/asset/5887d6d8-57df-410e-86c2-70524d2d3b15',
   title: 'Perbedaan Umrah dan Haji: Penjelasan Lengkap untuk Perbedaan Umrah dan Haji',
   brand: 'Maktub • Umrah',
-  image: 'https://www.figma.com/api/mcp/asset/90cea2a6-e6fb-49e4-a562-00825043da02',
+  image: publicAsset('assets/figma/article1.jpg'),
   sections: [
     {
       title: 'Perbedaan Umrah dan Haji dalam Islam',
@@ -612,6 +614,161 @@ export const doaUmrahContent: GuideListContent = {
     { id: 'setelah-tawaf', title: 'Doa Setelah Tawaf', subtitle: 'Di Hajar Aswad' },
   ],
 }
+
+export const dzikirHarianContent: GuideListContent = {
+  title: 'Dzikir Harian',
+  backIcon: 'https://www.figma.com/api/mcp/asset/8cd9bba4-f7fa-4a30-9895-d3a1248541a6',
+  icon: 'https://www.figma.com/api/mcp/asset/175cbb94-37b3-4030-999c-3ed24789775b',
+  chevronIcon: 'https://www.figma.com/api/mcp/asset/445e9415-20b4-4f26-8c03-096eddd984f2',
+  searchIcon: 'https://www.figma.com/api/mcp/asset/2bc7ef4a-edfb-4f72-824f-2e36da6f8f3a',
+  items: [
+    { id: 'dzikir-pagi', title: 'Dzikir Pagi', subtitle: 'Dibaca setelah Subuh hingga terbit matahari' },
+    { id: 'dzikir-petang', title: 'Dzikir Petang', subtitle: 'Dibaca setelah Asar hingga menjelang Maghrib' },
+    { id: 'setelah-sholat', title: 'Dzikir Setelah Sholat', subtitle: 'Dzikir penutup selepas sholat fardu' },
+    { id: 'sebelum-tidur', title: 'Dzikir Sebelum Tidur', subtitle: 'Diamalkan sebelum beristirahat di malam hari' },
+    { id: 'masuk-rumah', title: 'Dzikir Masuk Rumah', subtitle: 'Memohon keberkahan saat memasuki rumah' },
+    { id: 'keluar-rumah', title: 'Dzikir Keluar Rumah', subtitle: 'Memohon perlindungan ketika memulai aktivitas' },
+  ],
+}
+
+export const doaHarianContent: GuideListContent = {
+  title: 'Do’a Harian',
+  backIcon: 'https://www.figma.com/api/mcp/asset/a07a3c5c-2071-4ba1-86a1-3a6411511829',
+  icon: 'https://www.figma.com/api/mcp/asset/a0385a57-798b-46e1-a087-f23d14ce5235',
+  chevronIcon: 'https://www.figma.com/api/mcp/asset/1910ebe7-8a56-49b4-9b29-b18ef11000ae',
+  searchIcon: 'https://www.figma.com/api/mcp/asset/9cd0bfa3-1625-481e-abe6-13a36a7704cc',
+  items: [
+    { id: 'bangun-tidur', title: 'Doa Bangun Tidur', subtitle: 'Dibaca saat memulai hari dengan rasa syukur' },
+    { id: 'masuk-kamar-mandi', title: 'Doa Masuk Kamar Mandi', subtitle: 'Memohon perlindungan sebelum masuk' },
+    { id: 'keluar-kamar-mandi', title: 'Doa Keluar Kamar Mandi', subtitle: 'Dibaca setelah selesai bersuci' },
+    { id: 'sebelum-makan', title: 'Doa Sebelum Makan', subtitle: 'Memohon keberkahan atas rezeki yang diterima' },
+    { id: 'sesudah-makan', title: 'Doa Sesudah Makan', subtitle: 'Ungkapan syukur setelah selesai makan' },
+    { id: 'keluar-rumah', title: 'Doa Keluar Rumah', subtitle: 'Memohon penjagaan dalam perjalanan' },
+    { id: 'masuk-rumah', title: 'Doa Masuk Rumah', subtitle: 'Memohon ketenangan dan keberkahan di rumah' },
+    { id: 'sebelum-tidur', title: 'Doa Sebelum Tidur', subtitle: 'Dibaca sebelum memejamkan mata' },
+  ],
+}
+
+export const tataCaraSholatContent: GuideListContent = {
+  title: 'Tata Cara Sholat',
+  backIcon: 'https://www.figma.com/api/mcp/asset/8cd9bba4-f7fa-4a30-9895-d3a1248541a6',
+  icon: 'https://www.figma.com/api/mcp/asset/5fc0f599-441d-4706-8874-a347f69cbc1d',
+  chevronIcon: 'https://www.figma.com/api/mcp/asset/445e9415-20b4-4f26-8c03-096eddd984f2',
+  searchIcon: 'https://www.figma.com/api/mcp/asset/2bc7ef4a-edfb-4f72-824f-2e36da6f8f3a',
+  items: [
+    { id: 'niat', title: 'Niat Sholat', subtitle: 'Menetapkan niat sesuai sholat yang dikerjakan' },
+    { id: 'takbiratul-ihram', title: 'Takbiratul Ihram', subtitle: 'Mengangkat tangan sambil mengucap takbir' },
+    { id: 'berdiri-membaca', title: 'Berdiri dan Membaca Al-Fatihah', subtitle: 'Dilanjutkan dengan surat pendek bila mampu' },
+    { id: 'ruku', title: 'Ruku', subtitle: 'Membungkuk dengan tuma’ninah sambil bertasbih' },
+    { id: 'itidal', title: 'I’tidal', subtitle: 'Kembali berdiri tegak setelah ruku' },
+    { id: 'sujud', title: 'Sujud', subtitle: 'Meletakkan tujuh anggota tubuh dengan sempurna' },
+    { id: 'duduk', title: 'Duduk di Antara Dua Sujud', subtitle: 'Memohon ampunan dan rahmat Allah' },
+    { id: 'tasyahud-salam', title: 'Tasyahud dan Salam', subtitle: 'Menutup sholat dengan tasyahud akhir dan salam' },
+  ],
+}
+
+const dzikirBaseArabic = 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ'
+const dzikirBaseLatin = 'Subhanallahi wa bihamdih'
+const dzikirBaseTranslation = 'Maha Suci Allah dan segala puji hanya bagi-Nya.'
+
+const doaUmrahBaseArabic = 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ'
+const doaUmrahBaseLatin =
+  'Labbaikallahumma labbaik, labbaika laa syariika laka labbaik, innal hamda wan ni mata laka wal mulk, laa syariika lak'
+const doaUmrahBaseTranslation =
+  'Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Tiada sekutu bagi-Mu. Sesungguhnya segala puji, nikmat, dan kerajaan adalah milik-Mu. Tiada sekutu bagi-Mu.'
+
+function createDzikirDetailContent(title: string, subtitle: string): GuideDetailContent {
+  return {
+    backIcon: dzikirHarianContent.backIcon,
+    title,
+    categoryLabel: 'Dzikir Harian',
+    contextLabel: subtitle,
+    heroLabel: 'Amalan Ringkas',
+    arabicText: dzikirBaseArabic,
+    latinText: dzikirBaseLatin,
+    translationTitle: 'Makna Dzikir',
+    translationText: dzikirBaseTranslation,
+    sections: [
+      {
+        title: 'Waktu Pengamalan',
+        description: subtitle,
+      },
+      {
+        title: 'Cara Mengamalkan',
+        description: `Baca ${title.toLowerCase()} dengan tenang, menjaga niat ibadah dan memahami makna setiap lafaz yang diucapkan.`,
+        bullets: [
+          'Mulai dengan hati yang hadir dan tidak tergesa-gesa.',
+          'Baca berulang secara rutin agar menjadi amalan harian yang konsisten.',
+          'Utamakan ketenangan, adab, dan pemahaman makna saat berdzikir.',
+        ],
+      },
+    ],
+  }
+}
+
+function createDoaUmrahDetailContent(title: string, subtitle: string): GuideDetailContent {
+  return {
+    backIcon: doaUmrahContent.backIcon,
+    title,
+    categoryLabel: 'Do’a Umrah',
+    contextLabel: subtitle,
+    heroLabel: 'Bacaan Utama',
+    arabicText: doaUmrahBaseArabic,
+    latinText: doaUmrahBaseLatin,
+    translationTitle: 'Arti Doa',
+    translationText: doaUmrahBaseTranslation,
+    sections: [
+      {
+        title: 'Dibaca Saat',
+        description: subtitle,
+      },
+      {
+        title: 'Panduan Membaca',
+        description: `Gunakan bacaan ${title.toLowerCase()} dengan tartil dan penuh kekhusyukan sebagai bagian dari rangkaian ibadah umrah.`,
+        bullets: [
+          'Pastikan memahami konteks ibadah saat doa ini dibaca.',
+          'Dahulukan ketenangan dan niat ibadah sebelum melafalkan doa.',
+          'Jika belum hafal, baca perlahan sambil mengikuti transliterasi.',
+        ],
+      },
+    ],
+  }
+}
+
+function createSholatDetailContent(index: number, title: string, subtitle: string): SholatDetailContent {
+  return {
+    backIcon: tataCaraSholatContent.backIcon,
+    title,
+    stepLabel: `Langkah ${index + 1}`,
+    summary: subtitle,
+    niatLabel: 'Fokus Gerakan',
+    niatText: `Kerjakan ${title.toLowerCase()} dengan tuma'ninah, mengikuti rukun dan urutan sholat secara tertib.`,
+    steps: [
+      `Mulai ${title.toLowerCase()} dengan posisi tubuh yang tenang dan siap beribadah.`,
+      subtitle,
+      'Jaga tuma’ninah di setiap perpindahan gerakan agar sholat tidak tergesa-gesa.',
+      'Lanjutkan ke gerakan berikutnya sesuai urutan sholat yang benar.',
+    ],
+    reminderTitle: 'Hal Yang Perlu Dijaga',
+    reminders: [
+      'Jaga kekhusyukan dan pandangan tetap pada tempat sujud.',
+      'Utamakan kesempurnaan gerakan sebelum berpindah ke rukun berikutnya.',
+      'Sesuaikan bacaan dengan jenis sholat yang sedang dikerjakan.',
+    ],
+  }
+}
+
+export const dzikirHarianDetailById: Record<string, GuideDetailContent> = Object.fromEntries(
+  dzikirHarianContent.items.map((item) => [item.id, createDzikirDetailContent(item.title, item.subtitle)]),
+)
+
+export const doaUmrahDetailById: Record<string, GuideDetailContent> = Object.fromEntries(
+  doaUmrahContent.items.map((item) => [item.id, createDoaUmrahDetailContent(item.title, item.subtitle)]),
+)
+
+export const tataCaraSholatDetailById: Record<string, SholatDetailContent> = Object.fromEntries(
+  tataCaraSholatContent.items.map((item, index) => [item.id, createSholatDetailContent(index, item.title, item.subtitle)]),
+)
 
 export const umrahQuestionAssets: UmrahQuestionAssets = {
   aiMagic: publicAsset('assets/figma/maktub-ai-icon.svg'),
@@ -898,9 +1055,9 @@ export const umrahCompletionAssets: UmrahCompletionAssets = {
 }
 
 export const layananLainAssets: LayananLainAssets = {
-  layananTambahanIcon: 'https://www.figma.com/api/mcp/asset/2abb5739-8fbe-44fb-9f80-026e337d31da',
-  chatAssistantIcon: 'https://www.figma.com/api/mcp/asset/b2ad6b21-dcf5-47d3-a123-f3f270bb102a',
-  rekomendasiPaketIcon: 'https://www.figma.com/api/mcp/asset/0d1b3448-e462-4ae7-87be-5ca09df0b7a0',
+  layananTambahanIcon: publicAsset('assets/figma/layanan-tambahan.svg'),
+  chatAssistantIcon: publicAsset('assets/figma/chat-bot-bulk-rounded.svg'),
+  rekomendasiPaketIcon: publicAsset('assets/figma/rekomendasi-paket.svg'),
   navHomeIcon: publicAsset('assets/figma/nav-home-icon-active.svg'),
   navHomeInactiveIcon: publicAsset('assets/figma/nav-home-icon.svg'),
   navBookingIcon: publicAsset('assets/figma/nav-booking-icon.svg'),
@@ -910,10 +1067,10 @@ export const layananLainAssets: LayananLainAssets = {
 }
 
 export const rekomendasiPaketAssets: RekomendasiPaketAssets = {
-  clockIcon: 'https://www.figma.com/api/mcp/asset/093f8337-e3d1-48da-a390-41a310a39dd6',
-  calendarIcon: 'https://www.figma.com/api/mcp/asset/8b74dcc2-6608-4daa-ab5d-26ae26d33c08',
-  chevronRightIcon: 'https://www.figma.com/api/mcp/asset/2d22b946-b776-4967-af4f-68c7ca370fee',
-  backIcon: 'https://www.figma.com/api/mcp/asset/6323d8fa-aded-40bb-a1fd-a9e836d5aa2d',
+  clockIcon: publicAsset('assets/figma/clock-01.svg'),
+  calendarIcon: publicAsset('assets/figma/calendar.svg'),
+  chevronRightIcon: publicAsset('assets/figma/chevron-right.svg'),
+  backIcon: publicAsset('assets/figma/arrow-left.svg'),
 }
 
 export const rekomendasiPaketItems: RekomendasiPaketItem[] = [

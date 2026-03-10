@@ -5,6 +5,7 @@ type UmrahTravelerScreenProps = {
   assets: UmrahTravelerAssets
   participants: Record<ParticipantKey, number>
   selectedRoom: RoomType
+  maxParticipants?: number
   onChangeParticipants: (key: ParticipantKey, value: number) => void
   onSelectRoom: (value: RoomType) => void
   onBack: () => void
@@ -26,6 +27,7 @@ export function UmrahTravelerScreen({
   assets,
   participants,
   selectedRoom,
+  maxParticipants = 9,
   onChangeParticipants,
   onSelectRoom,
   onBack,
@@ -47,7 +49,7 @@ export function UmrahTravelerScreen({
       return
     }
 
-    if (diff === 1 && totalParticipants >= 9) {
+    if (diff === 1 && totalParticipants >= maxParticipants) {
       return
     }
 
