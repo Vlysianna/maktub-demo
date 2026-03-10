@@ -357,7 +357,7 @@ export const myBookingDetailsById: Record<string, BookingDetail> = {
 }
 
 export const homeAssets: HomeAssets = {
-  pattern: 'https://www.figma.com/api/mcp/asset/78bd8aa3-fb8e-462b-9936-1f2727ad104d',
+  pattern: publicAsset('assets/figma/pattern.png'),
   logo:  publicAsset('assets/figma/maktub-ai-icon.svg'),
   avatar: publicAsset('assets/figma/avatar-icon.svg'),
   bell: publicAsset('assets/figma/bell-icon.svg'),
@@ -451,8 +451,7 @@ export const informasiContent: InformasiContent = {
     {
       name: 'Fajr',
       time: '04:30',
-      icon: 'https://www.figma.com/api/mcp/asset/7002ecb7-36c0-4a73-8711-9d5cc41b4d6b',
-      iconOverlay: 'https://www.figma.com/api/mcp/asset/53830857-575e-4048-8ed6-2d2d688e86fe',
+      icon: publicAsset('assets/figma/Frame1.svg'),
       iconVariant: 'fajr',
       active: false,
     },
@@ -491,9 +490,9 @@ export const informasiContent: InformasiContent = {
     { id: 'tata-cara-sholat', label: 'Tata Cara Sholat', icon: publicAsset('assets/figma/sujood.svg') },
   ],
   hero: {
-    image: 'https://www.figma.com/api/mcp/asset/a45d38ea-e47f-4c58-9f89-ac882b1b8fcc',
+    image: publicAsset('assets/figma/information-hero.jpg'),
     alt: 'Lantas apa saja syarat perlengkapan Umrah?',
-    headingLogo: 'https://www.figma.com/api/mcp/asset/f63f62ee-ab16-480f-a9c4-de8cd94bb317',
+    headingLogo: publicAsset('assets/figma/icon-logo.svg'),
     brand: 'Maktub • Umrah',
     title: 'Lantas apa saja syarat perlengkapan Umrah?',
     dotsCount: 4,
@@ -510,20 +509,20 @@ export const informasiContent: InformasiContent = {
     {
       id: 'waktu-terbaik-umrah',
       title: 'Waktu Terbaik untuk Menunaikan Umrah: Tips dan..',
-      image: 'https://www.figma.com/api/mcp/asset/1c8c0380-b1cc-47d3-9f70-6bc47cba55d3',
+      image: publicAsset('assets/figma/article2.jpg'),
       brand: 'Maktub • Umrah',
     },
     {
       id: 'barang-bawaan-umrah',
       title: 'Barang Bawaan Wajib Saat Umrah: Apa Saja yang Harus..',
-      image: 'https://www.figma.com/api/mcp/asset/7165945e-2f28-4061-803c-fb1fc890ce83',
+      image: publicAsset('assets/figma/article3.jpg'),
       brand: 'Maktub • Umrah',
     },
   ],
 }
 
 export const informasiDetailContent: InformasiDetailContent = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/5887d6d8-57df-410e-86c2-70524d2d3b15',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
   title: 'Perbedaan Umrah dan Haji: Penjelasan Lengkap untuk Perbedaan Umrah dan Haji',
   brand: 'Maktub • Umrah',
   image: publicAsset('assets/figma/article1.jpg'),
@@ -541,18 +540,18 @@ export const informasiDetailContent: InformasiDetailContent = {
   ],
   ctaPrefix: 'Mulai Cari',
   ctaHighlight: 'Paket perjalanan',
-  ctaIcon: 'https://www.figma.com/api/mcp/asset/2bc6b3ee-2423-46ed-a430-fad33a2b35d7',
-  ctaPattern: 'https://www.figma.com/api/mcp/asset/27c23389-e737-4b23-a4d3-a6ca5fdcea01',
+  ctaIcon: publicAsset('assets/figma/arrow-right.svg'),
+  ctaPattern: publicAsset('assets/figma/pattern.png'),
 }
 
 export const kiblatScheduleContent: KiblatScheduleContent = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/cf3ee609-552a-4456-8ccc-97111ddce1b9',
-  locationIcon: 'https://www.figma.com/api/mcp/asset/f6c46d99-fbbd-4d98-8782-78326bc1e859',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  locationIcon: publicAsset('assets/figma/location-info.svg'),
   locationLabel: 'Saudi Arabia',
-  compassRing: 'https://www.figma.com/api/mcp/asset/30e9cf22-ba1f-43da-83b6-7ffac691900b',
-  compassWedge: 'https://www.figma.com/api/mcp/asset/25d72114-236e-4014-8cda-8cf56a711516',
-  compassNeedle: 'https://www.figma.com/api/mcp/asset/76a44b1a-a929-4532-9e54-91e0b16851c1',
-  kaabaIcon: 'https://www.figma.com/api/mcp/asset/22285655-6cc8-4fd7-a5d8-917d05616365',
+  compassRing: publicAsset('assets/figma/kompas.svg'),
+  compassWedge: publicAsset('assets/figma/kompas.svg'),
+  compassNeedle: publicAsset('assets/figma/kompas.svg'),
+  kaabaIcon: publicAsset('assets/figma/nav-home-icon-active.svg'),
   dateLabel: '16 Februari 2026',
   hijriDateLabel: "28 Sya'ban 1447",
   turnHint: 'Belok ke arah kanan',
@@ -561,49 +560,49 @@ export const kiblatScheduleContent: KiblatScheduleContent = {
       id: 'subuh',
       label: 'Subuh',
       time: '04:30',
-      icon: 'https://www.figma.com/api/mcp/asset/280a120c-34b1-42b5-afc7-db38d8b29365',
-      iconOverlay: 'https://www.figma.com/api/mcp/asset/7e11431d-4144-4f8e-b1bb-8858b3611544',
+      icon: publicAsset('assets/figma/Frame1.svg'),
+      iconOverlay: publicAsset('assets/figma/sunrise-overlay.svg'),
       iconVariant: 'fajr',
-      audioIcon: 'https://www.figma.com/api/mcp/asset/fb517f4d-8c56-48ff-ab87-55b8242ffb89',
+      audioIcon: publicAsset('assets/figma/volume-high.svg'),
     },
     {
       id: 'dzuhur',
       label: 'Dzuhur',
       time: '12:11',
-      icon: 'https://www.figma.com/api/mcp/asset/d23b775d-8905-48d3-abd0-7e25c39eacb6',
-      audioIcon: 'https://www.figma.com/api/mcp/asset/f59485f7-db8f-427c-ba9b-33a9c1ff773b',
+      icon: publicAsset('assets/figma/Frame2.svg'),
+      audioIcon: publicAsset('assets/figma/volume-high.svg'),
       active: true,
     },
     {
       id: 'asar',
       label: 'Asar',
       time: '15:26',
-      icon: 'https://www.figma.com/api/mcp/asset/9f1a9ed2-2384-4e98-9ae7-0d5a927266a3',
-      audioIcon: 'https://www.figma.com/api/mcp/asset/5de64c3a-82e9-4563-9efb-f0aec423a9ba',
+      icon: publicAsset('assets/figma/Frame3.svg'),
+      audioIcon: publicAsset('assets/figma/volume-high.svg'),
     },
     {
       id: 'maghrib',
       label: 'Maghrib',
       time: '18:04',
-      icon: 'https://www.figma.com/api/mcp/asset/b718b097-4b57-4a9e-973f-b257b36b8fd7',
-      audioIcon: 'https://www.figma.com/api/mcp/asset/475c7f14-f158-4548-b9aa-9e6cf935f7b8',
+      icon: publicAsset('assets/figma/Frame6.svg'),
+      audioIcon: publicAsset('assets/figma/volume-high.svg'),
     },
     {
       id: 'isya',
       label: 'Isya',
       time: '19:22',
-      icon: 'https://www.figma.com/api/mcp/asset/b048d925-e65e-440a-85df-796d7e4dd813',
-      audioIcon: 'https://www.figma.com/api/mcp/asset/5de64c3a-82e9-4563-9efb-f0aec423a9ba',
+      icon: publicAsset('assets/figma/Frame5.svg'),
+      audioIcon: publicAsset('assets/figma/volume-high.svg'),
     },
   ],
 }
 
 export const panduanUmrahContent: GuideListContent = {
   title: 'Panduan Umrah',
-  backIcon: 'https://www.figma.com/api/mcp/asset/8cd9bba4-f7fa-4a30-9895-d3a1248541a6',
-  icon: 'https://www.figma.com/api/mcp/asset/d3374e8f-c5a2-4034-84e6-61d082843732',
-  chevronIcon: 'https://www.figma.com/api/mcp/asset/445e9415-20b4-4f26-8c03-096eddd984f2',
-  searchIcon: 'https://www.figma.com/api/mcp/asset/2bc7ef4a-edfb-4f72-824f-2e36da6f8f3a',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  icon: publicAsset('assets/figma/book-02.svg'),
+  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'ihram', title: 'Ihram', subtitle: 'Niat Umrah' },
     { id: 'tawaf', title: 'Tawaf', subtitle: "Mengelilingi Ka'bah 7 kali" },
@@ -614,10 +613,10 @@ export const panduanUmrahContent: GuideListContent = {
 
 export const doaUmrahContent: GuideListContent = {
   title: 'Do’a Umrah',
-  backIcon: 'https://www.figma.com/api/mcp/asset/a07a3c5c-2071-4ba1-86a1-3a6411511829',
-  icon: 'https://www.figma.com/api/mcp/asset/aaa149ee-9ede-40f3-bcbf-92f1da98933a',
-  chevronIcon: 'https://www.figma.com/api/mcp/asset/1910ebe7-8a56-49b4-9b29-b18ef11000ae',
-  searchIcon: 'https://www.figma.com/api/mcp/asset/9cd0bfa3-1625-481e-abe6-13a36a7704cc',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  icon: publicAsset('assets/figma/book-open-01.svg'),
+  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'sebelum-ihram', title: 'Sebelum Ihram', subtitle: 'Mandi Sunnah Ihram' },
     { id: 'niat-miqat', title: 'Niat Umrah di Miqat', subtitle: 'Dilakukan setelah memakai pakaian ihram.' },
@@ -632,10 +631,10 @@ export const doaUmrahContent: GuideListContent = {
 
 export const dzikirHarianContent: GuideListContent = {
   title: 'Dzikir Harian',
-  backIcon: 'https://www.figma.com/api/mcp/asset/8cd9bba4-f7fa-4a30-9895-d3a1248541a6',
-  icon: 'https://www.figma.com/api/mcp/asset/175cbb94-37b3-4030-999c-3ed24789775b',
-  chevronIcon: 'https://www.figma.com/api/mcp/asset/445e9415-20b4-4f26-8c03-096eddd984f2',
-  searchIcon: 'https://www.figma.com/api/mcp/asset/2bc7ef4a-edfb-4f72-824f-2e36da6f8f3a',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  icon: publicAsset('assets/figma/tasbih.svg'),
+  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'dzikir-pagi', title: 'Dzikir Pagi', subtitle: 'Dibaca setelah Subuh hingga terbit matahari' },
     { id: 'dzikir-petang', title: 'Dzikir Petang', subtitle: 'Dibaca setelah Asar hingga menjelang Maghrib' },
@@ -648,10 +647,10 @@ export const dzikirHarianContent: GuideListContent = {
 
 export const doaHarianContent: GuideListContent = {
   title: 'Do’a Harian',
-  backIcon: 'https://www.figma.com/api/mcp/asset/a07a3c5c-2071-4ba1-86a1-3a6411511829',
-  icon: 'https://www.figma.com/api/mcp/asset/a0385a57-798b-46e1-a087-f23d14ce5235',
-  chevronIcon: 'https://www.figma.com/api/mcp/asset/1910ebe7-8a56-49b4-9b29-b18ef11000ae',
-  searchIcon: 'https://www.figma.com/api/mcp/asset/9cd0bfa3-1625-481e-abe6-13a36a7704cc',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  icon: publicAsset('assets/figma/quran-02.svg'),
+  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'bangun-tidur', title: 'Doa Bangun Tidur', subtitle: 'Dibaca saat memulai hari dengan rasa syukur' },
     { id: 'masuk-kamar-mandi', title: 'Doa Masuk Kamar Mandi', subtitle: 'Memohon perlindungan sebelum masuk' },
@@ -666,10 +665,10 @@ export const doaHarianContent: GuideListContent = {
 
 export const tataCaraSholatContent: GuideListContent = {
   title: 'Tata Cara Sholat',
-  backIcon: 'https://www.figma.com/api/mcp/asset/8cd9bba4-f7fa-4a30-9895-d3a1248541a6',
-  icon: 'https://www.figma.com/api/mcp/asset/5fc0f599-441d-4706-8874-a347f69cbc1d',
-  chevronIcon: 'https://www.figma.com/api/mcp/asset/445e9415-20b4-4f26-8c03-096eddd984f2',
-  searchIcon: 'https://www.figma.com/api/mcp/asset/2bc7ef4a-edfb-4f72-824f-2e36da6f8f3a',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  icon: publicAsset('assets/figma/sujood.svg'),
+  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'niat', title: 'Niat Sholat', subtitle: 'Menetapkan niat sesuai sholat yang dikerjakan' },
     { id: 'takbiratul-ihram', title: 'Takbiratul Ihram', subtitle: 'Mengangkat tangan sambil mengucap takbir' },

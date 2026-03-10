@@ -23,8 +23,8 @@ export function ArahKiblatJadwalScreen({ content, onBack }: ArahKiblatJadwalScre
 
       <div className="kiblat-scroll">
         <div className="kiblat-compass-wrap">
-          <img src={content.compassRing} alt="" aria-hidden className="kiblat-compass-ring" />
-          <img src={content.compassWedge} alt="" aria-hidden className="kiblat-compass-wedge" />
+          <span className="kiblat-compass-ring" aria-hidden />
+          <span className="kiblat-compass-wedge" aria-hidden />
           <span className="kiblat-center" aria-hidden>
             <img src={content.compassNeedle} alt="" className="kiblat-needle" />
           </span>
@@ -39,7 +39,7 @@ export function ArahKiblatJadwalScreen({ content, onBack }: ArahKiblatJadwalScre
 
         <div className="kiblat-list">
           {content.items.map((item) => (
-            <article key={item.id} className={`kiblat-item${item.active ? ' active' : ''}`}>
+            <article key={item.id} className={`kiblat-item kiblat-item--${item.id}${item.active ? ' active' : ''}`}>
               <div className="kiblat-item-left">
                 {item.iconVariant === 'fajr' ? (
                   <span className="informasi-fajr-icon" aria-hidden>
@@ -55,7 +55,9 @@ export function ArahKiblatJadwalScreen({ content, onBack }: ArahKiblatJadwalScre
                 <span>{item.label}</span>
               </div>
               <strong>{item.time}</strong>
-              <img src={item.audioIcon} alt="" aria-hidden className="kiblat-item-audio" />
+              <span className="kiblat-item-audio-wrap" aria-hidden>
+                <img src={item.audioIcon} alt="" className="kiblat-item-audio" />
+              </span>
             </article>
           ))}
         </div>
