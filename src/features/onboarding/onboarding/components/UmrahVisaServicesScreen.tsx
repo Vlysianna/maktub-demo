@@ -14,11 +14,13 @@ type UmrahVisaServicesScreenProps = {
   travelerCount: number
   selectedVisaCount: number
   hideStepper?: boolean
+  showSkipButton?: boolean
   onBack: () => void
   onSelectPackage: (id: VisaPackage['id']) => void
   onChangeVisaCount: (count: number) => void
   onOpenForm: () => void
   onBuy: () => void
+  onSkip?: () => void
 }
 
 export function UmrahVisaServicesScreen({
@@ -34,11 +36,13 @@ export function UmrahVisaServicesScreen({
   travelerCount,
   selectedVisaCount,
   hideStepper,
+  showSkipButton,
   onBack,
   onSelectPackage,
   onChangeVisaCount,
   onOpenForm,
   onBuy,
+  onSkip,
 }: UmrahVisaServicesScreenProps) {
   const [hasAttemptedBuy, setHasAttemptedBuy] = useState(false)
   const isCountTooHigh = selectedVisaCount > travelerCount
@@ -188,6 +192,11 @@ export function UmrahVisaServicesScreen({
         <button type="button" className="cta-button" disabled={!canBuy} onClick={handleBuy}>
           Beli
         </button>
+        {showSkipButton && onSkip && (
+          <button type="button" className="umrah-visa-skip-btn" onClick={onSkip}>
+            Lanjutkan tanpa membeli
+          </button>
+        )}
       </footer>
 
       <footer className="home-indicator" aria-hidden>

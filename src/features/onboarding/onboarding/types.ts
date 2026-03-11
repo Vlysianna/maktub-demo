@@ -497,14 +497,7 @@ export type UmrahTicketAssets = {
   infoOutlineIcon: string
   routeDivider: string
   addCircleIcon: string
-  cameraIcon: string
   chevronDownIcon: string
-  cameraSamplePassport: string
-  cameraGuideFrame: string
-  cameraMaskOverlay: string
-  cameraFlashIcon: string
-  cameraShutterOuter: string
-  cameraShutterInner: string
 }
 
 export type PassengerFormData = {

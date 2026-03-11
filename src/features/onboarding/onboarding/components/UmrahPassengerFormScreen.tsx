@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react'
+import { HiOutlineCamera } from 'react-icons/hi2'
 import type { PassengerFormData, UmrahTicketAssets } from '../types'
 
 type UmrahPassengerFormScreenProps = {
@@ -299,7 +300,10 @@ export function UmrahPassengerFormScreen({
           {form.passportPhoto ? (
             <img src={form.passportPhoto} alt="Foto Passport" className="umrah-passport-thumb" />
           ) : (
-            <><img src={assets.cameraIcon} alt="" aria-hidden /> Foto Passport</>
+            <>
+              <HiOutlineCamera aria-hidden />
+              Foto Passport
+            </>
           )}
         </button>
         <button type="button" className="cta-button" onClick={handleSave}>

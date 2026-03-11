@@ -1012,14 +1012,7 @@ export const umrahTicketAssets: UmrahTicketAssets = {
   infoOutlineIcon: publicAsset('assets/figma/eva_info-outline.svg'),
   routeDivider: publicAsset('assets/figma/1.svg'),
   addCircleIcon: publicAsset('assets/figma/add-circle.svg'),
-  cameraIcon: publicAsset('assets/figma/camera-icon.svg'),
   chevronDownIcon: publicAsset('assets/figma/chevron-down.svg'),
-  cameraSamplePassport: publicAsset('assets/figma/camera-sample-passport.svg'),
-  cameraGuideFrame: publicAsset('assets/figma/camera-guide-frame.svg'),
-  cameraMaskOverlay: publicAsset('assets/figma/camera-mask-overlay.svg'),
-  cameraFlashIcon: publicAsset('assets/figma/flashlight.svg'),
-  cameraShutterOuter: publicAsset('assets/figma/camera-shutter-outer.svg'),
-  cameraShutterInner: publicAsset('assets/figma/camera-shutter-inner.svg'),
 }
 
 export const cityAirportCodeMap: Record<string, string> = {
@@ -1269,7 +1262,7 @@ export const onboardingConfig: OnboardingConfig = {
   defaultContact: {
     name: '',
     email: '',
-    phone: '+',
+    phone: '',
     virtualAccountNumber: '8848800096475552',
     passportNumber: '',
   },

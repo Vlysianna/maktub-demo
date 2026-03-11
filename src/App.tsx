@@ -416,6 +416,7 @@ function App() {
   const [contactValidationMessage, setContactValidationMessage] = useState('')
   const [paymentFlow, setPaymentFlow] = useState<'package' | 'visa'>('package')
   const [paymentCompletedAt, setPaymentCompletedAt] = useState<Date | null>(null)
+  const [alreadyHasVisa, setAlreadyHasVisa] = useState(false)
   const [visaFromHome, setVisaFromHome] = useState(false)
   const [visaStandaloneBackScreen, setVisaStandaloneBackScreen] = useState<Screen>('home')
   const [guestBookingContact, setGuestBookingContact] = useState(createInitialGuestBookingContact)
@@ -1553,6 +1554,7 @@ function App() {
           }}
           onOpenChatAssistant={() => openChatAssistant('home')}
           onOpenVisa={() => {
+            setAlreadyHasVisa(false)
             setVisaFromHome(true)
             setVisaStandaloneBackScreen('home')
             setTravelerParticipants({ dewasa: 1, anak: 0, bayi: 0 })
@@ -1627,10 +1629,11 @@ function App() {
         <UmrahQuestionScreen
           assets={umrahQuestionAssets}
           onClose={() => setScreen('home')}
-          onNext={(selectedDate) => {
+          onNext={(selectedDate, hasVisa) => {
             setTravelDate(selectedDate)
             setHotelStartDate(selectedDate)
             setHotelEndDate(addDays(selectedDate, onboardingConfig.defaultHotelNightCount))
+            setAlreadyHasVisa(hasVisa)
             setPaymentCompletedAt(null)
             setScreen('umrah-traveler')
           }}
@@ -2218,6 +2221,7 @@ function App() {
           travelerCount={travelerCount}
           selectedVisaCount={visaTravelerCount}
           hideStepper={visaFromHome}
+          showSkipButton={alreadyHasVisa}
           onBack={() => {
             if (visaFromHome) {
               setVisaFromHome(false)
@@ -2237,6 +2241,7 @@ function App() {
             setPaymentFlow('visa')
             setScreen('umrah-payment-method')
           }}
+          onSkip={() => setScreen('umrah-payment-complete')}
         />
       )}
 
@@ -2346,6 +2351,7 @@ function App() {
               label: 'Layanan Tambahan',
               icon: layananLainAssets.layananTambahanIcon,
               onClick: () => {
+                setAlreadyHasVisa(false)
                 setVisaFromHome(true)
                 setVisaStandaloneBackScreen('layanan-lain')
                 setTravelerParticipants({ dewasa: 1, anak: 0, bayi: 0 })

@@ -6060,6 +6060,16 @@ button.umrah-visa-package-card {
   height: 43px;
 }
 
+.umrah-visa-skip-btn {
+  height: 38px;
+  border: 1px solid #d1d5da;
+  border-radius: 6px;
+  background: #fff;
+  color: #0a0c0e;
+  font-size: 13px;
+  cursor: pointer;
+}
+
 .umrah-visa-form-stepper {
   position: relative;
   left: auto;
@@ -6907,6 +6917,11 @@ background: #03694b;
   height: 20px;
 }
 
+.umrah-passport-photo-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
 .umrah-passport-thumb {
   width: 100% !important;
   height: 100% !important;
@@ -6973,15 +6988,9 @@ background: #03694b;
   width: min(302px, 82%);
   height: min(511px, 63vh);
   z-index: 3;
-}
-
-.umrah-camera-overlay {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 2;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  border-radius: 22px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.58);
 }
 
 .umrah-camera-flash {
@@ -7001,6 +7010,12 @@ background: #03694b;
 .umrah-camera-flash img {
   width: 40px;
   height: 40px;
+}
+
+.umrah-camera-flash svg {
+  width: 32px;
+  height: 32px;
+  color: #fff;
 }
 
 .umrah-camera-shutter {
@@ -7027,6 +7042,9 @@ background: #03694b;
   inset: 0;
   width: 73px;
   height: 73px;
+  border: 3px solid rgba(255, 255, 255, 0.96);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .umrah-camera-shutter .inner {
@@ -7035,6 +7053,17 @@ background: #03694b;
   left: 4px;
   width: 65px;
   height: 65px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.umrah-camera-shutter .inner svg {
+  width: 26px;
+  height: 26px;
+  color: #111;
 }
 
 .umrah-camera-indicator {
@@ -7055,16 +7084,46 @@ background: #03694b;
 }
 
 .umrah-camera-warning {
-  position: absolute;
-  left: 20px;
-  right: 20px;
-  bottom: max(60px, 8vh);
-  z-index: 4;
   margin: 0;
   text-align: center;
   color: #fff;
   font-size: 12px;
   line-height: 1.4;
+}
+
+.umrah-camera-warning-wrap {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: max(40px, 6vh);
+  z-index: 4;
+  display: grid;
+  gap: 10px;
+}
+
+.umrah-camera-warning-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.umrah-camera-retry-btn {
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.umrah-camera-retry-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .visa-popup-backdrop {

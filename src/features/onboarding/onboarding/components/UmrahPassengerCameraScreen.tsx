@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent } from 'react'
+import { HiOutlineArrowPath, HiOutlineBolt, HiOutlineCamera } from 'react-icons/hi2'
 import type { UmrahTicketAssets } from '../types'
 
 type UmrahPassengerCameraScreenProps = {
@@ -10,50 +11,60 @@ type UmrahPassengerCameraScreenProps = {
 export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahPassengerCameraScreenProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const [cameraReady, setCameraReady] = useState(false)
   const [cameraUnavailable, setCameraUnavailable] = useState(false)
+  const [isStartingCamera, setIsStartingCamera] = useState(true)
 
-  useEffect(() => {
-    let active = true
+  const stopCamera = () => {
+    streamRef.current?.getTracks().forEach((track) => track.stop())
+    streamRef.current = null
+    if (videoRef.current) {
+      videoRef.current.srcObject = null
+    }
+  }
 
-    async function startCamera() {
-      if (!navigator.mediaDevices?.getUserMedia) {
-        setCameraUnavailable(true)
-        return
-      }
+  const startCamera = async () => {
+    setIsStartingCamera(true)
+    setCameraUnavailable(false)
+    setCameraReady(false)
 
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: { ideal: 'environment' },
-          },
-          audio: false,
-        })
+    stopCamera()
 
-        if (!active) {
-          stream.getTracks().forEach((track) => track.stop())
-          return
-        }
-
-        streamRef.current = stream
-
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream
-          await videoRef.current.play()
-          setCameraReady(true)
-        }
-      } catch {
-        setCameraUnavailable(true)
-      }
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraUnavailable(true)
+      setIsStartingCamera(false)
+      return
     }
 
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { ideal: 'environment' },
+        },
+        audio: false,
+      })
+
+      streamRef.current = stream
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream
+        await videoRef.current.play()
+        setCameraReady(true)
+      }
+    } catch {
+      setCameraUnavailable(true)
+    } finally {
+      setIsStartingCamera(false)
+    }
+  }
+
+  useEffect(() => {
     void startCamera()
 
     return () => {
-      active = false
-      streamRef.current?.getTracks().forEach((track) => track.stop())
-      streamRef.current = null
+      stopCamera()
     }
   }, [])
 
@@ -83,28 +94,43 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     }
   }
 
+  const handleFileCapture = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+
+    if (!file) {
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        onCapture(reader.result)
+      }
+    }
+    reader.readAsDataURL(file)
+    event.currentTarget.value = ''
+  }
+
   return (
     <section className="phone-shell umrah-camera-shell" aria-label="Kamera Paspor">
-      <img src={assets.cameraMaskOverlay} alt="" aria-hidden className="umrah-camera-overlay" />
-
       <header className="umrah-camera-header">
         <button type="button" className="umrah-ticket-back" aria-label="Kembali" onClick={onBack}>
           <img src={assets.backIcon} alt="" aria-hidden />
         </button>
       </header>
 
-      <div className="umrah-camera-preview-wrap" aria-hidden>
+      <div className="umrah-camera-preview-wrap">
         {cameraReady ? (
           <video ref={videoRef} className="umrah-camera-preview" autoPlay playsInline muted />
         ) : (
-          <div className="umrah-camera-empty">Arahkan kamera ke paspor</div>
+          <div className="umrah-camera-empty">{isStartingCamera ? 'Menyalakan kamera...' : 'Arahkan kamera ke paspor'}</div>
         )}
       </div>
 
-      <img src={assets.cameraGuideFrame} alt="" aria-hidden className="umrah-camera-guide" />
+      <div className="umrah-camera-guide" aria-hidden />
 
       <button type="button" className="umrah-camera-flash" aria-label="Flashlight">
-        <img src={assets.cameraFlashIcon} alt="" aria-hidden />
+        <HiOutlineBolt aria-hidden />
       </button>
 
       <button
@@ -114,13 +140,37 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
         onClick={handleShutter}
         disabled={!cameraReady}
       >
-        <img src={assets.cameraShutterOuter} alt="" aria-hidden className="outer" />
-        <img src={assets.cameraShutterInner} alt="" aria-hidden className="inner" />
+        <span className="outer" aria-hidden />
+        <span className="inner" aria-hidden>
+          <HiOutlineCamera aria-hidden />
+        </span>
       </button>
 
-      {cameraUnavailable && <p className="umrah-camera-warning">Kamera tidak tersedia. Izinkan akses kamera lalu coba lagi.</p>}
+      {cameraUnavailable && (
+        <div className="umrah-camera-warning-wrap">
+          <p className="umrah-camera-warning">Kamera tidak tersedia. Izinkan akses kamera lalu coba lagi.</p>
+          <div className="umrah-camera-warning-actions">
+            <button type="button" className="umrah-camera-retry-btn" onClick={() => void startCamera()}>
+              <HiOutlineArrowPath aria-hidden />
+              Coba Lagi
+            </button>
+            <button type="button" className="umrah-camera-retry-btn" onClick={() => fileInputRef.current?.click()}>
+              <HiOutlineCamera aria-hidden />
+              Ambil dari Galeri
+            </button>
+          </div>
+        </div>
+      )}
 
       <canvas ref={canvasRef} className="umrah-camera-canvas" aria-hidden />
+      <input
+        ref={fileInputRef}
+        className="umrah-camera-input"
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onChange={handleFileCapture}
+      />
 
       <footer className="umrah-camera-indicator" aria-hidden />
     </section>
