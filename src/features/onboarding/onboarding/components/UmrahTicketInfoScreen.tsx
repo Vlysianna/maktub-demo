@@ -53,6 +53,7 @@ type UmrahTicketInfoScreenProps = {
   returnSeatLayoutLabel: string
   returnSeatPitchLabel: string
   travelerNames: string[]
+  travelerLabels?: string[]
   contactName: string
   contactEmail: string
   contactPhone: string
@@ -195,6 +196,7 @@ export function UmrahTicketInfoScreen({
   returnSeatLayoutLabel,
   returnSeatPitchLabel,
   travelerNames,
+  travelerLabels = [],
   contactName,
   contactEmail,
   contactPhone,
@@ -286,7 +288,7 @@ export function UmrahTicketInfoScreen({
         <h2 className="umrah-ticket-title">Penumpang</h2>
         <article className="umrah-info-passenger-card">
           <button type="button" className="umrah-info-add-passenger" onClick={onAddPassenger}>
-            Tambah Nama Baru
+            Tambah Nama Baru (Penumpang)
             <img src={assets.addCircleIcon} alt="" aria-hidden />
           </button>
           {travelerNames.map((name, index) => (
@@ -296,7 +298,7 @@ export function UmrahTicketInfoScreen({
               className="umrah-info-passenger-item"
               onClick={() => onEditPassenger(index)}
             >
-              <span>{name}</span>
+              <span>{travelerLabels[index] ? `${travelerLabels[index]} - ${name}` : name}</span>
               <span aria-hidden>›</span>
             </button>
           ))}

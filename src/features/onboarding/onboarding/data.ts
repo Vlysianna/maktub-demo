@@ -1226,7 +1226,7 @@ export const layananLainAssets: LayananLainAssets = {
 export const rekomendasiPaketAssets: RekomendasiPaketAssets = {
   clockIcon: publicAsset('assets/figma/clock-01.svg'),
   calendarIcon: publicAsset('assets/figma/calendar.svg'),
-  chevronRightIcon: publicAsset('assets/figma/chevron-right.svg'),
+  chevronRightIcon: publicAsset('assets/figma/Vector-4.svg'),
   backIcon: publicAsset('assets/figma/arrow-left.svg'),
 }
 
@@ -1446,10 +1446,10 @@ export const notificationItems: NotificationItem[] = [
 ]
 
 export const loginGuestAssets: LoginGuestAssets = {
-  closeIcon: 'https://www.figma.com/api/mcp/asset/0fd00dbc-a596-40cb-b132-f2b0f4333baf',
-  backgroundGlow: 'https://www.figma.com/api/mcp/asset/d58cfbce-1f10-4b90-9398-67a970b4ed65',
-  googleIcon: 'https://www.figma.com/api/mcp/asset/8afc1fe7-6ebe-452e-9089-f968b5d89f12',
-  phoneArrowIcon: 'https://www.figma.com/api/mcp/asset/be3aacc3-78ba-4c45-a739-a75dd8d60012',
+  closeIcon: publicAsset('assets/figma/arrow-left.svg'),
+  backgroundGlow: publicAsset('assets/figma/background-glow.svg'),
+  googleIcon: publicAsset('assets/figma/google.svg'),
+  phoneArrowIcon: publicAsset('assets/figma/phone-arrow-icon.svg'),
 }
 
 export const loginGuestContent: LoginGuestContent = {

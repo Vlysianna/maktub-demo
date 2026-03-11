@@ -37,6 +37,8 @@ export function UmrahVisaServicesScreen({
   onBuy,
   onSkip,
 }: UmrahVisaServicesScreenProps) {
+  const isOverVisaLimit = travelerCount > 1
+
   return (
     <section className="phone-shell umrah-visa-shell" aria-label="Visa dan Lainnya">
       <header className="umrah-flight-header">
@@ -133,8 +135,11 @@ export function UmrahVisaServicesScreen({
         {!formCompleted && (
           <p className="visa-field-error visa-services-form-error">Lengkapi formulir visa sebelum melanjutkan pembayaran</p>
         )}
-        <button type="button" className="cta-button" disabled={!formCompleted} onClick={onBuy}>
-          Beli ({travelerCount} orang)
+        {isOverVisaLimit && (
+          <p className="visa-field-error visa-services-form-error">Pembelian visa hanya tersedia untuk 1 orang.</p>
+        )}
+        <button type="button" className="cta-button" disabled={!formCompleted || isOverVisaLimit} onClick={onBuy}>
+          Beli (1 orang)
         </button>
         <button type="button" className="umrah-visa-skip-btn" onClick={onSkip}>
           Lanjutkan tanpa membeli

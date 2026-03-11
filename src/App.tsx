@@ -271,6 +271,20 @@ function isPassengerFormComplete(form: PassengerFormData) {
   )
 }
 
+function getPassengerSlotLabel(index: number, participants: { dewasa: number; anak: number; bayi: number }) {
+  if (index < participants.dewasa) {
+    return `Dewasa ${index + 1}`
+  }
+
+  const childIndex = index - participants.dewasa
+  if (childIndex < participants.anak) {
+    return `Anak-anak ${childIndex + 1}`
+  }
+
+  const infantIndex = index - participants.dewasa - participants.anak
+  return `Bayi ${infantIndex + 1}`
+}
+
 const fallbackTravelDate = new Date(
   onboardingConfig.defaultTravelDate.year,
   onboardingConfig.defaultTravelDate.month,
@@ -531,8 +545,16 @@ function App() {
   }, [totalParticipants, travelerRoom])
 
   const travelerCount = Math.max(totalParticipants, 1)
+  const visaTravelerCount = 1
   const passengerText = `${travelerCount} orang`
   const roomCount = Math.max(1, Math.ceil(travelerCount / travelerRoom))
+  const passengerSlotLabels = useMemo(
+    () =>
+      Array.from({ length: travelerCount }, (_, index) =>
+        getPassengerSlotLabel(index, travelerParticipants),
+      ),
+    [travelerCount, travelerParticipants],
+  )
 
   const syncTravelerCollections = (count: number) => {
     setTravelerNames((prev) =>
@@ -908,7 +930,7 @@ function App() {
   ])
 
   const visaPaymentBreakdown = useMemo<PaymentBreakdown>(() => {
-    const subtotal = visaPackagePricePerPerson[selectedVisaPackage] * travelerCount
+    const subtotal = visaPackagePricePerPerson[selectedVisaPackage] * visaTravelerCount
     const serviceFee = 50_000
     const taxAmount = Math.round(subtotal * 0.1)
 
@@ -922,7 +944,7 @@ function App() {
       taxAmount,
       grandTotal: subtotal + serviceFee + taxAmount,
     }
-  }, [selectedVisaPackage, travelerCount])
+  }, [selectedVisaPackage, visaTravelerCount])
 
   const flightOnlyPaymentBreakdown = useMemo<PaymentBreakdown>(() => {
     const flightDeparture = selectedDepartureFare.totalPrice
@@ -1777,6 +1799,7 @@ function App() {
           returnSeatLayoutLabel="3-3"
           returnSeatPitchLabel="29 inches (Standar)"
           travelerNames={travelerNames}
+          travelerLabels={passengerSlotLabels}
           contactName={activeContactName}
           contactEmail={activeContactEmail}
           contactPhone={activeContactPhone}
@@ -1805,8 +1828,9 @@ function App() {
             const incompleteTravelerIndex = passengerForms.slice(0, travelerCount).findIndex((form) => !isPassengerFormComplete(form))
 
             if (incompleteTravelerIndex !== -1) {
+              const incompleteLabel = passengerSlotLabels[incompleteTravelerIndex] ?? `Jamaah ${incompleteTravelerIndex + 1}`
               setTicketInfoValidationMessage(
-                `Data jamaah ${incompleteTravelerIndex + 1} belum lengkap. Mohon lengkapi data jamaah terlebih dahulu.`,
+                `Data ${incompleteLabel} belum lengkap. Mohon lengkapi data penumpang terlebih dahulu.`,
               )
               return
             }
@@ -2019,7 +2043,7 @@ function App() {
           paymentFor={paymentFlow}
           packageSummaryLabel={isHotelOnlyFlow && paymentFlow === 'package' ? 'Harga tiket hotel' : undefined}
           visaLabel={visaPackageLabelMap[selectedVisaPackage]}
-          travelerCount={travelerCount}
+          travelerCount={paymentFlow === 'visa' ? visaTravelerCount : travelerCount}
           flightOnly={flightSearchEntry === 'home' && paymentFlow !== 'visa'}
           onBack={() => {
             if (paymentFlow === 'visa') {
@@ -2131,6 +2155,10 @@ function App() {
           onSelectPackage={setSelectedVisaPackage}
           onOpenForm={() => setScreen('umrah-visa-form-personal')}
           onBuy={() => {
+            if (travelerCount > 1) {
+              return
+            }
+
             setPaymentFlow('visa')
             setScreen('umrah-payment-method')
           }}
@@ -2178,7 +2206,7 @@ function App() {
       {screen === 'umrah-passenger-form' && (
         <UmrahPassengerFormScreen
           assets={umrahTicketAssets}
-          title={`Dewasa ${activePassengerIndex + 1}`}
+          title={passengerSlotLabels[activePassengerIndex] ?? `Penumpang ${activePassengerIndex + 1}`}
           form={activePassengerForm}
           nationalityOptions={nationalityOptions}
           dayOptions={dayOptions}
