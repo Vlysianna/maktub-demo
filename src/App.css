@@ -19,6 +19,9 @@
 
 .phone-shell {
   --maktub-header-top: 16px;
+  --home-nav-height: 61px;
+  --home-safe-bottom: max(0px, env(safe-area-inset-bottom));
+  --home-nav-total-height: calc(var(--home-nav-height) + var(--home-safe-bottom));
   position: relative;
   width: 100%;
   max-width: 430px;
@@ -263,9 +266,6 @@
 } */
 
 .home-shell {
-  --home-nav-height: 61px;
-  --home-safe-bottom: max(0px, env(safe-area-inset-bottom));
-  --home-nav-total-height: calc(var(--home-nav-height) + var(--home-safe-bottom));
   background: #eef2f6;
 }
 
@@ -1005,7 +1005,7 @@
 
 .my-booking-shell {
   background: #f5f7f9;
-  padding: 57px 16px 61px;
+  padding: 57px 16px var(--home-nav-total-height);
   display: flex;
   flex-direction: column;
 }
@@ -7080,7 +7080,7 @@ background: #03694b;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 16px 16px max(18px, env(safe-area-inset-bottom));
+  padding: 16px 16px var(--home-nav-total-height);
 }
 
 .layanan-lain-hero {
@@ -7380,7 +7380,7 @@ background: #03694b;
   z-index: 1;
   height: 100%;
   overflow-y: auto;
-  padding: 99px 16px 80px;
+  padding: 99px 16px var(--home-nav-total-height);
 }
 
 .informasi-scroll::-webkit-scrollbar {
@@ -9176,7 +9176,7 @@ background: #03694b;
 .profile-scroll {
   position: relative;
   z-index: 1;
-  height: calc(100% - 79px);
+  height: calc(100% - var(--home-nav-total-height));
   overflow-y: auto;
   padding: 76px 24px 24px;
 }

@@ -671,7 +671,7 @@ export const panduanUmrahContent: GuideListContent = {
   title: 'Panduan Umrah',
   backIcon: publicAsset('assets/figma/arrow-right.svg'),
   icon: publicAsset('assets/figma/book-02.svg'),
-  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  chevronIcon: publicAsset('assets/figma/Vector-4.svg'),
   searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'ihram', title: 'Ihram', subtitle: 'Niat Umrah' },
@@ -685,7 +685,7 @@ export const doaUmrahContent: GuideListContent = {
   title: 'Do’a Umrah',
   backIcon: publicAsset('assets/figma/arrow-right.svg'),
   icon: publicAsset('assets/figma/book-open-01.svg'),
-  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  chevronIcon: publicAsset('assets/figma/Vector-4.svg'),
   searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'sebelum-ihram', title: 'Sebelum Ihram', subtitle: 'Mandi Sunnah Ihram' },
@@ -703,7 +703,7 @@ export const dzikirHarianContent: GuideListContent = {
   title: 'Dzikir Harian',
   backIcon: publicAsset('assets/figma/arrow-right.svg'),
   icon: publicAsset('assets/figma/tasbih.svg'),
-  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  chevronIcon: publicAsset('assets/figma/Vector-4.svg'),
   searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'dzikir-pagi', title: 'Dzikir Pagi', subtitle: 'Dibaca setelah Subuh hingga terbit matahari' },
@@ -719,7 +719,7 @@ export const doaHarianContent: GuideListContent = {
   title: 'Do’a Harian',
   backIcon: publicAsset('assets/figma/arrow-right.svg'),
   icon: publicAsset('assets/figma/quran-02.svg'),
-  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  chevronIcon: publicAsset('assets/figma/Vector-4.svg'),
   searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'bangun-tidur', title: 'Doa Bangun Tidur', subtitle: 'Dibaca saat memulai hari dengan rasa syukur' },
@@ -737,7 +737,7 @@ export const tataCaraSholatContent: GuideListContent = {
   title: 'Tata Cara Sholat',
   backIcon: publicAsset('assets/figma/arrow-right.svg'),
   icon: publicAsset('assets/figma/sujood.svg'),
-  chevronIcon: publicAsset('assets/figma/chevron-right.svg'),
+  chevronIcon: publicAsset('assets/figma/Vector-4.svg'),
   searchIcon: publicAsset('assets/figma/search.svg'),
   items: [
     { id: 'niat', title: 'Niat Sholat', subtitle: 'Menetapkan niat sesuai sholat yang dikerjakan' },
