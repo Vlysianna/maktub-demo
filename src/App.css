@@ -5810,7 +5810,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 8px 0 24px;
+  padding: 8px 0 20px;
 }
 
 .umrah-visa-scroll::-webkit-scrollbar,
@@ -5823,7 +5823,7 @@
   margin: 0 8px;
   border: 1px solid #d1d5da;
   border-radius: 8px;
-  background: #fff;
+  background: #f1f2f4;
   padding: 10px;
 }
 
@@ -5885,7 +5885,7 @@
 
 .umrah-visa-section h2 {
   color: #0a0c0e;
-  font-size: 29px;
+  font-size: 28px;
   font-weight: 600;
 }
 
@@ -5897,6 +5897,17 @@
   margin-top: 6px;
   color: #03694b;
   font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.umrah-visa-learn::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #03694b;
 }
 
 .umrah-visa-package-grid {
@@ -5914,7 +5925,7 @@
   border: 1px solid #d1d5da;
   border-radius: 8px;
   background: #fff;
-  padding: 10px;
+  padding: 12px;
   text-align: left;
 }
 
@@ -5940,7 +5951,7 @@ button.umrah-visa-package-card {
 }
 
 .umrah-visa-package-card small {
-  margin-top: 8px;
+  margin-top: 10px;
   color: #979899;
   font-size: 11px;
 }
@@ -5956,15 +5967,70 @@ button.umrah-visa-package-card {
 }
 
 .umrah-visa-form-btn {
-  margin-top: 10px;
-  width: 100%;
-  height: 40px;
+  margin-top: 0;
+  width: 125px;
+  height: 36px;
   border: 1px solid #03694b;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #fff;
   color: #03694b;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
+  flex-shrink: 0;
+}
+
+.umrah-visa-actions-row {
+  margin-top: 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.umrah-visa-count-wrap {
+  display: grid;
+  gap: 8px;
+}
+
+.umrah-visa-count-wrap > span {
+  color: #0a0c0e;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.umrah-visa-counter {
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid #d1d5da;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.umrah-visa-counter button {
+  width: 30px;
+  height: 100%;
+  border: 0;
+  background: #eef2f1;
+  color: #323333;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.umrah-visa-counter button:last-child {
+  background: #03694b;
+  color: #fff;
+}
+
+.umrah-visa-counter strong {
+  width: 44px;
+  text-align: center;
+  color: #0a0c0e;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .umrah-visa-section.collapsed {
@@ -5984,20 +6050,14 @@ button.umrah-visa-package-card {
   bottom: auto;
   background: #f5f7f9;
   border-top: 1px solid #d1d5da;
-  padding: 8px 8px max(6px, env(safe-area-inset-bottom));
+  padding: 10px 8px max(8px, env(safe-area-inset-bottom));
   display: grid;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
-.umrah-visa-skip-btn {
-  height: 40px;
-  border: 1px solid #d1d5da;
-  border-radius: 6px;
-  background: #fff;
-  color: #0a0c0e;
-  font-size: 13px;
-  cursor: pointer;
+.umrah-visa-footer .cta-button {
+  height: 43px;
 }
 
 .umrah-visa-form-stepper {
@@ -6005,21 +6065,75 @@ button.umrah-visa-package-card {
   left: auto;
   right: auto;
   top: auto;
-  display: inline-flex;
-  gap: 10px;
+  display: flex;
+  gap: 12px;
   align-items: center;
   border-top: 1px solid #ececec;
   border-bottom: 1px solid #ececec;
   background: #fff;
   padding: 10px 12px;
-  color: #979899;
-  font-size: 13px;
-  font-weight: 600;
   flex-shrink: 0;
 }
 
-.umrah-visa-form-stepper .active {
+.umrah-visa-form-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.umrah-visa-form-step i {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: #f5f6f8;
+  color: #a7a7a7;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.umrah-visa-form-step b {
+  margin: 0;
+  color: #a7a7a7;
+  font-size: 13px;
+  line-height: normal;
+  font-weight: 600;
+}
+
+.umrah-visa-form-step.active i {
+  background: #03694b;
+  color: #fff;
+}
+
+.umrah-visa-form-step.active b {
   color: #0a0c0e;
+}
+
+.umrah-visa-travelers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.umrah-visa-traveler-chip {
+  border: 1px solid #d1d5da;
+  background: #f5f7f9;
+  border-radius: 40px;
+  height: 34px;
+  padding: 0 14px;
+  color: #0a0c0e;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.umrah-visa-traveler-chip.active {
+  color: #366c38;
+  font-weight: 600;
 }
 
 .umrah-visa-form-scroll {
@@ -8757,6 +8871,22 @@ background: #03694b;
   overflow: hidden;
 }
 
+.login-guest-shell::before {
+  content: '';
+  position: absolute;
+  left: -120px;
+  bottom: -170px;
+  width: 560px;
+  height: 360px;
+  border-radius: 50%;
+  background:
+    radial-gradient(70% 72% at 34% 62%, rgba(120, 217, 189, 0.55) 0%, rgba(120, 217, 189, 0) 68%),
+    radial-gradient(56% 60% at 68% 52%, rgba(186, 235, 222, 0.42) 0%, rgba(186, 235, 222, 0) 72%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .login-guest-close {
   position: absolute;
   top: 52px;
@@ -8805,17 +8935,6 @@ background: #03694b;
   font-size: 31px;
   line-height: 1;
   color: #0e1315;
-}
-
-.login-guest-bg-glow {
-  position: absolute;
-  left: -140px;
-  bottom: -12px;
-  width: 399px;
-  height: 303px;
-  transform: rotate(180deg) scaleY(-1);
-  pointer-events: none;
-  z-index: 1;
 }
 
 .login-guest-form-wrap {

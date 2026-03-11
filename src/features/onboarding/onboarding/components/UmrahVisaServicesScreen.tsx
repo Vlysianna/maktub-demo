@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { UmrahVisaFormAssets, VisaPackage } from '../types'
 
 type UmrahVisaServicesScreenProps = {
@@ -11,12 +12,13 @@ type UmrahVisaServicesScreenProps = {
   formCompleted: boolean
   selectedPackageId: VisaPackage['id']
   travelerCount: number
+  selectedVisaCount: number
   hideStepper?: boolean
   onBack: () => void
   onSelectPackage: (id: VisaPackage['id']) => void
+  onChangeVisaCount: (count: number) => void
   onOpenForm: () => void
   onBuy: () => void
-  onSkip: () => void
 }
 
 export function UmrahVisaServicesScreen({
@@ -30,14 +32,32 @@ export function UmrahVisaServicesScreen({
   formCompleted,
   selectedPackageId,
   travelerCount,
+  selectedVisaCount,
   hideStepper,
   onBack,
   onSelectPackage,
+  onChangeVisaCount,
   onOpenForm,
   onBuy,
-  onSkip,
 }: UmrahVisaServicesScreenProps) {
-  const isOverVisaLimit = travelerCount > 1
+  const [hasAttemptedBuy, setHasAttemptedBuy] = useState(false)
+  const isCountTooHigh = selectedVisaCount > travelerCount
+  const isCountTooLow = selectedVisaCount < 1
+  const isCountInvalid = isCountTooLow || isCountTooHigh
+  const canBuy = formCompleted && !isCountInvalid
+
+  const quantityError = isCountTooHigh
+    ? `Jumlah visa tidak boleh melebihi jumlah keberangkatan (${travelerCount} orang).`
+    : 'Jumlah visa minimal 1.'
+
+  const handleBuy = () => {
+    if (!canBuy) {
+      setHasAttemptedBuy(true)
+      return
+    }
+
+    onBuy()
+  }
 
   return (
     <section className="phone-shell umrah-visa-shell" aria-label="Visa dan Lainnya">
@@ -53,11 +73,11 @@ export function UmrahVisaServicesScreen({
         <div className="umrah-flight-stepper umrah-flight-stepper--figma" aria-hidden>
           <span className="umrah-flight-step active">
             <i>2</i>
-            <b>Hotel ---</b>
+            <b>Hotel</b>
           </span>
           <span className="umrah-flight-step active">
             <i>3</i>
-            <b>Pembayaran ---</b>
+            <b>Pembayaran</b>
           </span>
           <span className="umrah-flight-step active">
             <i>4</i>
@@ -98,9 +118,36 @@ export function UmrahVisaServicesScreen({
             ))}
           </div>
 
-          <button type="button" className="umrah-visa-form-btn" onClick={onOpenForm}>
-            {formCompleted ? 'Edit Formulir' : 'Lengkapi Formulir'}
-          </button>
+          <div className="umrah-visa-actions-row">
+            <div className="umrah-visa-count-wrap">
+              <span>Jumlah</span>
+              <div className="umrah-visa-counter" aria-label="Jumlah visa">
+                <button
+                  type="button"
+                  aria-label="Kurangi jumlah visa"
+                  onClick={() => onChangeVisaCount(Math.max(0, selectedVisaCount - 1))}
+                >
+                  -
+                </button>
+                <strong>{selectedVisaCount}</strong>
+                <button
+                  type="button"
+                  aria-label="Tambah jumlah visa"
+                  onClick={() => onChangeVisaCount(Math.min(travelerCount, selectedVisaCount + 1))}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <button type="button" className="umrah-visa-form-btn" onClick={onOpenForm}>
+              {formCompleted ? 'Edit Formulir' : 'Lengkapi Formulir'}
+            </button>
+          </div>
+
+          {hasAttemptedBuy && isCountInvalid && (
+            <p className="visa-field-error">{quantityError}</p>
+          )}
         </section>
 
         <section className="umrah-visa-section">
@@ -132,17 +179,14 @@ export function UmrahVisaServicesScreen({
       </div>
 
       <footer className="umrah-visa-footer">
-        {!formCompleted && (
+        {hasAttemptedBuy && !formCompleted && (
           <p className="visa-field-error visa-services-form-error">Lengkapi formulir visa sebelum melanjutkan pembayaran</p>
         )}
-        {isOverVisaLimit && (
-          <p className="visa-field-error visa-services-form-error">Pembelian visa hanya tersedia untuk 1 orang.</p>
+        {hasAttemptedBuy && isCountInvalid && (
+          <p className="visa-field-error visa-services-form-error">{quantityError}</p>
         )}
-        <button type="button" className="cta-button" disabled={!formCompleted || isOverVisaLimit} onClick={onBuy}>
-          Beli (1 orang)
-        </button>
-        <button type="button" className="umrah-visa-skip-btn" onClick={onSkip}>
-          Lanjutkan tanpa membeli
+        <button type="button" className="cta-button" disabled={!canBuy} onClick={handleBuy}>
+          Beli
         </button>
       </footer>
 

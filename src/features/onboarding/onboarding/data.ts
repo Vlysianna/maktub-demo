@@ -1447,7 +1447,6 @@ export const notificationItems: NotificationItem[] = [
 
 export const loginGuestAssets: LoginGuestAssets = {
   closeIcon: publicAsset('assets/figma/arrow-left.svg'),
-  backgroundGlow: publicAsset('assets/figma/background-glow.svg'),
   googleIcon: publicAsset('assets/figma/google.svg'),
   phoneArrowIcon: publicAsset('assets/figma/phone-arrow-icon.svg'),
 }

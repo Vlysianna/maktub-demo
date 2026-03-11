@@ -48,8 +48,6 @@ export function LoginGuestScreen({ assets, content, onClose, onContinueWithGoogl
         <span>{content.subtitle}</span>
       </div>
 
-      <img src={assets.backgroundGlow} alt="" className="login-guest-bg-glow" aria-hidden />
-
       <div className="login-guest-form-wrap">
         <button type="button" className="login-guest-google-btn" onClick={onContinueWithGoogle}>
           <img src={assets.googleIcon} alt="" aria-hidden />

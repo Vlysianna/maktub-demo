@@ -8,7 +8,10 @@ type VisaDocumentsValue = Record<VisaDocumentField, File | null>
 type UmrahVisaFormDocsScreenProps = {
   assets: UmrahVisaFormAssets
   value: VisaDocumentsValue
+  totalTravelerCount: number
+  activeTravelerIndex: number
   hideStepper?: boolean
+  onSelectTraveler: (index: number) => void
   onUpload: (field: VisaDocumentField, file: File | null) => void
   onBack: () => void
   onSave: () => void
@@ -25,7 +28,17 @@ const docItems: Array<{ field: VisaDocumentField; label: string; hint?: string; 
   { field: 'photo', label: 'Pas Foto', required: true, hint: 'Pas foto terbaru dengan latar belakang putih, ukuran 4×6 cm.' },
 ]
 
-export function UmrahVisaFormDocsScreen({ assets, value, hideStepper, onUpload, onBack, onSave }: UmrahVisaFormDocsScreenProps) {
+export function UmrahVisaFormDocsScreen({
+  assets,
+  value,
+  totalTravelerCount,
+  activeTravelerIndex,
+  hideStepper,
+  onSelectTraveler,
+  onUpload,
+  onBack,
+  onSave,
+}: UmrahVisaFormDocsScreenProps) {
   const [hasAttempted, setHasAttempted] = useState(false)
   const requiredComplete = useMemo(() => requiredFields.every((field) => value[field]), [value])
 
@@ -41,13 +54,38 @@ export function UmrahVisaFormDocsScreen({ assets, value, hideStepper, onUpload, 
 
       {!hideStepper && (
         <div className="umrah-visa-form-stepper" aria-hidden>
-          <span className="active">1 Data Pribadi -----</span>
-          <span className="active">2 Dokumen</span>
+          <span className="umrah-visa-form-step active">
+            <i>1</i>
+            <b>Data Pribadi -----</b>
+          </span>
+          <span className="umrah-visa-form-step active">
+            <i>2</i>
+            <b>Dokumen</b>
+          </span>
         </div>
       )}
 
       <div className="umrah-visa-form-scroll">
         <h2>Dokumen</h2>
+        <div className="umrah-visa-travelers" role="tablist" aria-label="Pilih dokumen jamaah">
+          {Array.from({ length: Math.max(totalTravelerCount, 1) }, (_, index) => {
+            const active = index === activeTravelerIndex
+
+            return (
+              <button
+                key={`visa-doc-jamaah-${index + 1}`}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                className={`umrah-visa-traveler-chip${active ? ' active' : ''}`}
+                onClick={() => onSelectTraveler(index)}
+              >
+                Jamaah {index + 1}
+              </button>
+            )
+          })}
+        </div>
+
         <p className="umrah-visa-form-intro">
           Anda harus memenuhi persyaratan dokumen berikut untuk mendapatkan visa perjalanan untuk menerima eVisa Arab Saudi:
         </p>

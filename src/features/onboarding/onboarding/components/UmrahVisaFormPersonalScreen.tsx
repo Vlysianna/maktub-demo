@@ -19,10 +19,13 @@ type VisaPersonalFormValue = {
 type UmrahVisaFormPersonalScreenProps = {
   assets: UmrahVisaFormAssets
   value: VisaPersonalFormValue
+  totalTravelerCount: number
+  activeTravelerIndex: number
   monthOptions: string[]
   nationalityOptions: string[]
   yearSpan: number
   hideStepper?: boolean
+  onSelectTraveler: (index: number) => void
   onChange: (field: keyof VisaPersonalFormValue, nextValue: string) => void
   onBack: () => void
   onNext: () => void
@@ -54,7 +57,20 @@ function validate(value: VisaPersonalFormValue): FieldErrors {
   return errors
 }
 
-export function UmrahVisaFormPersonalScreen({ assets, value, monthOptions, nationalityOptions, yearSpan, hideStepper, onChange, onBack, onNext }: UmrahVisaFormPersonalScreenProps) {
+export function UmrahVisaFormPersonalScreen({
+  assets,
+  value,
+  totalTravelerCount,
+  activeTravelerIndex,
+  monthOptions,
+  nationalityOptions,
+  yearSpan,
+  hideStepper,
+  onSelectTraveler,
+  onChange,
+  onBack,
+  onNext,
+}: UmrahVisaFormPersonalScreenProps) {
   const yearOptions = Array.from({ length: yearSpan }, (_, index) => String(currentYear - index))
   const [hasAttempted, setHasAttempted] = useState(false)
   const errors = hasAttempted ? validate(value) : {}
@@ -72,13 +88,38 @@ export function UmrahVisaFormPersonalScreen({ assets, value, monthOptions, natio
 
       {!hideStepper && (
         <div className="umrah-visa-form-stepper" aria-hidden>
-          <span className="active">1 Data Pribadi -----</span>
-          <span>2 Dokumen</span>
+          <span className="umrah-visa-form-step active">
+            <i>1</i>
+            <b>Data Pribadi -----</b>
+          </span>
+          <span className="umrah-visa-form-step">
+            <i>2</i>
+            <b>Dokumen</b>
+          </span>
         </div>
       )}
 
       <div className="umrah-visa-form-scroll">
         <h2>Data Pribadi</h2>
+
+        <div className="umrah-visa-travelers" role="tablist" aria-label="Pilih data jamaah">
+          {Array.from({ length: Math.max(totalTravelerCount, 1) }, (_, index) => {
+            const active = index === activeTravelerIndex
+
+            return (
+              <button
+                key={`visa-jamaah-${index + 1}`}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                className={`umrah-visa-traveler-chip${active ? ' active' : ''}`}
+                onClick={() => onSelectTraveler(index)}
+              >
+                Jamaah {index + 1}
+              </button>
+            )
+          })}
+        </div>
 
         <label>
           Keluarga / nama belakang *

@@ -671,7 +671,6 @@ export type NotifikasiAssets = {
 
 export type LoginGuestAssets = {
   closeIcon: string
-  backgroundGlow: string
   googleIcon: string
   phoneArrowIcon: string
 }

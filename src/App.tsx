@@ -221,6 +221,58 @@ function createInitialGuestBookingContact() {
   }
 }
 
+type VisaPersonalFormValue = {
+  familyName: string
+  givenName: string
+  gender: string
+  birthDay: string
+  birthMonth: string
+  birthYear: string
+  birthPlace: string
+  birthCountry: string
+  email: string
+  phone: string
+  maritalStatus: string
+  nationality: string
+}
+
+type VisaDocumentsValue = {
+  passport: File | null
+  ktp: File | null
+  familyCard: File | null
+  marriageBook: File | null
+  birthCertificate: File | null
+  photo: File | null
+}
+
+function createInitialVisaPersonalForm(): VisaPersonalFormValue {
+  return {
+    familyName: '',
+    givenName: '',
+    gender: '',
+    birthDay: '',
+    birthMonth: '',
+    birthYear: '',
+    birthPlace: '',
+    birthCountry: '',
+    email: onboardingConfig.defaultContact.email,
+    phone: onboardingConfig.defaultContact.phone,
+    maritalStatus: '',
+    nationality: '',
+  }
+}
+
+function createInitialVisaDocsForm(): VisaDocumentsValue {
+  return {
+    passport: null,
+    ktp: null,
+    familyCard: null,
+    marriageBook: null,
+    birthCertificate: null,
+    photo: null,
+  }
+}
+
 function createTicketFareOptions(basePrice: number, travelerCount: number): TicketFareOption[] {
   return onboardingConfig.flightFareTemplates.map((template) => {
     const topUp =
@@ -370,35 +422,10 @@ function App() {
   const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId>(
     onboardingConfig.visaPackages[0].id,
   )
-  const [visaPersonalForm, setVisaPersonalForm] = useState({
-    familyName: '',
-    givenName: '',
-    gender: '',
-    birthDay: '',
-    birthMonth: '',
-    birthYear: '',
-    birthPlace: '',
-    birthCountry: '',
-    email: onboardingConfig.defaultContact.email,
-    phone: onboardingConfig.defaultContact.phone,
-    maritalStatus: '',
-    nationality: '',
-  })
-  const [visaDocsForm, setVisaDocsForm] = useState<{
-    passport: File | null
-    ktp: File | null
-    familyCard: File | null
-    marriageBook: File | null
-    birthCertificate: File | null
-    photo: File | null
-  }>({
-    passport: null,
-    ktp: null,
-    familyCard: null,
-    marriageBook: null,
-    birthCertificate: null,
-    photo: null,
-  })
+  const [selectedVisaCount, setSelectedVisaCount] = useState(0)
+  const [activeVisaTravelerIndex, setActiveVisaTravelerIndex] = useState(0)
+  const [visaPersonalForms, setVisaPersonalForms] = useState<VisaPersonalFormValue[]>([createInitialVisaPersonalForm()])
+  const [visaDocsForms, setVisaDocsForms] = useState<VisaDocumentsValue[]>([createInitialVisaDocsForm()])
   const [travelerNames, setTravelerNames] = useState<string[]>(['Jamaah 1'])
   const [activePassengerIndex, setActivePassengerIndex] = useState(0)
   const [passengerForms, setPassengerForms] = useState<PassengerFormData[]>([createInitialPassengerForm()])
@@ -545,7 +572,7 @@ function App() {
   }, [totalParticipants, travelerRoom])
 
   const travelerCount = Math.max(totalParticipants, 1)
-  const visaTravelerCount = 1
+  const visaTravelerCount = Math.min(selectedVisaCount, travelerCount)
   const passengerText = `${travelerCount} orang`
   const roomCount = Math.max(1, Math.ceil(travelerCount / travelerRoom))
   const passengerSlotLabels = useMemo(
@@ -588,6 +615,40 @@ function App() {
       return next
     })
   }
+
+  const syncVisaFormCollections = (count: number) => {
+    const safeCount = Math.max(count, 1)
+
+    setVisaPersonalForms((prev) =>
+      Array.from({ length: safeCount }, (_, index) => {
+        if (prev[index]) {
+          return prev[index]
+        }
+
+        return createInitialVisaPersonalForm()
+      }),
+    )
+
+    setVisaDocsForms((prev) =>
+      Array.from({ length: safeCount }, (_, index) => {
+        if (prev[index]) {
+          return prev[index]
+        }
+
+        return createInitialVisaDocsForm()
+      }),
+    )
+
+    setActiveVisaTravelerIndex((prev) => Math.min(prev, safeCount - 1))
+  }
+
+  useEffect(() => {
+    setSelectedVisaCount((prev) => Math.min(prev, travelerCount))
+  }, [travelerCount])
+
+  useEffect(() => {
+    syncVisaFormCollections(selectedVisaCount)
+  }, [selectedVisaCount])
 
   const fallbackDepartureLabel =
     departureAirportOptions.find((option) => option.code === onboardingConfig.defaultDepartureCode)?.label.split(',')[0] ??
@@ -1128,10 +1189,22 @@ function App() {
     }
   }, [selectedRekomendasiPaket])
 
-  const isVisaPersonalCompleted = useMemo(() => Object.values(visaPersonalForm).every((value) => value.trim().length > 0), [visaPersonalForm])
+  const activeVisaPersonalForm = visaPersonalForms[activeVisaTravelerIndex] ?? createInitialVisaPersonalForm()
+  const activeVisaDocsForm = visaDocsForms[activeVisaTravelerIndex] ?? createInitialVisaDocsForm()
+
+  const isVisaPersonalCompleted = useMemo(
+    () =>
+      selectedVisaCount > 0 &&
+      visaPersonalForms.slice(0, selectedVisaCount).every((form) => Object.values(form).every((value) => value.trim().length > 0)),
+    [selectedVisaCount, visaPersonalForms],
+  )
   const isVisaDocsCompleted = useMemo(
-    () => Boolean(visaDocsForm.passport && visaDocsForm.ktp && visaDocsForm.familyCard && visaDocsForm.photo),
-    [visaDocsForm.familyCard, visaDocsForm.ktp, visaDocsForm.passport, visaDocsForm.photo],
+    () =>
+      selectedVisaCount > 0 &&
+      visaDocsForms
+        .slice(0, selectedVisaCount)
+        .every((form) => Boolean(form.passport && form.ktp && form.familyCard && form.photo)),
+    [selectedVisaCount, visaDocsForms],
   )
   const isVisaFormCompleted = isVisaPersonalCompleted && isVisaDocsCompleted
   const primaryBookingId = 'booking-dynamic-1'
@@ -2143,6 +2216,7 @@ function App() {
           formCompleted={isVisaFormCompleted}
           selectedPackageId={selectedVisaPackage}
           travelerCount={travelerCount}
+          selectedVisaCount={visaTravelerCount}
           hideStepper={visaFromHome}
           onBack={() => {
             if (visaFromHome) {
@@ -2153,23 +2227,15 @@ function App() {
             }
           }}
           onSelectPackage={setSelectedVisaPackage}
+          onChangeVisaCount={setSelectedVisaCount}
           onOpenForm={() => setScreen('umrah-visa-form-personal')}
           onBuy={() => {
-            if (travelerCount > 1) {
+            if (visaTravelerCount < 1 || visaTravelerCount > travelerCount) {
               return
             }
 
             setPaymentFlow('visa')
             setScreen('umrah-payment-method')
-          }}
-          onSkip={() => {
-            if (visaFromHome) {
-              setVisaFromHome(false)
-              setScreen(visaStandaloneBackScreen)
-              return
-            }
-
-            setScreen('umrah-payment-complete')
           }}
         />
       )}
@@ -2177,13 +2243,21 @@ function App() {
       {screen === 'umrah-visa-form-personal' && (
         <UmrahVisaFormPersonalScreen
           assets={umrahVisaFormAssets}
-          value={visaPersonalForm}
+          value={activeVisaPersonalForm}
+          totalTravelerCount={visaTravelerCount}
+          activeTravelerIndex={activeVisaTravelerIndex}
           monthOptions={onboardingConfig.monthOptions}
           nationalityOptions={onboardingConfig.nationalityOptions}
           yearSpan={onboardingConfig.passportYearSpan}
           hideStepper={visaFromHome}
+          onSelectTraveler={setActiveVisaTravelerIndex}
           onChange={(field, value) => {
-            setVisaPersonalForm((prev) => ({ ...prev, [field]: value }))
+            setVisaPersonalForms((prev) => {
+              const next = [...prev]
+              const current = next[activeVisaTravelerIndex] ?? createInitialVisaPersonalForm()
+              next[activeVisaTravelerIndex] = { ...current, [field]: value }
+              return next
+            })
           }}
           onBack={() => setScreen('umrah-visa-services')}
           onNext={() => setScreen('umrah-visa-form-docs')}
@@ -2193,10 +2267,18 @@ function App() {
       {screen === 'umrah-visa-form-docs' && (
         <UmrahVisaFormDocsScreen
           assets={umrahVisaFormAssets}
-          value={visaDocsForm}
+          value={activeVisaDocsForm}
+          totalTravelerCount={visaTravelerCount}
+          activeTravelerIndex={activeVisaTravelerIndex}
           hideStepper={visaFromHome}
+          onSelectTraveler={setActiveVisaTravelerIndex}
           onUpload={(field, file) => {
-            setVisaDocsForm((prev) => ({ ...prev, [field]: file }))
+            setVisaDocsForms((prev) => {
+              const next = [...prev]
+              const current = next[activeVisaTravelerIndex] ?? createInitialVisaDocsForm()
+              next[activeVisaTravelerIndex] = { ...current, [field]: file }
+              return next
+            })
           }}
           onBack={() => setScreen('umrah-visa-form-personal')}
           onSave={() => setScreen('umrah-visa-services')}
