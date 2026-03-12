@@ -573,7 +573,10 @@ function App() {
   }, [totalParticipants, travelerRoom])
 
   const travelerCount = Math.max(totalParticipants, 1)
-  const visaTravelerCount = Math.min(selectedVisaCount, travelerCount)
+  const visaCounterTravelerLimit = visaFromHome
+    ? Math.max(travelerCount, selectedVisaCount + 1)
+    : travelerCount
+  const visaTravelerCount = Math.min(selectedVisaCount, visaCounterTravelerLimit)
   const passengerText = `${travelerCount} orang`
   const roomCount = Math.max(1, Math.ceil(travelerCount / travelerRoom))
   const passengerSlotLabels = useMemo(
@@ -2218,7 +2221,7 @@ function App() {
           cityLabel={secondaryHotelCityLabel}
           formCompleted={isVisaFormCompleted}
           selectedPackageId={selectedVisaPackage}
-          travelerCount={travelerCount}
+          travelerCount={visaCounterTravelerLimit}
           selectedVisaCount={visaTravelerCount}
           hideStepper={visaFromHome}
           showSkipButton={alreadyHasVisa}
@@ -2234,7 +2237,7 @@ function App() {
           onChangeVisaCount={setSelectedVisaCount}
           onOpenForm={() => setScreen('umrah-visa-form-personal')}
           onBuy={() => {
-            if (visaTravelerCount < 1 || visaTravelerCount > travelerCount) {
+            if (visaTravelerCount < 1 || visaTravelerCount > visaCounterTravelerLimit) {
               return
             }
 
