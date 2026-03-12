@@ -45,6 +45,7 @@ export function UmrahVisaServicesScreen({
   onSkip,
 }: UmrahVisaServicesScreenProps) {
   const [hasAttemptedBuy, setHasAttemptedBuy] = useState(false)
+  const [hasAttemptedOpenForm, setHasAttemptedOpenForm] = useState(false)
   const isCountTooHigh = selectedVisaCount > travelerCount
   const isCountTooLow = selectedVisaCount < 1
   const isCountInvalid = isCountTooLow || isCountTooHigh
@@ -61,6 +62,15 @@ export function UmrahVisaServicesScreen({
     }
 
     onBuy()
+  }
+
+  const handleOpenForm = () => {
+    if (isCountTooLow) {
+      setHasAttemptedOpenForm(true)
+      return
+    }
+
+    onOpenForm()
   }
 
   return (
@@ -144,10 +154,14 @@ export function UmrahVisaServicesScreen({
               </div>
             </div>
 
-            <button type="button" className="umrah-visa-form-btn" onClick={onOpenForm}>
+            <button type="button" className="umrah-visa-form-btn" onClick={handleOpenForm}>
               {formCompleted ? 'Edit Formulir' : 'Lengkapi Formulir'}
             </button>
           </div>
+
+          {hasAttemptedOpenForm && isCountTooLow && (
+            <p className="visa-field-error">Isi jumlah visa terlebih dahulu.</p>
+          )}
 
           {hasAttemptedBuy && isCountInvalid && (
             <p className="visa-field-error">{quantityError}</p>
