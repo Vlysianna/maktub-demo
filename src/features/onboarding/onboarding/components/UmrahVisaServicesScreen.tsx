@@ -44,8 +44,8 @@ export function UmrahVisaServicesScreen({
   onBuy,
   onSkip,
 }: UmrahVisaServicesScreenProps) {
-  const [hasAttemptedBuy, setHasAttemptedBuy] = useState(false)
   const [hasAttemptedOpenForm, setHasAttemptedOpenForm] = useState(false)
+  const [buyValidationMessage, setBuyValidationMessage] = useState<string | null>(null)
   const isCountTooHigh = selectedVisaCount > travelerCount
   const isCountTooLow = selectedVisaCount < 1
   const isCountInvalid = isCountTooLow || isCountTooHigh
@@ -57,10 +57,16 @@ export function UmrahVisaServicesScreen({
 
   const handleBuy = () => {
     if (!canBuy) {
-      setHasAttemptedBuy(true)
+      if (!formCompleted) {
+        setBuyValidationMessage('Lengkapi formulir visa sebelum melanjutkan pembayaran.')
+        return
+      }
+
+      setBuyValidationMessage(quantityError)
       return
     }
 
+    setBuyValidationMessage(null)
     onBuy()
   }
 
@@ -163,9 +169,6 @@ export function UmrahVisaServicesScreen({
             <p className="visa-field-error">Isi jumlah visa terlebih dahulu.</p>
           )}
 
-          {hasAttemptedBuy && isCountInvalid && (
-            <p className="visa-field-error">{quantityError}</p>
-          )}
         </section>
 
         <section className="umrah-visa-section">
@@ -197,12 +200,6 @@ export function UmrahVisaServicesScreen({
       </div>
 
       <footer className="umrah-visa-footer">
-        {hasAttemptedBuy && !formCompleted && (
-          <p className="visa-field-error visa-services-form-error">Lengkapi formulir visa sebelum melanjutkan pembayaran</p>
-        )}
-        {hasAttemptedBuy && isCountInvalid && (
-          <p className="visa-field-error visa-services-form-error">{quantityError}</p>
-        )}
         <button type="button" className={`cta-button${canBuy ? '' : ' disabled'}`} aria-disabled={!canBuy} onClick={handleBuy}>
           Beli
         </button>
@@ -212,6 +209,28 @@ export function UmrahVisaServicesScreen({
           </button>
         )}
       </footer>
+
+      {buyValidationMessage && (
+        <div
+          className="visa-popup-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Validasi pembelian visa"
+          onClick={() => setBuyValidationMessage(null)}
+        >
+          <div className="visa-popup-card visa-popup-card--validation" onClick={(event) => event.stopPropagation()}>
+            <div className="visa-popup-gradient" aria-hidden />
+            <h3 className="visa-validation-title">Pembelian belum bisa dilanjutkan</h3>
+            <p className="visa-validation-message">{buyValidationMessage}</p>
+
+            <div className="visa-popup-actions">
+              <button type="button" className="visa-option primary" onClick={() => setBuyValidationMessage(null)}>
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer className="home-indicator" aria-hidden>
         <span />

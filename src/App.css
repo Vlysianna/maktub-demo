@@ -7203,6 +7203,18 @@ background: #03694b;
   animation: visa-popup-slide-up 260ms ease-out;
 }
 
+.visa-popup-card--validation {
+  padding: 22px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.visa-popup-card--validation .visa-popup-gradient {
+  height: 72px;
+  opacity: 0.95;
+}
+
 .visa-popup-gradient {
   position: absolute;
   top: 0;
@@ -7229,11 +7241,33 @@ background: #03694b;
   line-height: 1.4;
 }
 
+.visa-validation-title {
+  position: relative;
+  z-index: 1;
+  margin: 6px auto 0;
+  max-width: 256px;
+  text-align: center;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+.visa-validation-message {
+  margin: 8px auto 0;
+  max-width: 262px;
+  color: #414447;
+  text-align: center;
+  line-height: 1.45;
+}
+
 .visa-popup-actions {
   margin-top: 24px;
   display: flex;
   justify-content: center;
   gap: 24px;
+}
+
+.visa-popup-card--validation .visa-popup-actions {
+  margin-top: 18px;
 }
 
 .visa-option {

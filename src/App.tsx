@@ -215,7 +215,7 @@ function parseRupiahLabelToNumber(label: string) {
 
 function createInitialGuestBookingContact() {
   return {
-    name: 'Jamaah 1',
+    name: '',
     email: onboardingConfig.defaultContact.email,
     phone: onboardingConfig.defaultContact.phone,
   }
