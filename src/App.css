@@ -60,13 +60,68 @@
 }
 
 .splash-logo {
+  width: 127px;
+  height: 48px;
+  object-fit: contain;
+  animation: splashLogoDrop 1050ms cubic-bezier(0.2, 0.85, 0.2, 1) both;
+}
+
+.splash-brand {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 127px;
-  height: 48px;
-  object-fit: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.splash-tagline {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: splashTaglineReveal 700ms ease-out 400ms forwards;
+}
+
+@keyframes splashLogoDrop {
+  0% {
+    opacity: 0;
+    transform: translateY(-58px) scale(0.96);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(6px) scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes splashTaglineReveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-logo,
+  .splash-tagline {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .decorative-shape {

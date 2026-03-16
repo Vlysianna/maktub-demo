@@ -203,7 +203,7 @@ export function UmrahVisaServicesScreen({
         {hasAttemptedBuy && isCountInvalid && (
           <p className="visa-field-error visa-services-form-error">{quantityError}</p>
         )}
-        <button type="button" className="cta-button" disabled={!canBuy} onClick={handleBuy}>
+        <button type="button" className={`cta-button${canBuy ? '' : ' disabled'}`} aria-disabled={!canBuy} onClick={handleBuy}>
           Beli
         </button>
         {showSkipButton && onSkip && (
