@@ -1472,7 +1472,7 @@ export const loginOtpContent: LoginOtpContent = {
 }
 
 export const loginNameAssets: LoginNameAssets = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/2eec210f-aa42-47e8-9801-b9a4e11b5575',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
 }
 
 export const loginNameContent: LoginNameContent = {

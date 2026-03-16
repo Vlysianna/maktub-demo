@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import { AboutUsScreen } from './features/onboarding/onboarding/components/AboutUsScreen'
 import { HomeGuestScreen } from './features/onboarding/onboarding/components/HomeGuestScreen'
@@ -363,10 +363,88 @@ const walkthroughSlideDurationMs = 3200
 const bookingItemsStorageKey = 'maktub-booking-items'
 const bookingDetailsStorageKey = 'maktub-booking-details'
 
+const allScreens: Screen[] = [
+  'splash',
+  'walkthrough',
+  'home',
+  'about-us',
+  'home-banner-detail',
+  'my-booking',
+  'my-booking-detail',
+  'my-booking-itinerary',
+  'my-booking-itinerary-edit',
+  'umrah-question',
+  'umrah-traveler',
+  'umrah-departure',
+  'umrah-arrival-return',
+  'umrah-budget',
+  'umrah-processing',
+  'umrah-flight-search',
+  'umrah-flight',
+  'umrah-flight-detail',
+  'umrah-ticket-info',
+  'umrah-hotel-search',
+  'umrah-hotel',
+  'umrah-hotel-detail',
+  'umrah-hotel-ticket-info',
+  'umrah-payment-overview',
+  'umrah-payment-method',
+  'umrah-payment-pending',
+  'umrah-payment-success',
+  'umrah-payment-complete',
+  'umrah-visa-services',
+  'umrah-visa-form-personal',
+  'umrah-visa-form-docs',
+  'umrah-passenger-form',
+  'umrah-passenger-camera',
+  'layanan-lain',
+  'informasi',
+  'informasi-detail',
+  'arah-kiblat-jadwal',
+  'panduan-umrah',
+  'panduan-umrah-detail',
+  'doa-umrah',
+  'dzikir-harian',
+  'doa-harian',
+  'doa-harian-detail',
+  'tata-cara-sholat',
+  'dzikir-harian-detail',
+  'doa-umrah-detail',
+  'tata-cara-sholat-detail',
+  'chat-assistant',
+  'rekomendasi-paket',
+  'rekomendasi-paket-payment',
+  'rekomendasi-paket-payment-pending',
+  'rekomendasi-paket-payment-complete',
+  'notifikasi',
+  'login-guest',
+  'login-otp',
+  'login-name',
+  'profile',
+  'profile-settings',
+]
+
+const screenNameSet = new Set(allScreens)
+
+function isScreenName(value: unknown): value is Screen {
+  return typeof value === 'string' && screenNameSet.has(value as Screen)
+}
+
+function getInitialScreenFromHash(): Screen {
+  if (typeof window === 'undefined') {
+    return 'splash'
+  }
+
+  const hashScreen = window.location.hash.slice(1)
+  return isScreenName(hashScreen) ? hashScreen : 'splash'
+}
+
 type FlightCabinSelection = string
 
 function App() {
-  const [screen, setScreen] = useState<Screen>('splash')
+  const [screen, setScreen] = useState<Screen>(getInitialScreenFromHash)
+  const hasInitializedHistoryRef = useRef(false)
+  const isApplyingPopStateRef = useRef(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userProfile, setUserProfile] = useState(profileData)
   const [loginGuestBackScreen, setLoginGuestBackScreen] = useState<Screen>('home')
@@ -432,6 +510,52 @@ function App() {
   const [passengerForms, setPassengerForms] = useState<PassengerFormData[]>([createInitialPassengerForm()])
   const [savedBookingItems, setSavedBookingItems] = useState<BookingItem[]>([])
   const [savedBookingDetailsById, setSavedBookingDetailsById] = useState<Record<string, BookingDetail>>({})
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      const screenFromState = (event.state as { screen?: unknown } | null)?.screen
+      const screenFromHash = window.location.hash.slice(1)
+      const nextScreen = isScreenName(screenFromState) ? screenFromState : isScreenName(screenFromHash) ? screenFromHash : null
+
+      if (!nextScreen) {
+        return
+      }
+
+      isApplyingPopStateRef.current = true
+      setScreen(nextScreen)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [])
+
+  useEffect(() => {
+    const state = { screen }
+    const targetUrl = `${window.location.pathname}${window.location.search}#${screen}`
+
+    if (!hasInitializedHistoryRef.current) {
+      window.history.replaceState(state, '', targetUrl)
+      hasInitializedHistoryRef.current = true
+      return
+    }
+
+    if (isApplyingPopStateRef.current) {
+      isApplyingPopStateRef.current = false
+      if (window.location.hash !== `#${screen}`) {
+        window.history.replaceState(state, '', targetUrl)
+      }
+      return
+    }
+
+    if (window.location.hash === `#${screen}` && isScreenName(window.history.state?.screen) && window.history.state.screen === screen) {
+      return
+    }
+
+    window.history.pushState(state, '', targetUrl)
+  }, [screen])
 
   useEffect(() => {
     try {
