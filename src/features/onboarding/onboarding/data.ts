@@ -408,18 +408,18 @@ export const articles: ArticleItem[] = [
 ]
 
 export const homeBannerDetailContent: HomeBannerDetailContent = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/8406fbab-3839-4dc1-88d9-6dcdf6c26e6b',
-  headingLogo: 'https://www.figma.com/api/mcp/asset/e742b640-6b2e-414b-a9a4-8887ac7b1558',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  headingLogo: publicAsset('assets/figma/maps.svg'),
   brand: 'Maktub.com | مكتوب',
   title: 'Tempat-tempat bersejarah yang bisa dikunjungi',
-  heroImage: 'https://www.figma.com/api/mcp/asset/0247c8c8-5bdd-498a-850b-8e6b54c99209',
+  heroImage: publicAsset('assets/figma/home1.jpg'),
   heroImageAlt: 'Tempat-tempat bersejarah yang bisa dikunjungi',
   description:
     'Saat ibadah umrah di Mekkah dan Madinah, ada banyak tempat bersejarah yang sangat dianjurkan untuk dikunjungi karena memiliki nilai penting dalam sejarah Islam dan kehidupan Nabi Muhammad.',
   sectionTitle: 'Tempat Bersejarah di Mekkah',
-  galleryMainImage: 'https://www.figma.com/api/mcp/asset/f6962765-f6fc-4304-b312-3647a8c64e6b',
-  galleryTopImage: 'https://www.figma.com/api/mcp/asset/4f80c547-0f94-4960-852a-e91df7dff432',
-  galleryBottomImage: 'https://www.figma.com/api/mcp/asset/e59b319c-3712-4be0-87e8-b1d2d5fc2165',
+  galleryMainImage: publicAsset('assets/figma/gallery-main.png'),
+  galleryTopImage: publicAsset('assets/figma/gallery-top.png'),
+  galleryBottomImage: publicAsset('assets/figma/gallery-bottom.png'),
   places: [
     {
       id: 'masjidil-haram',
