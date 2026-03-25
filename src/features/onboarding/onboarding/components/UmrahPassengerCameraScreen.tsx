@@ -16,6 +16,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
   const [cameraReady, setCameraReady] = useState(false)
   const [cameraUnavailable, setCameraUnavailable] = useState(false)
   const [isStartingCamera, setIsStartingCamera] = useState(true)
+  const [cameraMessage, setCameraMessage] = useState('Menyalakan kamera...')
 
   const stopCamera = () => {
     streamRef.current?.getTracks().forEach((track) => track.stop())
@@ -29,11 +30,22 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     setIsStartingCamera(true)
     setCameraUnavailable(false)
     setCameraReady(false)
+    setCameraMessage('Menyalakan kamera...')
 
     stopCamera()
 
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+
+    if (!window.isSecureContext && !isLocalhost) {
+      setCameraUnavailable(true)
+      setCameraMessage('Kamera membutuhkan koneksi HTTPS.')
+      setIsStartingCamera(false)
+      return
+    }
+
     if (!navigator.mediaDevices?.getUserMedia) {
       setCameraUnavailable(true)
+      setCameraMessage('Perangkat tidak mendukung akses kamera.')
       setIsStartingCamera(false)
       return
     }
@@ -48,13 +60,30 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
 
       streamRef.current = stream
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream
-        await videoRef.current.play()
-        setCameraReady(true)
+      const videoElement = videoRef.current
+
+      if (!videoElement) {
+        setCameraUnavailable(true)
+        setCameraMessage('Pratinjau kamera belum siap. Coba lagi.')
+        return
       }
-    } catch {
+
+      videoElement.srcObject = stream
+      await videoElement.play()
+      setCameraReady(true)
+    } catch (error) {
+      const mediaError = error as DOMException
       setCameraUnavailable(true)
+
+      if (mediaError.name === 'NotAllowedError') {
+        setCameraMessage('Akses kamera ditolak. Izinkan kamera di browser lalu coba lagi.')
+      } else if (mediaError.name === 'NotFoundError') {
+        setCameraMessage('Kamera tidak ditemukan di perangkat ini.')
+      } else if (mediaError.name === 'NotReadableError') {
+        setCameraMessage('Kamera sedang dipakai aplikasi lain. Tutup aplikasi lain lalu coba lagi.')
+      } else {
+        setCameraMessage('Kamera tidak tersedia. Izinkan akses kamera lalu coba lagi.')
+      }
     } finally {
       setIsStartingCamera(false)
     }
@@ -90,6 +119,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
 
       context.drawImage(video, 0, 0, width, height)
       const captured = canvas.toDataURL('image/jpeg', 0.92)
+      stopCamera()
       onCapture(captured)
     }
   }
@@ -120,11 +150,8 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       </header>
 
       <div className="umrah-camera-preview-wrap">
-        {cameraReady ? (
-          <video ref={videoRef} className="umrah-camera-preview" autoPlay playsInline muted />
-        ) : (
-          <div className="umrah-camera-empty">{isStartingCamera ? 'Menyalakan kamera...' : 'Arahkan kamera ke paspor'}</div>
-        )}
+        <video ref={videoRef} className="umrah-camera-preview" autoPlay playsInline muted />
+        {!cameraReady && <div className="umrah-camera-empty">{isStartingCamera ? 'Menyalakan kamera...' : cameraMessage}</div>}
       </div>
 
       <div className="umrah-camera-guide" aria-hidden />
@@ -148,7 +175,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
 
       {cameraUnavailable && (
         <div className="umrah-camera-warning-wrap">
-          <p className="umrah-camera-warning">Kamera tidak tersedia. Izinkan akses kamera lalu coba lagi.</p>
+          <p className="umrah-camera-warning">{cameraMessage}</p>
           <div className="umrah-camera-warning-actions">
             <button type="button" className="umrah-camera-retry-btn" onClick={() => void startCamera()}>
               <HiOutlineArrowPath aria-hidden />
