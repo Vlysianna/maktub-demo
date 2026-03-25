@@ -13,14 +13,33 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
+  const previewReadyTimeoutRef = useRef<number | null>(null)
   const [cameraReady, setCameraReady] = useState(false)
   const [cameraUnavailable, setCameraUnavailable] = useState(false)
   const [isStartingCamera, setIsStartingCamera] = useState(true)
   const [cameraMessage, setCameraMessage] = useState('Menyalakan kamera...')
+  const [hasCameraStream, setHasCameraStream] = useState(false)
+
+  const clearPreviewReadyTimeout = () => {
+    if (previewReadyTimeoutRef.current !== null) {
+      window.clearTimeout(previewReadyTimeoutRef.current)
+      previewReadyTimeoutRef.current = null
+    }
+  }
+
+  const markCameraReady = () => {
+    setCameraReady(true)
+    setCameraUnavailable(false)
+    setCameraMessage('Arahkan kamera ke paspor')
+    setIsStartingCamera(false)
+    clearPreviewReadyTimeout()
+  }
 
   const stopCamera = () => {
+    clearPreviewReadyTimeout()
     streamRef.current?.getTracks().forEach((track) => track.stop())
     streamRef.current = null
+    setHasCameraStream(false)
     if (videoRef.current) {
       videoRef.current.srcObject = null
     }
@@ -30,6 +49,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     setIsStartingCamera(true)
     setCameraUnavailable(false)
     setCameraReady(false)
+    setHasCameraStream(false)
     setCameraMessage('Menyalakan kamera...')
 
     stopCamera()
@@ -59,6 +79,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       })
 
       streamRef.current = stream
+      setHasCameraStream(true)
 
       const videoElement = videoRef.current
 
@@ -69,15 +90,24 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       }
 
       videoElement.srcObject = stream
+      setCameraMessage('Menghubungkan pratinjau kamera...')
       const playPromise = videoElement.play()
       if (playPromise) {
         void playPromise.catch(() => {
           // Keep waiting for user interaction or metadata events on restrictive browsers.
         })
       }
+
+      // Some mobile browsers miss media events even when stream is active.
+      previewReadyTimeoutRef.current = window.setTimeout(() => {
+        if (streamRef.current === stream) {
+          markCameraReady()
+        }
+      }, 1000)
     } catch (error) {
       const mediaError = error as DOMException
       setCameraUnavailable(true)
+      setHasCameraStream(false)
 
       if (mediaError.name === 'NotAllowedError') {
         setCameraMessage('Akses kamera ditolak. Izinkan kamera di browser lalu coba lagi.')
@@ -102,7 +132,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
   }, [])
 
   const handleShutter = () => {
-    if (cameraReady && videoRef.current && canvasRef.current) {
+    if (hasCameraStream && videoRef.current && canvasRef.current) {
       const video = videoRef.current
       const canvas = canvasRef.current
 
@@ -110,6 +140,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       const height = video.videoHeight
 
       if (!width || !height) {
+        setCameraMessage('Pratinjau belum siap. Coba lagi dalam 1-2 detik.')
         return
       }
 
@@ -130,15 +161,14 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
 
   const handleVideoReady = () => {
     if (!cameraReady) {
-      setCameraReady(true)
-      setCameraUnavailable(false)
-      setCameraMessage('Arahkan kamera ke paspor')
-      setIsStartingCamera(false)
+      markCameraReady()
     }
   }
 
   const handleVideoError = () => {
+    clearPreviewReadyTimeout()
     setCameraReady(false)
+    setHasCameraStream(false)
     setCameraUnavailable(true)
     setIsStartingCamera(false)
     setCameraMessage('Pratinjau kamera gagal dimuat. Coba Lagi.')
@@ -195,7 +225,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
         className="umrah-camera-shutter"
         aria-label="Ambil foto paspor"
         onClick={handleShutter}
-        disabled={!cameraReady}
+        disabled={!hasCameraStream}
       >
         <span className="outer" aria-hidden />
         <span className="inner" aria-hidden>
