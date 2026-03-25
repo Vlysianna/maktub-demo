@@ -7044,6 +7044,24 @@ background: #03694b;
   background: rgba(0, 0, 0, 0.14);
 }
 
+.umrah-camera-activate-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  height: 36px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(12, 14, 16, 0.78);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  z-index: 3;
+  cursor: pointer;
+}
+
 .umrah-camera-guide {
   position: absolute;
   left: 50%;

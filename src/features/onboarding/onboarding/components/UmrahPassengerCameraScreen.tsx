@@ -20,6 +20,23 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
   const [isStartingCamera, setIsStartingCamera] = useState(true)
   const [cameraMessage, setCameraMessage] = useState('Menyalakan kamera...')
   const [hasCameraStream, setHasCameraStream] = useState(false)
+  const [requiresTapToStart, setRequiresTapToStart] = useState(false)
+
+  const attemptVideoPlayback = (videoElement: HTMLVideoElement) => {
+    const playPromise = videoElement.play()
+
+    if (!playPromise) {
+      return
+    }
+
+    void playPromise
+      .then(() => {
+        setRequiresTapToStart(false)
+      })
+      .catch(() => {
+        setRequiresTapToStart(true)
+      })
+  }
 
   const clearPreviewReadyTimeout = () => {
     if (previewReadyTimeoutRef.current !== null) {
@@ -61,6 +78,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     setCameraUnavailable(false)
     setCameraReady(false)
     setHasCameraStream(false)
+    setRequiresTapToStart(false)
     setCameraMessage('Menyalakan kamera...')
 
     stopCamera()
@@ -100,16 +118,26 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       }
 
       videoElement.srcObject = stream
+      videoElement.setAttribute('autoplay', 'true')
+      videoElement.setAttribute('playsinline', 'true')
+      videoElement.setAttribute('webkit-playsinline', 'true')
       videoElement.muted = true
       videoElement.playsInline = true
       setCameraMessage('Menghubungkan pratinjau kamera...')
       setHasCameraStream(true)
-      const playPromise = videoElement.play()
-      if (playPromise) {
-        void playPromise.catch(() => {
-          // Keep waiting for user interaction or metadata events on restrictive browsers.
-        })
+
+      const activeTrack = stream.getVideoTracks()[0]
+      if (activeTrack) {
+        activeTrack.onunmute = () => {
+          attemptVideoPlayback(videoElement)
+        }
       }
+
+      videoElement.onloadedmetadata = () => {
+        attemptVideoPlayback(videoElement)
+      }
+
+      attemptVideoPlayback(videoElement)
 
       // Some mobile browsers miss media events even when stream is active.
       const startedAt = Date.now()
@@ -119,14 +147,16 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
           return
         }
 
-        const previewHasFrame = videoElement.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && videoElement.videoWidth > 0
+        const previewHasFrame =
+          (videoElement.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && videoElement.videoWidth > 0) ||
+          videoElement.currentTime > 0
 
         if (previewHasFrame) {
           markCameraReady()
           return
         }
 
-        if (Date.now() - startedAt > 4500) {
+        if (Date.now() - startedAt > 8000) {
           clearPreviewReadyTimeout()
           setCameraUnavailable(true)
           setHasCameraStream(false)
@@ -212,6 +242,26 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     setCameraMessage('Pratinjau kamera gagal dimuat. Coba Lagi.')
   }
 
+  const handleManualPreviewStart = () => {
+    const videoElement = videoRef.current
+
+    if (!videoElement || !streamRef.current) {
+      void startCamera()
+      return
+    }
+
+    setCameraMessage('Mengaktifkan kamera...')
+    setIsStartingCamera(true)
+    attemptVideoPlayback(videoElement)
+
+    window.setTimeout(() => {
+      if (!cameraReady && streamRef.current) {
+        setIsStartingCamera(false)
+        setCameraMessage('Ketuk lagi jika pratinjau belum tampil.')
+      }
+    }, 900)
+  }
+
   const handleFileCapture = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
 
@@ -253,6 +303,12 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
           <div className={`umrah-camera-empty${hasCameraStream ? ' is-streaming' : ''}`}>
             {isStartingCamera ? 'Menyalakan kamera...' : cameraMessage}
           </div>
+        )}
+
+        {requiresTapToStart && !cameraReady && !cameraUnavailable && (
+          <button type="button" className="umrah-camera-activate-btn" onClick={handleManualPreviewStart}>
+            Aktifkan kamera
+          </button>
         )}
       </div>
 
