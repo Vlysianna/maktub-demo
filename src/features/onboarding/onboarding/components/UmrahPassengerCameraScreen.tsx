@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
-import { HiOutlineArrowPath, HiOutlineBolt, HiOutlineCamera } from 'react-icons/hi2'
+import { HiOutlineArrowPath, HiOutlineCamera } from 'react-icons/hi2'
 import type { UmrahTicketAssets } from '../types'
 
 type UmrahPassengerCameraScreenProps = {
@@ -7,6 +7,8 @@ type UmrahPassengerCameraScreenProps = {
   onBack: () => void
   onCapture: (photoDataUrl: string) => void
 }
+
+type CameraFacing = 'environment' | 'user'
 
 export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahPassengerCameraScreenProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -23,6 +25,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
   const [cameraMessage, setCameraMessage] = useState('Menyalakan kamera...')
   const [hasCameraStream, setHasCameraStream] = useState(false)
   const [requiresTapToStart, setRequiresTapToStart] = useState(false)
+  const [activeFacing, setActiveFacing] = useState<CameraFacing>('environment')
 
   useEffect(() => {
     cameraReadyRef.current = cameraReady
@@ -77,15 +80,32 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     }
   }
 
-  const getCameraStream = async (preferredFacing: 'environment' | 'user') => {
-    const oppositeFacing: 'environment' | 'user' = preferredFacing === 'environment' ? 'user' : 'environment'
+  const getVideoDeviceCandidates = async (preferredFacing: CameraFacing) => {
+    const devices = await navigator.mediaDevices.enumerateDevices()
+    const videoDevices = devices.filter((device) => device.kind === 'videoinput')
+    const frontKeywords = ['front', 'user', 'selfie']
+    const backKeywords = ['back', 'rear', 'environment']
+    const preferredKeywords = preferredFacing === 'environment' ? backKeywords : frontKeywords
+
+    const scored = videoDevices
+      .map((device) => {
+        const label = device.label.toLowerCase()
+        const score = preferredKeywords.some((keyword) => label.includes(keyword)) ? 1 : 0
+        return { device, score }
+      })
+      .sort((a, b) => b.score - a.score)
+
+    return scored.map((item) => item.device.deviceId).filter(Boolean)
+  }
+
+  const getCameraStream = async (preferredFacing: CameraFacing) => {
+    const oppositeFacing: CameraFacing = preferredFacing === 'environment' ? 'user' : 'environment'
+    const candidateDeviceIds = await getVideoDeviceCandidates(preferredFacing)
 
     const attempts: MediaStreamConstraints[] = [
       {
         video: {
           facingMode: { ideal: preferredFacing },
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
         },
         audio: false,
       },
@@ -100,6 +120,15 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
         audio: false,
       },
     ]
+
+    for (const deviceId of candidateDeviceIds) {
+      attempts.splice(2, 0, {
+        video: {
+          deviceId: { exact: deviceId },
+        },
+        audio: false,
+      })
+    }
 
     let lastError: unknown = null
 
@@ -137,8 +166,9 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     }
   }
 
-  const startCamera = async (preferredFacing: 'environment' | 'user' = 'environment') => {
+  const startCamera = async (preferredFacing: CameraFacing = activeFacing) => {
     let hasScheduledFallbackRetry = false
+    setActiveFacing(preferredFacing)
     setIsStartingCamera(true)
     setCameraUnavailable(false)
     setCameraReady(false)
@@ -342,6 +372,14 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     }, 900)
   }
 
+  const handleSwitchCamera = () => {
+    const nextFacing: CameraFacing = activeFacing === 'environment' ? 'user' : 'environment'
+
+    fallbackToUserTriedRef.current = nextFacing === 'environment' ? false : fallbackToUserTriedRef.current
+    setCameraMessage('Mengganti kamera...')
+    void startCamera(nextFacing)
+  }
+
   const handleFileCapture = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
 
@@ -383,7 +421,11 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
         />
         {!cameraReady && (
           <div className={`umrah-camera-empty${hasCameraStream ? ' is-streaming' : ''}`}>
-            {isStartingCamera ? 'Menyalakan kamera...' : cameraMessage}
+            {hasCameraStream ? (
+              <span className="umrah-camera-empty-label">{isStartingCamera ? 'Menyalakan kamera...' : cameraMessage}</span>
+            ) : (
+              isStartingCamera ? 'Menyalakan kamera...' : cameraMessage
+            )}
           </div>
         )}
 
@@ -396,8 +438,8 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
 
       <div className="umrah-camera-guide" aria-hidden />
 
-      <button type="button" className="umrah-camera-flash" aria-label="Flashlight">
-        <HiOutlineBolt aria-hidden />
+      <button type="button" className="umrah-camera-flash" aria-label="Ganti kamera" onClick={handleSwitchCamera}>
+        <HiOutlineArrowPath aria-hidden />
       </button>
 
       <button
