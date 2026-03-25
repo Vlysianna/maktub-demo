@@ -28,7 +28,12 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
   }
 
   const markCameraReady = () => {
+    if (!streamRef.current) {
+      return
+    }
+
     setCameraReady(true)
+    setHasCameraStream(true)
     setCameraUnavailable(false)
     setCameraMessage('Arahkan kamera ke paspor')
     setIsStartingCamera(false)
@@ -79,7 +84,6 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       })
 
       streamRef.current = stream
-      setHasCameraStream(true)
 
       const videoElement = videoRef.current
 
@@ -100,10 +104,18 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
 
       // Some mobile browsers miss media events even when stream is active.
       previewReadyTimeoutRef.current = window.setTimeout(() => {
-        if (streamRef.current === stream) {
+        if (streamRef.current === stream && videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
           markCameraReady()
+          return
         }
-      }, 1000)
+
+        if (streamRef.current === stream) {
+          setCameraUnavailable(true)
+          setHasCameraStream(false)
+          setIsStartingCamera(false)
+          setCameraMessage('Pratinjau belum muncul. Ketuk Coba Lagi atau pilih Ambil dari Galeri.')
+        }
+      }, 1800)
     } catch (error) {
       const mediaError = error as DOMException
       setCameraUnavailable(true)
@@ -135,9 +147,11 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     if (hasCameraStream && videoRef.current && canvasRef.current) {
       const video = videoRef.current
       const canvas = canvasRef.current
+      const activeTrack = streamRef.current?.getVideoTracks()[0] ?? null
+      const settings = activeTrack?.getSettings()
 
-      const width = video.videoWidth
-      const height = video.videoHeight
+      const width = video.videoWidth || settings?.width || 1280
+      const height = video.videoHeight || settings?.height || 720
 
       if (!width || !height) {
         setCameraMessage('Pratinjau belum siap. Coba lagi dalam 1-2 detik.')
@@ -225,7 +239,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
         className="umrah-camera-shutter"
         aria-label="Ambil foto paspor"
         onClick={handleShutter}
-        disabled={!hasCameraStream}
+        disabled={!cameraReady || !hasCameraStream || cameraUnavailable}
       >
         <span className="outer" aria-hidden />
         <span className="inner" aria-hidden>
