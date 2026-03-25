@@ -7012,16 +7012,19 @@ background: #03694b;
   height: min(464px, 57vh);
   overflow: hidden;
   z-index: 1;
+  border-radius: 14px;
+  background: #101010;
 }
 
 .umrah-camera-preview {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: rotate(90deg) scale(1.82);
 }
 
 .umrah-camera-empty {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -7033,6 +7036,8 @@ background: #03694b;
   letter-spacing: 0.2px;
   text-align: center;
   padding: 24px;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 2;
 }
 
 .umrah-camera-guide {
@@ -7046,6 +7051,7 @@ background: #03694b;
   border: 2px solid rgba(255, 255, 255, 0.92);
   border-radius: 22px;
   box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.58);
+  pointer-events: none;
 }
 
 .umrah-camera-flash {

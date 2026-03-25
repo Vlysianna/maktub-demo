@@ -69,8 +69,12 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       }
 
       videoElement.srcObject = stream
-      await videoElement.play()
-      setCameraReady(true)
+      const playPromise = videoElement.play()
+      if (playPromise) {
+        void playPromise.catch(() => {
+          // Keep waiting for user interaction or metadata events on restrictive browsers.
+        })
+      }
     } catch (error) {
       const mediaError = error as DOMException
       setCameraUnavailable(true)
@@ -124,6 +128,22 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     }
   }
 
+  const handleVideoReady = () => {
+    if (!cameraReady) {
+      setCameraReady(true)
+      setCameraUnavailable(false)
+      setCameraMessage('Arahkan kamera ke paspor')
+      setIsStartingCamera(false)
+    }
+  }
+
+  const handleVideoError = () => {
+    setCameraReady(false)
+    setCameraUnavailable(true)
+    setIsStartingCamera(false)
+    setCameraMessage('Pratinjau kamera gagal dimuat. Coba Lagi.')
+  }
+
   const handleFileCapture = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
 
@@ -150,7 +170,17 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       </header>
 
       <div className="umrah-camera-preview-wrap">
-        <video ref={videoRef} className="umrah-camera-preview" autoPlay playsInline muted />
+        <video
+          ref={videoRef}
+          className="umrah-camera-preview"
+          autoPlay
+          playsInline
+          muted
+          onLoadedData={handleVideoReady}
+          onCanPlay={handleVideoReady}
+          onPlaying={handleVideoReady}
+          onError={handleVideoError}
+        />
         {!cameraReady && <div className="umrah-camera-empty">{isStartingCamera ? 'Menyalakan kamera...' : cameraMessage}</div>}
       </div>
 
