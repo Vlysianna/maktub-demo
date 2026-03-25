@@ -15,12 +15,18 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
   const streamRef = useRef<MediaStream | null>(null)
   const previewReadyTimeoutRef = useRef<number | null>(null)
   const previewReadyIntervalRef = useRef<number | null>(null)
+  const cameraReadyRef = useRef(false)
+  const fallbackToUserTriedRef = useRef(false)
   const [cameraReady, setCameraReady] = useState(false)
   const [cameraUnavailable, setCameraUnavailable] = useState(false)
   const [isStartingCamera, setIsStartingCamera] = useState(true)
   const [cameraMessage, setCameraMessage] = useState('Menyalakan kamera...')
   const [hasCameraStream, setHasCameraStream] = useState(false)
   const [requiresTapToStart, setRequiresTapToStart] = useState(false)
+
+  useEffect(() => {
+    cameraReadyRef.current = cameraReady
+  }, [cameraReady])
 
   const attemptVideoPlayback = (videoElement: HTMLVideoElement) => {
     const playPromise = videoElement.play()
@@ -52,6 +58,62 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     }
   }
 
+  const getUserMediaWithTimeout = async (constraints: MediaStreamConstraints, timeoutMs = 7000) => {
+    let timeoutId: number | null = null
+
+    try {
+      return await Promise.race([
+        navigator.mediaDevices.getUserMedia(constraints),
+        new Promise<never>((_, reject) => {
+          timeoutId = window.setTimeout(() => {
+            reject(new DOMException('Permintaan kamera melebihi batas waktu.', 'AbortError'))
+          }, timeoutMs)
+        }),
+      ])
+    } finally {
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId)
+      }
+    }
+  }
+
+  const getCameraStream = async (preferredFacing: 'environment' | 'user') => {
+    const oppositeFacing: 'environment' | 'user' = preferredFacing === 'environment' ? 'user' : 'environment'
+
+    const attempts: MediaStreamConstraints[] = [
+      {
+        video: {
+          facingMode: { ideal: preferredFacing },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+        },
+        audio: false,
+      },
+      {
+        video: {
+          facingMode: { ideal: oppositeFacing },
+        },
+        audio: false,
+      },
+      {
+        video: true,
+        audio: false,
+      },
+    ]
+
+    let lastError: unknown = null
+
+    for (const constraints of attempts) {
+      try {
+        return await getUserMediaWithTimeout(constraints)
+      } catch (error) {
+        lastError = error
+      }
+    }
+
+    throw lastError
+  }
+
   const markCameraReady = () => {
     if (!streamRef.current) {
       return
@@ -75,7 +137,8 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     }
   }
 
-  const startCamera = async () => {
+  const startCamera = async (preferredFacing: 'environment' | 'user' = 'environment') => {
+    let hasScheduledFallbackRetry = false
     setIsStartingCamera(true)
     setCameraUnavailable(false)
     setCameraReady(false)
@@ -102,12 +165,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     }
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: { ideal: 'environment' },
-        },
-        audio: false,
-      })
+      const stream = await getCameraStream(preferredFacing)
 
       streamRef.current = stream
 
@@ -156,6 +214,20 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
         }
 
         if (Date.now() - startedAt > 8000) {
+          if (preferredFacing === 'environment' && !fallbackToUserTriedRef.current) {
+            fallbackToUserTriedRef.current = true
+            hasScheduledFallbackRetry = true
+            clearPreviewReadyTimeout()
+            stream.getTracks().forEach((track) => track.stop())
+            if (streamRef.current === stream) {
+              streamRef.current = null
+            }
+            setHasCameraStream(false)
+            setCameraMessage('Kamera belakang belum merespons. Mencoba kamera depan...')
+            void startCamera('user')
+            return
+          }
+
           clearPreviewReadyTimeout()
           setCameraUnavailable(true)
           setHasCameraStream(false)
@@ -165,7 +237,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       }, 160)
 
       previewReadyTimeoutRef.current = window.setTimeout(() => {
-        if (!cameraReady && streamRef.current === stream) {
+        if (!cameraReadyRef.current && streamRef.current === stream) {
           setIsStartingCamera(false)
         }
       }, 1200)
@@ -184,11 +256,14 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
         setCameraMessage('Kamera tidak tersedia. Izinkan akses kamera lalu coba lagi.')
       }
     } finally {
-      setIsStartingCamera(false)
+      if (!hasScheduledFallbackRetry) {
+        setIsStartingCamera(false)
+      }
     }
   }
 
   useEffect(() => {
+    fallbackToUserTriedRef.current = false
     if (videoRef.current) {
       videoRef.current.setAttribute('webkit-playsinline', 'true')
     }

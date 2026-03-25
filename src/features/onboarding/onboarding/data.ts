@@ -1194,9 +1194,9 @@ export const umrahVisaFormAssets: UmrahVisaFormAssets = {
 
 export const chatAssistantAssets: ChatAssistantAssets = {
   backIcon: publicAsset('assets/figma/arrow-right.svg'),
-  botIcon: 'https://www.figma.com/api/mcp/asset/87ad1f5b-8f4e-4eb2-a839-09da5fa6d24a',
-  sendIcon: 'https://www.figma.com/api/mcp/asset/4311bb95-c7b2-4381-903e-05033d3bd5b4',
-  micIcon: 'https://www.figma.com/api/mcp/asset/f03ddf33-6368-4097-88cd-88433003dba9',
+  botIcon: publicAsset('assets/figma/chat-bot-bulk-rounded2.svg'),
+  sendIcon: publicAsset('assets/figma/sent-solid-sharp.svg'),
+  micIcon: publicAsset('assets/figma/mic-02-solid-rounded.svg'),
 }
 
 export const umrahCompletionAssets: UmrahCompletionAssets = {
