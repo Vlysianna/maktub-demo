@@ -656,6 +656,19 @@ export type NotificationItem = {
   icon: string
 }
 
+export type NotificationPreferenceItem = {
+  id: string
+  label: string
+  enabled: boolean
+}
+
+export type NotificationPreferenceSection = {
+  id: string
+  title: string
+  description: string
+  items: NotificationPreferenceItem[]
+}
+
 export type NotifikasiAssets = {
   backIcon: string
   infoIcon: string

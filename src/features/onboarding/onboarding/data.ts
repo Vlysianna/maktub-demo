@@ -24,6 +24,7 @@ import type {
   LoginOtpContent,
   ChatAssistantAssets,
   NotificationItem,
+  NotificationPreferenceSection,
   NotifikasiAssets,
   UmrahCompletionAssets,
   UmrahPaymentAssets,
@@ -1366,9 +1367,9 @@ export const onboardingConfig: OnboardingConfig = {
 }
 
 export const notifikasiAssets: NotifikasiAssets = {
-  backIcon: 'https://www.figma.com/api/mcp/asset/239daa61-a580-4383-8bcb-13c877547e56',
-  infoIcon: 'https://www.figma.com/api/mcp/asset/faa1ac38-3ac9-4a6a-ba91-25d3e208b3c7',
-  unreadDot: 'https://www.figma.com/api/mcp/asset/938d293c-9ea8-4b8a-93ae-4522796ba6a6',
+  backIcon: publicAsset('assets/figma/arrow-right.svg'),
+  infoIcon: publicAsset('assets/figma/Info.svg'),
+  unreadDot: publicAsset('assets/figma/unread.svg'),
 }
 
 export const notificationItems: NotificationItem[] = [
@@ -1438,6 +1439,36 @@ export const notificationItems: NotificationItem[] = [
   },
 ]
 
+export const notificationPreferenceSections: NotificationPreferenceSection[] = [
+  {
+    id: 'aktivitas-akun',
+    title: 'Aktivitas Akun',
+    description: 'Pantau aktivitas login dan OTP untuk memastikan akunmu aman',
+    items: [
+      { id: 'email', label: 'Email', enabled: true },
+      { id: 'push-notifikasi', label: 'Push Notifikasi', enabled: true },
+    ],
+  },
+  {
+    id: 'info-ekslusif',
+    title: 'Info Ekslusif',
+    description: 'Dapatkan informasi terkait promo dan penawaran terbaik',
+    items: [
+      { id: 'email', label: 'Email', enabled: true },
+      { id: 'push-notifikasi', label: 'Push Notifikasi', enabled: false },
+    ],
+  },
+  {
+    id: 'waktu-sholat',
+    title: 'Waktu Sholat',
+    description: 'Dapatkan informasi terkait pengingat waktu sholat',
+    items: [
+      { id: 'adzan', label: 'Adzan', enabled: true },
+      { id: 'push-notifikasi', label: 'Push Notifikasi', enabled: true },
+    ],
+  },
+]
+
 export const loginGuestAssets: LoginGuestAssets = {
   closeIcon: publicAsset('assets/figma/arrow-left.svg'),
   googleIcon: publicAsset('assets/figma/google.svg'),
@@ -1482,7 +1513,7 @@ export const loginNameContent: LoginNameContent = {
 }
 
 export const profileData: ProfileData = {
-  avatar: 'https://www.figma.com/api/mcp/asset/5791793b-087a-46e8-be34-37715e874d94',
+  avatar: publicAsset('assets/figma/avatar.png'),
   name: 'Nama Anda',
   email: '',
   phone: '',
@@ -1505,27 +1536,27 @@ export const profileData: ProfileData = {
     {
       id: 'itinerary',
       label: 'Itinerary Saya',
-      icon: 'https://www.figma.com/api/mcp/asset/592fb706-834f-4846-92f1-69c3c394b78d',
+      icon: publicAsset('assets/figma/left-to-right-list-number.svg'),
     },
     {
       id: 'notifikasi',
       label: 'Notifikasi',
-      icon: 'https://www.figma.com/api/mcp/asset/4a52f52e-feb2-40df-9fa3-10900f6d714f',
+      icon: publicAsset('assets/figma/bell.svg'),
     },
     {
       id: 'kebijakan-privasi',
       label: 'Kebijakan Privasi',
-      icon: 'https://www.figma.com/api/mcp/asset/a670f205-7d05-4cc3-9890-f9524360b8ea',
+      icon: publicAsset('assets/figma/privacy-policy.svg'),
     },
     {
       id: 'syarat-ketentuan',
       label: 'Syarat dan Ketentuan',
-      icon: 'https://www.figma.com/api/mcp/asset/46f7b171-315c-438a-9c75-d93862da9c6b',
+      icon: publicAsset('assets/figma/terms-and-conditions.svg'),
     },
     {
       id: 'pusat-bantuan',
       label: 'Pusat Bantuan',
-      icon: 'https://www.figma.com/api/mcp/asset/c831b8b9-ffd8-46be-b88e-91c45cdf0a80',
+      icon: publicAsset('assets/figma/customer-support.svg'),
     },
   ],
   logoutLabel: 'Keluar',

@@ -109,6 +109,7 @@ import {
   loginNameContent,
   notifikasiAssets,
   notificationItems,
+  notificationPreferenceSections,
   profileData,
 } from './features/onboarding/onboarding/data'
 import type {
@@ -2745,7 +2746,9 @@ function App() {
       {screen === 'notifikasi' && (
         <NotifikasiScreen
           assets={notifikasiAssets}
+          mode={notifikasiBackScreen === 'profile' ? 'settings' : 'feed'}
           notifications={notificationItems}
+          sections={notificationPreferenceSections}
           onBack={() => setScreen(notifikasiBackScreen)}
         />
       )}
