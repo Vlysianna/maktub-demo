@@ -35,6 +35,8 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       })
       .catch(() => {
         setRequiresTapToStart(true)
+        setIsStartingCamera(false)
+        setCameraMessage('Ketuk tombol di bawah untuk mengaktifkan pratinjau kamera.')
       })
   }
 
@@ -118,9 +120,6 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       }
 
       videoElement.srcObject = stream
-      videoElement.setAttribute('autoplay', 'true')
-      videoElement.setAttribute('playsinline', 'true')
-      videoElement.setAttribute('webkit-playsinline', 'true')
       videoElement.muted = true
       videoElement.playsInline = true
       setCameraMessage('Menghubungkan pratinjau kamera...')
@@ -188,6 +187,12 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       setIsStartingCamera(false)
     }
   }
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.setAttribute('webkit-playsinline', 'true')
+    }
+  }, [])
 
   useEffect(() => {
     void startCamera()
@@ -294,6 +299,8 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
           autoPlay
           playsInline
           muted
+          controls={false}
+          disablePictureInPicture
           onLoadedData={handleVideoReady}
           onCanPlay={handleVideoReady}
           onPlaying={handleVideoReady}
@@ -305,9 +312,9 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
           </div>
         )}
 
-        {requiresTapToStart && !cameraReady && !cameraUnavailable && (
+        {requiresTapToStart && !cameraReady && (
           <button type="button" className="umrah-camera-activate-btn" onClick={handleManualPreviewStart}>
-            Aktifkan kamera
+            Ketuk untuk aktifkan kamera
           </button>
         )}
       </div>
