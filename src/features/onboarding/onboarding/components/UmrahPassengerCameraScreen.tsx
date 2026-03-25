@@ -14,6 +14,7 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const previewReadyTimeoutRef = useRef<number | null>(null)
+  const previewReadyIntervalRef = useRef<number | null>(null)
   const [cameraReady, setCameraReady] = useState(false)
   const [cameraUnavailable, setCameraUnavailable] = useState(false)
   const [isStartingCamera, setIsStartingCamera] = useState(true)
@@ -24,6 +25,11 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
     if (previewReadyTimeoutRef.current !== null) {
       window.clearTimeout(previewReadyTimeoutRef.current)
       previewReadyTimeoutRef.current = null
+    }
+
+    if (previewReadyIntervalRef.current !== null) {
+      window.clearInterval(previewReadyIntervalRef.current)
+      previewReadyIntervalRef.current = null
     }
   }
 
@@ -94,7 +100,10 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       }
 
       videoElement.srcObject = stream
+      videoElement.muted = true
+      videoElement.playsInline = true
       setCameraMessage('Menghubungkan pratinjau kamera...')
+      setHasCameraStream(true)
       const playPromise = videoElement.play()
       if (playPromise) {
         void playPromise.catch(() => {
@@ -103,19 +112,34 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
       }
 
       // Some mobile browsers miss media events even when stream is active.
-      previewReadyTimeoutRef.current = window.setTimeout(() => {
-        if (streamRef.current === stream && videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+      const startedAt = Date.now()
+      previewReadyIntervalRef.current = window.setInterval(() => {
+        if (streamRef.current !== stream) {
+          clearPreviewReadyTimeout()
+          return
+        }
+
+        const previewHasFrame = videoElement.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && videoElement.videoWidth > 0
+
+        if (previewHasFrame) {
           markCameraReady()
           return
         }
 
-        if (streamRef.current === stream) {
+        if (Date.now() - startedAt > 4500) {
+          clearPreviewReadyTimeout()
           setCameraUnavailable(true)
           setHasCameraStream(false)
           setIsStartingCamera(false)
           setCameraMessage('Pratinjau belum muncul. Ketuk Coba Lagi atau pilih Ambil dari Galeri.')
         }
-      }, 1800)
+      }, 160)
+
+      previewReadyTimeoutRef.current = window.setTimeout(() => {
+        if (!cameraReady && streamRef.current === stream) {
+          setIsStartingCamera(false)
+        }
+      }, 1200)
     } catch (error) {
       const mediaError = error as DOMException
       setCameraUnavailable(true)
@@ -225,7 +249,11 @@ export function UmrahPassengerCameraScreen({ assets, onBack, onCapture }: UmrahP
           onPlaying={handleVideoReady}
           onError={handleVideoError}
         />
-        {!cameraReady && <div className="umrah-camera-empty">{isStartingCamera ? 'Menyalakan kamera...' : cameraMessage}</div>}
+        {!cameraReady && (
+          <div className={`umrah-camera-empty${hasCameraStream ? ' is-streaming' : ''}`}>
+            {isStartingCamera ? 'Menyalakan kamera...' : cameraMessage}
+          </div>
+        )}
       </div>
 
       <div className="umrah-camera-guide" aria-hidden />

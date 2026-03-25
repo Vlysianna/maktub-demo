@@ -7040,6 +7040,10 @@ background: #03694b;
   z-index: 2;
 }
 
+.umrah-camera-empty.is-streaming {
+  background: rgba(0, 0, 0, 0.14);
+}
+
 .umrah-camera-guide {
   position: absolute;
   left: 50%;
