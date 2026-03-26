@@ -8580,18 +8580,19 @@ background: #03694b;
 }
 
 .guide-list-shell {
+  display: flex;
+  flex-direction: column;
   background: #f5f7f9;
 }
 
 .guide-list-header {
-  position: absolute;
-  top: 54px;
-  left: 16px;
-  right: 16px;
+  position: relative;
+  margin: 54px 16px 0;
   display: grid;
   grid-template-columns: 24px 1fr 24px;
   align-items: center;
-  z-index: 2;
+  flex-shrink: 0;
+  z-index: 1;
 }
 
 .guide-list-header h1 {
@@ -8619,9 +8620,10 @@ background: #03694b;
 }
 
 .guide-list-scroll {
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
-  padding: 107px 16px 32px;
+  padding: 29px 16px 32px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -8687,6 +8689,8 @@ background: #03694b;
 }
 
 .recitation-detail-shell {
+  display: flex;
+  flex-direction: column;
   background:
     radial-gradient(circle at top right, rgba(214, 237, 221, 0.9) 0, rgba(214, 237, 221, 0) 38%),
     #f5f7f9;
@@ -8694,14 +8698,13 @@ background: #03694b;
 
 .recitation-detail-header,
 .sholat-detail-header {
-  position: absolute;
-  top: 54px;
-  left: 16px;
-  right: 16px;
+  position: relative;
+  margin: 54px 16px 0;
   display: grid;
   grid-template-columns: 24px 1fr 24px;
   align-items: center;
-  z-index: 2;
+  flex-shrink: 0;
+  z-index: 1;
 }
 
 .recitation-detail-header h1,
@@ -8731,9 +8734,10 @@ background: #03694b;
 
 .recitation-detail-scroll,
 .sholat-detail-scroll {
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
-  padding: 102px 16px 36px;
+  padding: 24px 16px 36px;
 }
 
 .recitation-detail-scroll::-webkit-scrollbar,
@@ -8897,6 +8901,8 @@ background: #03694b;
 }
 
 .sholat-detail-shell {
+  display: flex;
+  flex-direction: column;
   background:
     linear-gradient(180deg, rgba(3, 105, 75, 0.08) 0%, rgba(3, 105, 75, 0) 24%),
     #f5f7f9;
