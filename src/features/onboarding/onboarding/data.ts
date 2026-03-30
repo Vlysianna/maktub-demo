@@ -49,6 +49,7 @@ import type {
   WalkthroughSlide,
   OnboardingConfig,
   ProfileData,
+  UmrahPreparationChecklistSection,
 } from './types'
 
 const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`
@@ -1561,3 +1562,75 @@ export const profileData: ProfileData = {
   ],
   logoutLabel: 'Keluar',
 }
+
+export const umrahPreparationChecklistSections: UmrahPreparationChecklistSection[] = [
+  {
+    id: 'dokumen-administrasi',
+    title: 'Dokumen & Administrasi',
+    groups: [
+      {
+        id: 'dokumen-administrasi-items',
+        title: '',
+        items: [
+          { id: 'paspor', label: 'Paspor (masa berlaku >= 6 bulan)', checked: true },
+          { id: 'visa-umrah', label: 'Visa umrah', checked: true },
+          { id: 'tiket-pesawat-pp', label: 'Tiket pesawat PP', checked: true },
+          { id: 'booking-hotel', label: 'Booking hotel (Makkah & Madinah)', checked: true },
+          { id: 'asuransi-perjalanan', label: 'Asuransi perjalanan' },
+          { id: 'fotokopi-dokumen', label: 'Fotokopi semua dokumen (disimpan terpisah)' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'perlengkapan-ibadah',
+    title: 'Perlengkapan Ibadah',
+    groups: [
+      {
+        id: 'pria',
+        title: 'Pria:',
+        items: [
+          { id: 'kain-ihram', label: '2-3 set kain ihram' },
+          { id: 'sabuk-ihram', label: 'Sabuk ihram' },
+          { id: 'sandal-nyaman', label: 'Sandal nyaman' },
+        ],
+      },
+      {
+        id: 'wanita',
+        title: 'Wanita:',
+        items: [
+          { id: 'mukena', label: 'Mukena' },
+          { id: 'gamis-longgar', label: 'Gamis / pakaian longgar' },
+          { id: 'kaos-kaki', label: 'Kaos kaki' },
+        ],
+      },
+      {
+        id: 'umum',
+        title: 'Umum:',
+        items: [
+          { id: 'tas-selempang', label: 'Tas kecil selempang untuk tawaf' },
+          { id: 'sajadah-tipis', label: 'Sajadah tipis (opsional)' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'perlengkapan-pribadi',
+    title: 'Perlengkapan Pribadi',
+    groups: [
+      {
+        id: 'perlengkapan-pribadi-items',
+        title: '',
+        items: [
+          { id: 'pakaian-secukupnya', label: 'Pakaian secukupnya' },
+          { id: 'perlengkapan-mandi', label: 'Perlengkapan mandi (travel size)' },
+          { id: 'handuk-kecil', label: 'Handuk kecil' },
+          { id: 'charger-powerbank', label: 'Charger & power bank' },
+          { id: 'adapter-internasional', label: 'Adapter colokan internasional' },
+          { id: 'kacamata-hitam', label: 'Kacamata hitam' },
+          { id: 'pelembap-lipbalm', label: 'Pelembap & lip balm' },
+        ],
+      },
+    ],
+  },
+]

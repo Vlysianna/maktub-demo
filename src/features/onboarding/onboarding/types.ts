@@ -8,6 +8,7 @@ export type Screen =
   | 'my-booking-detail'
   | 'my-booking-itinerary'
   | 'my-booking-itinerary-edit'
+  | 'profile-itinerary'
   | 'umrah-question'
   | 'umrah-traveler'
   | 'umrah-departure'
@@ -57,6 +58,10 @@ export type Screen =
   | 'login-name'
   | 'profile'
   | 'profile-settings'
+  | 'privacy-policy'
+  | 'terms-conditions'
+  | 'help-center'
+  | 'umrah-preparation-checklist'
 
 export type WalkthroughSlide = {
   image: string
@@ -724,7 +729,7 @@ export type ProfileTopAction = {
 }
 
 export type ProfileMenuItem = {
-  id: string
+  id: 'itinerary' | 'notifikasi' | 'kebijakan-privasi' | 'syarat-ketentuan' | 'pusat-bantuan'
   label: string
   icon: string
 }
@@ -751,6 +756,24 @@ export type ProfileData = {
   prepActionLabel: string
   menuItems: ProfileMenuItem[]
   logoutLabel: string
+}
+
+export type UmrahPreparationChecklistItem = {
+  id: string
+  label: string
+  checked?: boolean
+}
+
+export type UmrahPreparationChecklistGroup = {
+  id: string
+  title: string
+  items: UmrahPreparationChecklistItem[]
+}
+
+export type UmrahPreparationChecklistSection = {
+  id: string
+  title: string
+  groups: UmrahPreparationChecklistGroup[]
 }
 
 export type PaymentMethod = 'bni-va' | 'bri-va' | 'mandiri-va' | 'bca-va' | 'credit-card'

@@ -9,6 +9,11 @@ type ProfileScreenProps = {
   onOpenLayananLain: () => void
   onOpenInformasi: () => void
   onOpenNotifikasi: () => void
+  onOpenItinerary: () => void
+  onOpenPrivacyPolicy: () => void
+  onOpenTermsConditions: () => void
+  onOpenHelpCenter: () => void
+  onOpenUmrahPreparation: () => void
   onLogout: () => void
 }
 
@@ -21,6 +26,11 @@ export function ProfileScreen({
   onOpenLayananLain,
   onOpenInformasi,
   onOpenNotifikasi,
+  onOpenItinerary,
+  onOpenPrivacyPolicy,
+  onOpenTermsConditions,
+  onOpenHelpCenter,
+  onOpenUmrahPreparation,
   onLogout,
 }: ProfileScreenProps) {
   const navItems = [
@@ -66,7 +76,7 @@ export function ProfileScreen({
         <section className="profile-prep-card">
           <h2>{profile.prepTitle}</h2>
           <p>{profile.prepDescription}</p>
-          <button type="button">{profile.prepActionLabel}</button>
+          <button type="button" onClick={onOpenUmrahPreparation}>{profile.prepActionLabel}</button>
         </section>
 
         <div className="profile-menu-list">
@@ -75,7 +85,19 @@ export function ProfileScreen({
               key={item.id}
               type="button"
               className="profile-menu-item"
-              onClick={item.id === 'notifikasi' ? onOpenNotifikasi : undefined}
+              onClick={
+                item.id === 'itinerary'
+                  ? onOpenItinerary
+                  : item.id === 'notifikasi'
+                  ? onOpenNotifikasi
+                  : item.id === 'kebijakan-privasi'
+                    ? onOpenPrivacyPolicy
+                    : item.id === 'syarat-ketentuan'
+                      ? onOpenTermsConditions
+                      : item.id === 'pusat-bantuan'
+                        ? onOpenHelpCenter
+                    : undefined
+              }
             >
               <img src={item.icon} alt="" aria-hidden />
               <span>{item.label}</span>

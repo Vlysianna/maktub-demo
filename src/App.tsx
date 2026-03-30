@@ -51,6 +51,11 @@ import { LoginGuestScreen } from './features/onboarding/onboarding/components/Lo
 import { LoginNameScreen } from './features/onboarding/onboarding/components/LoginNameScreen'
 import { ProfileScreen } from './features/onboarding/onboarding/components/ProfileScreen'
 import { ProfileSettingsScreen } from './features/onboarding/onboarding/components/ProfileSettingsScreen'
+import { ProfileItineraryScreen } from './features/onboarding/onboarding/components/ProfileItineraryScreen'
+import { PrivacyPolicyScreen } from './features/onboarding/onboarding/components/PrivacyPolicyScreen'
+import { TermsConditionsScreen } from './features/onboarding/onboarding/components/TermsConditionsScreen'
+import { HelpCenterScreen } from './features/onboarding/onboarding/components/HelpCenterScreen'
+import { UmrahPreparationChecklistScreen } from './features/onboarding/onboarding/components/UmrahPreparationChecklistScreen'
 import { ChatAssistantScreen } from './features/onboarding/onboarding/components/ChatAssistantScreen'
 import {
   articles,
@@ -111,6 +116,7 @@ import {
   notificationItems,
   notificationPreferenceSections,
   profileData,
+  umrahPreparationChecklistSections,
 } from './features/onboarding/onboarding/data'
 import type {
   BookingDetail,
@@ -374,6 +380,7 @@ const allScreens: Screen[] = [
   'my-booking-detail',
   'my-booking-itinerary',
   'my-booking-itinerary-edit',
+  'profile-itinerary',
   'umrah-question',
   'umrah-traveler',
   'umrah-departure',
@@ -423,6 +430,10 @@ const allScreens: Screen[] = [
   'login-name',
   'profile',
   'profile-settings',
+  'privacy-policy',
+  'terms-conditions',
+  'help-center',
+  'umrah-preparation-checklist',
 ]
 
 const screenNameSet = new Set(allScreens)
@@ -451,6 +462,7 @@ function App() {
   const [loginGuestBackScreen, setLoginGuestBackScreen] = useState<Screen>('home')
   const [notifikasiBackScreen, setNotifikasiBackScreen] = useState<Screen>('home')
   const [chatAssistantBackScreen, setChatAssistantBackScreen] = useState<Screen>('home')
+  const [itineraryBackScreen, setItineraryBackScreen] = useState<'my-booking-detail' | 'profile-itinerary'>('my-booking-detail')
   const [showProfileCompletionPopup, setShowProfileCompletionPopup] = useState(false)
   const [loginPhoneNumber, setLoginPhoneNumber] = useState('')
   const [flightSearchEntry, setFlightSearchEntry] = useState<'home' | 'maktub-ai'>('home')
@@ -1722,7 +1734,10 @@ function App() {
           assets={myBookingDetailAssets}
           detail={selectedMyBookingDetail}
           onBack={() => setScreen('my-booking')}
-          onOpenItinerary={() => setScreen('my-booking-itinerary')}
+          onOpenItinerary={() => {
+            setItineraryBackScreen('my-booking-detail')
+            setScreen('my-booking-itinerary')
+          }}
         />
       )}
 
@@ -1731,8 +1746,24 @@ function App() {
           assets={myBookingAssets}
           detailAssets={myBookingDetailAssets}
           days={activeItineraryDays}
-          onBack={() => setScreen('my-booking-detail')}
+          onBack={() => setScreen(itineraryBackScreen)}
           onEdit={() => setScreen('my-booking-itinerary-edit')}
+        />
+      )}
+
+      {screen === 'profile-itinerary' && (
+        <ProfileItineraryScreen
+          assets={myBookingAssets}
+          detailAssets={myBookingDetailAssets}
+          bookings={bookingItems}
+          itineraryByBookingId={itineraryByBookingId}
+          fallbackItineraryDays={defaultItineraryDays}
+          onBack={() => setScreen('profile')}
+          onOpenDetail={(bookingId) => {
+            setSelectedMyBookingId(bookingId)
+            setItineraryBackScreen('profile-itinerary')
+            setScreen('my-booking-itinerary')
+          }}
         />
       )}
 
@@ -2809,6 +2840,11 @@ function App() {
             setNotifikasiBackScreen('profile')
             setScreen('notifikasi')
           }}
+          onOpenItinerary={() => setScreen('profile-itinerary')}
+          onOpenPrivacyPolicy={() => setScreen('privacy-policy')}
+          onOpenTermsConditions={() => setScreen('terms-conditions')}
+          onOpenHelpCenter={() => setScreen('help-center')}
+          onOpenUmrahPreparation={() => setScreen('umrah-preparation-checklist')}
           onLogout={() => {
             setIsLoggedIn(false)
             setLoginPhoneNumber('')
@@ -2835,6 +2871,30 @@ function App() {
             setShowProfileCompletionPopup(false)
             setScreen('home')
           }}
+        />
+      )}
+
+      {screen === 'privacy-policy' && (
+        <PrivacyPolicyScreen onBack={() => setScreen('profile')} />
+      )}
+
+      {screen === 'terms-conditions' && (
+        <TermsConditionsScreen onBack={() => setScreen('profile')} />
+      )}
+
+      {screen === 'help-center' && (
+        <HelpCenterScreen
+          userName={userProfile.name || 'Noermansyah'}
+          onBack={() => setScreen('profile')}
+          onOpenChatSupport={() => openChatAssistant('help-center')}
+        />
+      )}
+
+      {screen === 'umrah-preparation-checklist' && (
+        <UmrahPreparationChecklistScreen
+          assets={myBookingDetailAssets}
+          sections={umrahPreparationChecklistSections}
+          onBack={() => setScreen('profile')}
         />
       )}
 
