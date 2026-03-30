@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { MyBookingDetailAssets, UmrahPreparationChecklistSection } from '../types'
+
+const umrahChecklistStorageKey = 'maktub-umrah-preparation-checklist'
 
 type UmrahPreparationChecklistScreenProps = {
   assets: MyBookingDetailAssets
@@ -17,7 +19,50 @@ export function UmrahPreparationChecklistScreen({ assets, sections, onBack }: Um
     return Object.fromEntries(entries)
   }, [sections])
 
-  const [checkedMap, setCheckedMap] = useState<Record<string, boolean>>(initialCheckedState)
+  const [checkedMap, setCheckedMap] = useState<Record<string, boolean>>(() => {
+    if (typeof window === 'undefined') {
+      return initialCheckedState
+    }
+
+    try {
+      const storedValue = window.localStorage.getItem(umrahChecklistStorageKey)
+      if (!storedValue) {
+        return initialCheckedState
+      }
+
+      const parsedValue = JSON.parse(storedValue)
+      if (!parsedValue || typeof parsedValue !== 'object' || Array.isArray(parsedValue)) {
+        return initialCheckedState
+      }
+
+      const normalizedStoredValue = Object.fromEntries(
+        Object.entries(parsedValue).map(([key, value]) => [key, Boolean(value)]),
+      ) as Record<string, boolean>
+
+      return {
+        ...initialCheckedState,
+        ...normalizedStoredValue,
+      }
+    } catch {
+      window.localStorage.removeItem(umrahChecklistStorageKey)
+      return initialCheckedState
+    }
+  })
+
+  useEffect(() => {
+    setCheckedMap((previous) => ({
+      ...initialCheckedState,
+      ...previous,
+    }))
+  }, [initialCheckedState])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    window.localStorage.setItem(umrahChecklistStorageKey, JSON.stringify(checkedMap))
+  }, [checkedMap])
 
   const toggleItem = (itemId: string) => {
     setCheckedMap((previous) => ({
