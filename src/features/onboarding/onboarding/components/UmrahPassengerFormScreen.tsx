@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useRef, useState, type ChangeEvent, type ReactNode } from 'react'
 import { HiOutlineCamera } from 'react-icons/hi2'
 import type { PassengerFormData, UmrahTicketAssets } from '../types'
 
@@ -138,6 +138,8 @@ export function UmrahPassengerFormScreen({
   onChange,
 }: UmrahPassengerFormScreenProps) {
   const [errors, setErrors] = useState<FormErrors>({})
+  const [isPassportOptionOpen, setIsPassportOptionOpen] = useState(false)
+  const galleryInputRef = useRef<HTMLInputElement | null>(null)
 
   function handleSave() {
     const validationErrors = validatePassengerForm(form)
@@ -162,6 +164,42 @@ export function UmrahPassengerFormScreen({
         return next
       })
     }
+  }
+
+  function handleOpenPassportOptions() {
+    setIsPassportOptionOpen(true)
+  }
+
+  function handleClosePassportOptions() {
+    setIsPassportOptionOpen(false)
+  }
+
+  function handleOpenCameraOption() {
+    setIsPassportOptionOpen(false)
+    onOpenCamera()
+  }
+
+  function handleOpenGalleryOption() {
+    setIsPassportOptionOpen(false)
+    galleryInputRef.current?.click()
+  }
+
+  function handleGalleryFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (!file) {
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = typeof reader.result === 'string' ? reader.result : null
+      if (result) {
+        handleChange('passportPhoto', result)
+      }
+    }
+    reader.readAsDataURL(file)
+
+    event.target.value = ''
   }
 
   return (
@@ -296,7 +334,15 @@ export function UmrahPassengerFormScreen({
       </div>
 
       <footer className="umrah-passenger-footer">
-        <button type="button" className="umrah-passport-photo-btn" onClick={onOpenCamera}>
+        <input
+          ref={galleryInputRef}
+          type="file"
+          accept="image/*"
+          className="umrah-passenger-gallery-input"
+          onChange={handleGalleryFileChange}
+        />
+
+        <button type="button" className="umrah-passport-photo-btn" onClick={handleOpenPassportOptions}>
           {form.passportPhoto ? (
             <img src={form.passportPhoto} alt="Foto Passport" className="umrah-passport-thumb" />
           ) : (
@@ -310,6 +356,38 @@ export function UmrahPassengerFormScreen({
           Simpan
         </button>
       </footer>
+
+      {isPassportOptionOpen && (
+        <div className="umrah-passport-option-overlay" role="dialog" aria-modal onClick={handleClosePassportOptions}>
+          <div className="umrah-passport-option-sheet" onClick={(event) => event.stopPropagation()}>
+            <span className="umrah-passport-option-handle" />
+
+            <div className="umrah-passport-option-head">
+              <h3>Paspor</h3>
+              <button type="button" onClick={handleClosePassportOptions} aria-label="Tutup">
+                ✕
+              </button>
+            </div>
+
+            <div className="umrah-passport-option-actions">
+              <button type="button" onClick={handleOpenCameraOption}>
+                <HiOutlineCamera aria-hidden />
+                Ambil foto
+              </button>
+
+              <button type="button" onClick={handleOpenGalleryOption}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <rect x="3.5" y="4.5" width="17" height="15" rx="3" stroke="#111827" strokeWidth="1.6" />
+                  <circle cx="9" cy="10" r="1.4" fill="#111827" />
+                  <path d="M6.5 16L10.2 12.3C10.7 11.8 11.5 11.8 12 12.3L14.2 14.5" stroke="#111827" strokeWidth="1.6" strokeLinecap="round" />
+                  <path d="M12.6 13.9L13.8 12.7C14.4 12.1 15.3 12.1 15.9 12.7L18 14.8" stroke="#111827" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+                Pilih foto
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer className="home-indicator" aria-hidden>
         <span />
