@@ -511,9 +511,7 @@ function App() {
   const [visaFromHome, setVisaFromHome] = useState(false)
   const [visaStandaloneBackScreen, setVisaStandaloneBackScreen] = useState<Screen>('home')
   const [guestBookingContact, setGuestBookingContact] = useState(createInitialGuestBookingContact)
-  const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId>(
-    onboardingConfig.visaPackages[0].id,
-  )
+  const [selectedVisaPackage, setSelectedVisaPackage] = useState<VisaPackageId | null>(null)
   const [selectedVisaCount, setSelectedVisaCount] = useState(0)
   const [activeVisaTravelerIndex, setActiveVisaTravelerIndex] = useState(0)
   const [visaPersonalForms, setVisaPersonalForms] = useState<VisaPersonalFormValue[]>([createInitialVisaPersonalForm()])
@@ -1132,7 +1130,8 @@ function App() {
   ])
 
   const visaPaymentBreakdown = useMemo<PaymentBreakdown>(() => {
-    const subtotal = visaPackagePricePerPerson[selectedVisaPackage] * visaTravelerCount
+    const selectedPackagePrice = selectedVisaPackage ? visaPackagePricePerPerson[selectedVisaPackage] : 0
+    const subtotal = selectedPackagePrice * visaTravelerCount
     const serviceFee = 50_000
     const taxAmount = Math.round(subtotal * 0.1)
 
@@ -2277,7 +2276,7 @@ function App() {
           hideStepper={isHotelOnlyFlow || visaFromHome}
           paymentFor={paymentFlow}
           packageSummaryLabel={isHotelOnlyFlow && paymentFlow === 'package' ? 'Harga tiket hotel' : undefined}
-          visaLabel={visaPackageLabelMap[selectedVisaPackage]}
+          visaLabel={selectedVisaPackage ? visaPackageLabelMap[selectedVisaPackage] : undefined}
           travelerCount={paymentFlow === 'visa' ? visaTravelerCount : travelerCount}
           flightOnly={flightSearchEntry === 'home' && paymentFlow !== 'visa'}
           onBack={() => {

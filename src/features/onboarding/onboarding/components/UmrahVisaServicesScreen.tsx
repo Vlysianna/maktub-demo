@@ -10,7 +10,7 @@ type UmrahVisaServicesScreenProps = {
   pairedCityLabel: string
   cityLabel: string
   formCompleted: boolean
-  selectedPackageId: VisaPackage['id']
+  selectedPackageId: VisaPackage['id'] | null
   travelerCount: number
   selectedVisaCount: number
   hideStepper?: boolean
@@ -46,6 +46,7 @@ export function UmrahVisaServicesScreen({
 }: UmrahVisaServicesScreenProps) {
   const [hasAttemptedOpenForm, setHasAttemptedOpenForm] = useState(false)
   const [buyValidationMessage, setBuyValidationMessage] = useState<string | null>(null)
+  const hasSelectedPackage = selectedPackageId !== null
   const isCountTooHigh = selectedVisaCount > travelerCount
   const isCountTooLow = selectedVisaCount < 1
   const isCountInvalid = isCountTooLow || isCountTooHigh
@@ -71,6 +72,11 @@ export function UmrahVisaServicesScreen({
   }
 
   const handleOpenForm = () => {
+    if (!hasSelectedPackage) {
+      setHasAttemptedOpenForm(true)
+      return
+    }
+
     if (isCountTooLow) {
       setHasAttemptedOpenForm(true)
       return
@@ -160,12 +166,22 @@ export function UmrahVisaServicesScreen({
               </div>
             </div>
 
-            <button type="button" className="umrah-visa-form-btn" onClick={handleOpenForm}>
+            <button
+              type="button"
+              className="umrah-visa-form-btn"
+              onClick={handleOpenForm}
+              disabled={!hasSelectedPackage}
+              aria-disabled={!hasSelectedPackage}
+            >
               {formCompleted ? 'Edit Formulir' : 'Lengkapi Formulir'}
             </button>
           </div>
 
-          {hasAttemptedOpenForm && isCountTooLow && (
+          {hasAttemptedOpenForm && !hasSelectedPackage && (
+            <p className="visa-field-error">Pilih jenis visa terlebih dahulu.</p>
+          )}
+
+          {hasAttemptedOpenForm && hasSelectedPackage && isCountTooLow && (
             <p className="visa-field-error">Isi jumlah visa terlebih dahulu.</p>
           )}
 

@@ -153,7 +153,7 @@ export function UmrahQuestionScreen({ assets, onClose, onNext }: UmrahQuestionSc
       <p className="umrah-heading">Lengkapi langkah berikut untuk dapatkan paket Umrah Kamu.</p>
 
       <section className={`umrah-calendar-card ${visaStatus === null ? 'blocked' : ''}`} aria-label="Pilih tanggal keberangkatan">
-        <h2>Kapan rencana anda berangkat?</h2>
+        <h2>Mari kita mulai dengan menentukan jadwal keberangkatan dan kepulangan anda</h2>
 
         <div className="umrah-calendar-head">
           <p>{monthLabel}</p>
