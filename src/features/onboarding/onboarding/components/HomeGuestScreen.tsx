@@ -41,16 +41,20 @@ export function HomeGuestScreen({
 }: HomeGuestScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeIcon, active: true },
-    { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
-    { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
     { label: 'Informasi', icon: assets.navInfoIcon, active: false, onClick: onOpenInformasi },
+    { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
+    { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
     { label: 'Akun', icon: assets.navAccountIcon, active: false, onClick: onOpenAkun },
   ]
 
   return (
     <section className="phone-shell home-shell" aria-label="Home Guest">
       <div className="home-top-bg" aria-hidden />
-      <div className="home-top-pattern" aria-hidden />
+      <div
+        className="home-top-pattern"
+        style={{ backgroundImage: `url(${assets.pattern})` }}
+        aria-hidden
+      />
 
       <div className="home-scroll">
         <div className="home-header-row">

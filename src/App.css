@@ -55,7 +55,7 @@
 .splash-pattern {
   position: absolute;
   inset: 0;
-  background: url(assets/figma/pattern.png) center / cover no-repeat;
+  background: url('/assets/figma/pattern.png') center / cover no-repeat;
   mix-blend-mode: multiply;
 }
 
@@ -339,8 +339,11 @@
   left: 0;
   width: 100%;
   height: 551px;
-  background: url('https://www.figma.com/api/mcp/asset/78bd8aa3-fb8e-462b-9936-1f2727ad104d') center / cover no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   mix-blend-mode: multiply;
+  opacity: 0.94;
 }
 
 .home-scroll {
@@ -2391,6 +2394,17 @@
   right: auto;
   top: auto;
   margin: 0 0 clamp(16px, 3vh, 32px);
+}
+
+.umrah-traveler-shell .umrah-choice-card {
+  position: relative;
+  left: auto;
+  right: auto;
+  top: auto;
+  width: 100%;
+  max-width: 327px;
+  min-height: 0;
+  flex-shrink: 0;
 }
 
 .umrah-traveler-card {
