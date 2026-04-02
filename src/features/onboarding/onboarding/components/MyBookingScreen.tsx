@@ -117,9 +117,9 @@ export function MyBookingScreen({ assets, bookingAssets, bookings, onBackHome, o
 
   const navItems = [
     { label: 'Home', icon: assets.navHomeInactiveIcon, active: false, onClick: onBackHome },
-    { label: 'My Booking', icon: assets.navBookingActiveIcon, active: true },
-    { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
     { label: 'Informasi', icon: assets.navInfoIcon, active: false, onClick: onOpenInformasi },
+    { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
+    { label: 'My Booking', icon: assets.navBookingActiveIcon, active: true },
     { label: 'Akun', icon: assets.navAccountIcon, active: false, onClick: onOpenAkun },
   ]
 

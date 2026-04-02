@@ -26,9 +26,9 @@ export function LayananLainScreen({
 }: LayananLainScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeInactiveIcon, active: false, onClick: onOpenHome },
-    { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
-    { label: 'Layanan Lain', icon: assets.navServicesActiveIcon, active: true, onClick: undefined },
     { label: 'Informasi', icon: assets.navInfoIcon, active: false, onClick: onOpenInformasi },
+    { label: 'Layanan Lain', icon: assets.navServicesActiveIcon, active: true, onClick: undefined },
+    { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
     { label: 'Akun', icon: assets.navAccountIcon, active: false, onClick: onOpenAkun },
   ]
 

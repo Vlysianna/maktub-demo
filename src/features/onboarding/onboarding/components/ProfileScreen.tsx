@@ -35,10 +35,10 @@ export function ProfileScreen({
 }: ProfileScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeInactiveIcon, active: false, onClick: onOpenHome },
-    { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
+    { label: 'Informasi', icon: assets.navInfoActiveIcon, active: true },
     { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
-    { label: 'Informasi', icon: assets.navInfoIcon, active: false, onClick: onOpenInformasi },
-    { label: 'Akun', icon: assets.navAccountActiveIcon, active: true },
+    { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
+    { label: 'Akun', icon: assets.navAccountIcon, active: false, onClick: undefined },
   ]
 
   return (

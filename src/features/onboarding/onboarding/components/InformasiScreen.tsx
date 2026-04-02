@@ -33,9 +33,9 @@ export function InformasiScreen({
 }: InformasiScreenProps) {
   const navItems = [
     { label: 'Home', icon: assets.navHomeInactiveIcon, active: false, onClick: onOpenHome },
-    { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
-    { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
     { label: 'Informasi', icon: assets.navInfoActiveIcon, active: true },
+    { label: 'Layanan Lain', icon: assets.navServicesIcon, active: false, onClick: onOpenLayananLain },
+    { label: 'My Booking', icon: assets.navBookingIcon, active: false, onClick: onOpenMyBooking },
     { label: 'Akun', icon: assets.navAccountIcon, active: false, onClick: onOpenAkun },
   ]
 
